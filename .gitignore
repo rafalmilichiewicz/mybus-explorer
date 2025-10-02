@@ -1,0 +1,7 @@
+# Remove dev dump files
+*.json
+*.xml
+*.sql
+
+# Files to keep
+!deno.json

@@ -106,30 +106,32 @@ export class Schedule {
         const stopsSql = stopsSqlRaw.all() as (PrefixedStop & PrefixedStreet)[];
         // console.log(stopsSql);
 
-        getStopsDestinations(this.db);
+        const patched = getStopsDestinations(this.db);
 
-        // const stops = stopsSql.map((el) => {
-        //     const [groupName, groupNumber] = parseStopDescription(el.stop_id, el.stop_nazwa.trim());
-        //     return {
-        //         idSip: el.stop_id,
-        //         idZtm: el.stop_numer,
-        //         streetId: el.stop_id_ul,
-        //         streetName: el.street_nazwa,
-        //         order: el.stop_sort,
-        //         description: el.stop_nazwa.trim(),
-        //         groupName,
-        //         groupNumber,
-        //         longitude: el.stop_lon,
-        //         latitude: el.stop_lat,
-        //         linesBus: el.stop_linieA.split(','),
-        //         linesTram: el.stop_linieT.split(','),
-        //         linesTrolleybus: el.stop_linieR.split(','),
-        //         destinations: el.stop_kierunek.split(',').map((el) => el.trim()),
-        //         transportMode: el.stop_transport,
-        //     } satisfies Stop;
-        // });
-        // console.log(stops);
-        // return stops;
+        const stops = stopsSql.map((el) => {
+            const [groupName, groupNumber] = parseStopDescription(el.stop_id, el.stop_nazwa.trim());
+            const sip = el.stop_id;
+            return {
+                idSip: sip,
+                idZtm: el.stop_numer,
+                streetId: el.stop_id_ul,
+                streetName: el.street_nazwa,
+                order: el.stop_sort,
+                description: el.stop_nazwa.trim(),
+                groupName,
+                groupNumber,
+                longitude: el.stop_lon,
+                latitude: el.stop_lat,
+                linesBus: el.stop_linieA.split(','),
+                linesTram: el.stop_linieT.split(','),
+                linesTrolleybus: el.stop_linieR.split(','),
+                destinations: patched.find(p => p.id === sip)?.dest ?? [],
+                // destinations: el.stop_kierunek.split(',').map((el) => el.trim()),
+                transportMode: el.stop_transport,
+            } satisfies Stop;
+        });
+        console.log(stops);
+        return stops;
     }
 
     // private get

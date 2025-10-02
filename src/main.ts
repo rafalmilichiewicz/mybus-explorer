@@ -33,6 +33,8 @@ if (import.meta.main) {
     //     exit();
     // }
 
+
+
     const db = new DatabaseSync(filename, { readOnly: true, open: true });
 
     const schedule = new Schedule(filename);
@@ -60,7 +62,7 @@ if (import.meta.main) {
 
     // console.log(metaSql);
     schedule.getStops();
-    // Deno.writeTextFile("./stops.json", JSON.stringify(schedule.getStops()))
+    Deno.writeTextFile("./stops.json", JSON.stringify(schedule.getStops()))
     // type ScheduleMetadata = {
     //     validFrom: string;
     //     version: number;
