@@ -1,11 +1,11 @@
-import { DatabaseSchema, Row, ValuesToKeys, SomeOtherString } from "../../utils/types.ts";
-import { Stop } from "./stop.ts";
-import { VehicleTypeLetter, VehicleType, RouteDirectionTypeLetter, RouteDirectionType } from "./ztm-types.ts";
+import { DatabaseSchema, Row, ValuesToKeys } from '../../utils/types.ts';
+import { Stop } from './stop.ts';
+import { RouteDirection, TransportMode } from './ztm-types.ts';
 
 export const DESTINATIONS_TABLE = {
     __table__: 'KIERUNKI',
     __columns__: {
-        LINE_NUMBER: 'numer',
+        ROUTE_NUMBER: 'numer',
         ROUTE_VARIANT: 'war_trasy',
         DESTINATION: 'opis_tabl',
         ROUTE_DIRECTION: 'kierunek',
@@ -35,20 +35,15 @@ export const _destinationSql = {
 
 export type DestinationSql = typeof _destinationSql;
 
-export type Destination = {
-    id: number;
-    lineNumber: string;
-    transportMode: {
-        id: VehicleTypeLetter | SomeOtherString;
-        type: VehicleType;
-    };
+export type Route = {
+    id: string;
+    number: string;
+    transportMode: TransportMode;
     direction: string;
-    routeStops: Stop['idSip'][];
-    routeVariant: string;
-    routeDirection: {
-        id: RouteDirectionTypeLetter | SomeOtherString;
-        type: RouteDirectionType;
-    };
+    stops: Stop['idSip'][];
+    variant: string;
+    routeKey: `${Route['number']}-${Route['variant']}`;
+    routeDirection: RouteDirection;
     routeCode: number;
     _defaultVariant: unknown;
     _description: unknown;

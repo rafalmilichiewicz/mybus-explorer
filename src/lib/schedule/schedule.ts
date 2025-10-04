@@ -2,10 +2,11 @@
 import { DatabaseSync } from 'node:sqlite';
 import { SCHEMA } from '../db/schema.ts';
 import { Metadata, MetadataSql } from '../db/schema/metadata.ts';
-import { Destination, DestinationSql } from '../db/schema/destination.ts';
+import { Route, DestinationSql } from '../db/schema/destination.ts';
 import { StopSql, Stop } from '../db/schema/stop.ts';
 import { StreetSql } from '../db/schema/street.ts';
 import { getStopsDestinations } from '../db/sql.ts';
+import { DepartureSql } from "../db/schema/departure.ts";
 type PickAsObject<T, K extends keyof T> = { [P in K]: T[P] };
 
 function naturalSort(a: string, b: string) {
@@ -61,8 +62,8 @@ export class Schedule {
         };
     }
 
-    public getLines() {
-        const linesSql = this.db
+    public getRoutes() {
+        const routesSql = this.db
             .prepare(
                 // `SELECT DISTINCT dest.${SCHEMA.DESTINATIONS.__columns__.DESTINATION}, dest.${SCHEMA.DESTINATIONS.__columns__.LINE_NUMBER}, dest.${SCHEMA.DESTINATIONS.__columns__.ROUTE_VARIANT}
                 `SELECT *
@@ -71,13 +72,38 @@ export class Schedule {
                 ON dest.${SCHEMA.DESTINATIONS.__columns__.ID} = dep.${SCHEMA.DEPARTURES.__columns__.DESTINATION_ID}`
             )
 
-            .all();
-        console.log(linesSql);
+            .all() as DepartureSql[];
+        console.log(routesSql);
+
+        const routes = routesSql.map((destination) => {
+            return {
+                id: destination.,
+                number: destination.numer_lini,
+                transportMode: {
+                    id: 'A',
+                    type: 'BUS',
+                },
+                direction: '',
+                stops: [],
+                variant: '',
+                routeKey: '-',
+                routeDirection: {
+                    id: 'P',
+                    type: '_UNKNOWN',
+                },
+                routeCode: 0,
+                _defaultVariant: undefined,
+                _description: undefined,
+                _descriptionNumber: undefined,
+            } satisfies Route;
+        }) satisfies Route[];
+
         // console.log(linesSql.map((el) => el.numer.trim()).sort(naturalSort));
     }
 
     getStops() {
         // TODO Do this clever with .join()
+        // TODO Move to sql
         // str.${SCHEMA.STREETS.__columns__.ID}, str.${SCHEMA.STREETS.__columns__.ID}
         const prefixedStops = prefixedSelect(SCHEMA.STOPS.__columns__, 'stop');
         const prefixedStreet = prefixedSelect(SCHEMA.STREETS.__columns__, 'street');
@@ -125,7 +151,7 @@ export class Schedule {
                 linesBus: el.stop_linieA.split(','),
                 linesTram: el.stop_linieT.split(','),
                 linesTrolleybus: el.stop_linieR.split(','),
-                destinations: patched.find(p => p.id === sip)?.dest ?? [],
+                destinations: patched.find((p) => p.id === sip)?.dest ?? [],
                 // destinations: el.stop_kierunek.split(',').map((el) => el.trim()),
                 transportMode: el.stop_transport,
             } satisfies Stop;

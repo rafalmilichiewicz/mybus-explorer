@@ -61,8 +61,12 @@ if (import.meta.main) {
     // console.log(schedule.getLines())
 
     // console.log(metaSql);
-    schedule.getStops();
-    Deno.writeTextFile("./stops.json", JSON.stringify(schedule.getStops()))
+    // schedule.getStops();
+    // Deno.writeTextFile("./stops.json", JSON.stringify(schedule.getStops()))
+
+
+    schedule.getRoutes();
+
     // type ScheduleMetadata = {
     //     validFrom: string;
     //     version: number;

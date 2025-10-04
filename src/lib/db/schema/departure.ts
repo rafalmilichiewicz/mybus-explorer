@@ -1,6 +1,6 @@
 import { DatabaseSchema, SomeOtherString, Row, ValuesToKeys } from "../../utils/types.ts";
 import { Day } from "./day.ts";
-import { Destination } from "./destination.ts";
+import { Route } from "./destination.ts";
 import { Stop } from "./stop.ts";
 
 export const DEPARTURES_TABLE = {
@@ -41,11 +41,11 @@ export const _departureSql = {
 export type DepartureSql = typeof _departureSql;
 
 export type Departure = {
-    destinationId: Destination['id'];
+    destinationId: Route['id'];
     dayType: Day['type'];
-    routeVariant: Destination['routeVariant'];
+    routeVariant: Route['variant'];
     stopIdSip: Stop['idSip'];
     stopNumberOnRoute: number;
-    lineNumber: Destination['lineNumber'];
+    lineNumber: Route['routeNumber'];
     departureTimes: DepartureTime[];
 };
