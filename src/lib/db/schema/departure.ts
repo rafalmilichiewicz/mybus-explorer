@@ -46,6 +46,6 @@ export type Departure = {
     routeVariant: Route['variant'];
     stopIdSip: Stop['idSip'];
     stopNumberOnRoute: number;
-    lineNumber: Route['routeNumber'];
+    lineNumber: Route['number'];
     departureTimes: DepartureTime[];
 };

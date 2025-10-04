@@ -70,7 +70,7 @@ export const ROUTE_DIRECTION_TYPES_REV = {
     T: 'outbound',
     P: 'inbound',
     Z: 'depot',
-} satisfies Record<RouteDirectionTypeLetter, RouteDirectionType>;
+} satisfies Record<RouteDirectionTypeLetter, RouteDirectionTypeValid>;
 
 export type RouteDirection = {
     id: RouteDirectionTypeLetter | SomeOtherString;

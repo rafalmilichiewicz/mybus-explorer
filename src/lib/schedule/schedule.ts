@@ -8,7 +8,7 @@ import { StreetSql } from '../db/schema/street.ts';
 import { getStopsDestinations } from '../db/sql.ts';
 import { DepartureSql } from '../db/schema/departure.ts';
 import { getRouteDirectionType, getVehicleType } from '../db/schema/ztm-types.ts';
-import { SalesPoint, SalesPointSql } from "../db/schema/sales-point.ts";
+import { getSalesPointType, SalesPoint, SalesPointSql } from "../db/schema/sales-point.ts";
 type PickAsObject<T, K extends keyof T> = { [P in K]: T[P] };
 
 function naturalSort(a: string, b: string) {
@@ -162,6 +162,24 @@ export class Schedule {
         return stops;
     }
 
+    getSalesPoints(){
+        const sql = `SELECT * FROM ${SCHEMA.SALES_POINTS.__table__}`
+        const pointsSql = this.db.prepare(sql);
+        const pointsRaw = pointsSql.all() as SalesPointSql[];
+
+        const points = pointsRaw.map(point => {
+
+            return {
+              id: point.id,
+              name: point.nazwa,
+              type: getSalesPointType(point.id_pktp),
+              longitude: point.lon,
+              latitude: point.lat
+            } satisfies SalesPoint;
+        }) satisfies SalesPoint[];
+        return points;
+    }
+    
     // private get
 }
 
