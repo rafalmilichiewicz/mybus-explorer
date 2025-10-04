@@ -36,7 +36,7 @@ export const _destinationSql = {
 export type DestinationSql = typeof _destinationSql;
 
 export type Route = {
-    id: string;
+    id: number;
     number: string;
     transportMode: TransportMode;
     direction: string;

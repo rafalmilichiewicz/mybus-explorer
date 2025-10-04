@@ -6,7 +6,9 @@ import { Route, DestinationSql } from '../db/schema/destination.ts';
 import { StopSql, Stop } from '../db/schema/stop.ts';
 import { StreetSql } from '../db/schema/street.ts';
 import { getStopsDestinations } from '../db/sql.ts';
-import { DepartureSql } from "../db/schema/departure.ts";
+import { DepartureSql } from '../db/schema/departure.ts';
+import { getRouteDirectionType, getVehicleType } from '../db/schema/ztm-types.ts';
+import { SalesPoint, SalesPointSql } from "../db/schema/sales-point.ts";
 type PickAsObject<T, K extends keyof T> = { [P in K]: T[P] };
 
 function naturalSort(a: string, b: string) {
@@ -63,42 +65,42 @@ export class Schedule {
     }
 
     public getRoutes() {
-        const routesSql = this.db
-            .prepare(
-                // `SELECT DISTINCT dest.${SCHEMA.DESTINATIONS.__columns__.DESTINATION}, dest.${SCHEMA.DESTINATIONS.__columns__.LINE_NUMBER}, dest.${SCHEMA.DESTINATIONS.__columns__.ROUTE_VARIANT}
-                `SELECT *
+        // TODO add patches
+        const routesSql = this.db.prepare(
+            // `SELECT DISTINCT dest.${SCHEMA.DESTINATIONS.__columns__.DESTINATION}, dest.${SCHEMA.DESTINATIONS.__columns__.LINE_NUMBER}, dest.${SCHEMA.DESTINATIONS.__columns__.ROUTE_VARIANT}
+            `SELECT *
                 FROM ${SCHEMA.DESTINATIONS.__table__} dest 
-                INNER JOIN ${SCHEMA.DEPARTURES.__table__} dep 
-                ON dest.${SCHEMA.DESTINATIONS.__columns__.ID} = dep.${SCHEMA.DEPARTURES.__columns__.DESTINATION_ID}`
-            )
+                -- INNER JOIN ${SCHEMA.DEPARTURES.__table__} dep 
+                -- ON dest.${SCHEMA.DESTINATIONS.__columns__.ID} = dep.${SCHEMA.DEPARTURES.__columns__.DESTINATION_ID}`
+        );
+        console.log(routesSql.expandedSQL);
+        const routesRaw = routesSql.all() as DestinationSql[];
+        // console.log(routesSql);
 
-            .all() as DepartureSql[];
-        console.log(routesSql);
+        const routes = routesRaw.map((destination) => {
+            const stops = destination.trasa.split(',').map((stopId) => Number.parseInt(stopId));
+            if (stops.includes(Number.NaN)) {
+                throw Error('Stop found to be not a integer');
+            }
+            const routeNumber = destination.numer.trim();
 
-        const routes = routesSql.map((destination) => {
             return {
-                id: destination.,
-                number: destination.numer_lini,
-                transportMode: {
-                    id: 'A',
-                    type: 'BUS',
-                },
-                direction: '',
-                stops: [],
-                variant: '',
-                routeKey: '-',
-                routeDirection: {
-                    id: 'P',
-                    type: '_UNKNOWN',
-                },
-                routeCode: 0,
-                _defaultVariant: undefined,
-                _description: undefined,
-                _descriptionNumber: undefined,
+                id: destination.id_krn,
+                number: routeNumber,
+                transportMode: getVehicleType(destination.transport),
+                direction: destination.kierunek,
+                stops,
+                variant: destination.war_trasy,
+                routeKey: `${routeNumber}-${destination.war_trasy}`,
+                routeDirection: getRouteDirectionType(destination.kierunek),
+                routeCode: destination.kod,
+                _defaultVariant: destination.podstawowy,
+                _description: destination.opis2tabl,
+                _descriptionNumber: destination.lp_opis2tabl,
             } satisfies Route;
         }) satisfies Route[];
 
-        // console.log(linesSql.map((el) => el.numer.trim()).sort(naturalSort));
+        return routes;
     }
 
     getStops() {
