@@ -171,7 +171,7 @@ export class Schedule {
 
             return {
               id: point.id,
-              name: point.nazwa,
+              name: point.nazwa.trim(),
               type: getSalesPointType(point.id_pktp),
               longitude: point.lon,
               latitude: point.lat
