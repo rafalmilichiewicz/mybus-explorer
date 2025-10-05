@@ -64,9 +64,17 @@ if (import.meta.main) {
     // schedule.getStops();
     
     
-    Deno.writeTextFile("./stops.json", JSON.stringify(schedule.generateStops()))
-    Deno.writeTextFile("./routes.json", JSON.stringify(schedule.generateRoutes()))
-    // Deno.writeTextFile("./points.json", JSON.stringify(schedule.generateSalesPoints()))
+    // Deno.writeTextFile("./stops.json", JSON.stringify(schedule.generateStops()))
+    // Deno.writeTextFile("./routes.json", JSON.stringify(schedule.generateRoutes()))
+    // // Deno.writeTextFile("./points.json", JSON.stringify(schedule.generateSalesPoints()))
+
+    // ! 
+    // schedule.saveSchedule();
+
+
+
+
+
 
     // type ScheduleMetadata = {
     //     validFrom: string;

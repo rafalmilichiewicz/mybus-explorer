@@ -14,7 +14,9 @@ export const _calendarSql = {
     dt_kal: '2025-09-01 00:00:00',
 } satisfies Row<ValuesToKeys<typeof CALENDAR_TABLE.__columns__>>;
 
-export type Calendar = {
+export type CalendarEntrySql = typeof _calendarSql;
+
+export type CalendarEntry = {
     dayType: Day['type'];
     date: Date;
 };

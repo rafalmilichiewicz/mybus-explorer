@@ -14,6 +14,8 @@ import {
     VehicleTypeValid,
 } from '../db/schema/ztm-types.ts';
 import { getSalesPointType, SalesPoint, SalesPointSql } from '../db/schema/sales-point.ts';
+import { Day, DaySql } from '../db/schema/day.ts';
+import { CalendarEntry, CalendarEntrySql } from '../db/schema/calendar.ts';
 type PickAsObject<T, K extends keyof T> = { [P in K]: T[P] };
 
 function naturalSort(a: string, b: string) {
@@ -80,15 +82,63 @@ const patchesRoute = [
     },
 ] satisfies RoutePatch[];
 
+type RouteDto = {
+    number: Route['number'];
+    transportMode: Route['transportMode'];
+    night: boolean;
+    depot: boolean;
+};
+
 export class Schedule {
     private db: DatabaseSync;
     public metadata: Metadata;
     private routes: Route[];
+    private routeList: {
+        routesBus: RouteDto[];
+        routesTram: RouteDto[];
+        routesTrolleybus: RouteDto[];
+    };
+    private stops: Stop[];
+    private salesPoints: SalesPoint[];
+    private calendar: {
+        types: Day[];
+        entries: CalendarEntry[];
+    };
 
     constructor(filename: string) {
         this.db = new DatabaseSync(filename, { readOnly: true, open: true });
         this.metadata = this.getMetadata();
         this.routes = this.generateRoutes();
+
+        // TODO Extract function
+        const uniqueRoutesByTransportMode = TRANSPORT_MODES.map((mode) => {
+            const uniqueRoutes = new Set(
+                this.routes
+                    .filter((route) => route.transportMode.type === mode)
+                    .map((route) => {
+                        return {
+                            number: route.number,
+                            transportMode: route.transportMode,
+                            night: route.night,
+                            depot: route.depot,
+                        } satisfies RouteDto;
+                    })
+                    .sort((route1, route2) => naturalSort(route1.number, route2.number))
+            );
+            return Array.from(uniqueRoutes);
+        });
+        this.routeList = {
+            routesBus: uniqueRoutesByTransportMode[0],
+            routesTram: uniqueRoutesByTransportMode[1],
+            routesTrolleybus: uniqueRoutesByTransportMode[2],
+        };
+
+        this.stops = this.generateStops();
+        this.salesPoints = this.generateSalesPoints();
+        this.calendar = {
+            types: this.generateDayTypes(),
+            entries: this.generateCalendarEntries(),
+        };
     }
 
     private getMetadata(): Metadata {
@@ -146,8 +196,6 @@ export class Schedule {
                     ...defaultRoute,
                     ...mergedPatches,
                 };
-
-                console.log(defaultRoute);
             }
 
             return defaultRoute;
@@ -235,6 +283,51 @@ export class Schedule {
             } satisfies SalesPoint;
         }) satisfies SalesPoint[];
         return points;
+    }
+
+    generateDayTypes() {
+        const sql = `SELECT * FROM ${SCHEMA.DAYS.__table__}`;
+        const daysSql = this.db.prepare(sql);
+        const daysRaw = daysSql.all() as DaySql[];
+
+        const dayTypes = daysRaw.map((day) => {
+            return {
+                type: day.typ_dnia,
+                description: day.opis_dnia,
+                displayOrder: day.kolej_wydr,
+            } satisfies Day;
+        }) satisfies Day[];
+
+        return dayTypes;
+    }
+
+    generateCalendarEntries() {
+        // TODO Add patches
+        // TODO Add "night" bus days as property to entry type
+        const sql = `SELECT * FROM ${SCHEMA.CALENDAR.__table__}`;
+        const calendarSql = this.db.prepare(sql);
+        const calendarRaw = calendarSql.all() as CalendarEntrySql[];
+
+        const calendar = calendarRaw.map((entry) => {
+            const date = new Date(entry.dt_kal);
+            if (Number.isNaN(date.valueOf())) {
+                throw new Error('Encountered invalid date string');
+            }
+            return {
+                dayType: entry.td_rj,
+                date: date,
+            } satisfies CalendarEntry;
+        }) satisfies CalendarEntry[];
+
+        return calendar;
+    }
+
+    public async saveSchedule() {
+        await Deno.writeTextFile('./stops.json', JSON.stringify(this.stops));
+        await Deno.writeTextFile('./routes.json', JSON.stringify(this.routes));
+        await Deno.writeTextFile('./routes_list.json', JSON.stringify(this.routeList));
+        await Deno.writeTextFile('./points_of_sale.json', JSON.stringify(this.salesPoints));
+        await Deno.writeTextFile('./calendar.json', JSON.stringify(this.calendar));
     }
 
     // public get;
