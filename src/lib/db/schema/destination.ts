@@ -42,6 +42,8 @@ export type Route = {
     direction: string;
     stops: Stop['idSip'][];
     variant: string;
+    night: boolean;
+    depot: boolean;
     routeKey: `${Route['number']}-${Route['variant']}`;
     routeDirection: RouteDirection;
     routeCode: number;

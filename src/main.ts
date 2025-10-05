@@ -66,7 +66,7 @@ if (import.meta.main) {
 
 
     // Deno.writeTextFile("./routes.json", JSON.stringify(schedule.getRoutes()))
-    Deno.writeTextFile("./points.json", JSON.stringify(schedule.getSalesPoints()))
+    // Deno.writeTextFile("./points.json", JSON.stringify(schedule.generateSalesPoints()))
 
     // type ScheduleMetadata = {
     //     validFrom: string;

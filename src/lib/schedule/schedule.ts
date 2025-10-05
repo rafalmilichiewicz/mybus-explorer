@@ -8,7 +8,7 @@ import { StreetSql } from '../db/schema/street.ts';
 import { getStopsDestinations } from '../db/sql.ts';
 import { DepartureSql } from '../db/schema/departure.ts';
 import { getRouteDirectionType, getVehicleType } from '../db/schema/ztm-types.ts';
-import { getSalesPointType, SalesPoint, SalesPointSql } from "../db/schema/sales-point.ts";
+import { getSalesPointType, SalesPoint, SalesPointSql } from '../db/schema/sales-point.ts';
 type PickAsObject<T, K extends keyof T> = { [P in K]: T[P] };
 
 function naturalSort(a: string, b: string) {
@@ -46,10 +46,12 @@ function prefixedSelect<T extends Record<string, string>, Prefix extends string>
 export class Schedule {
     private db: DatabaseSync;
     public metadata: Metadata;
+    private routes: Route[];
 
     constructor(filename: string) {
         this.db = new DatabaseSync(filename, { readOnly: true, open: true });
         this.metadata = this.getMetadata();
+        this.routes = this.generateRoutes();
     }
 
     private getMetadata(): Metadata {
@@ -64,12 +66,11 @@ export class Schedule {
         };
     }
 
-    public getRoutes() {
+    public generateRoutes() {
         // TODO add patches
         const routesSql = this.db.prepare(
             // `SELECT DISTINCT dest.${SCHEMA.DESTINATIONS.__columns__.DESTINATION}, dest.${SCHEMA.DESTINATIONS.__columns__.LINE_NUMBER}, dest.${SCHEMA.DESTINATIONS.__columns__.ROUTE_VARIANT}
-            `SELECT *
-                FROM ${SCHEMA.DESTINATIONS.__table__} dest 
+            `SELECT * FROM ${SCHEMA.DESTINATIONS.__table__} dest 
                 -- INNER JOIN ${SCHEMA.DEPARTURES.__table__} dep 
                 -- ON dest.${SCHEMA.DESTINATIONS.__columns__.ID} = dep.${SCHEMA.DEPARTURES.__columns__.DESTINATION_ID}`
         );
@@ -97,13 +98,15 @@ export class Schedule {
                 _defaultVariant: destination.podstawowy,
                 _description: destination.opis2tabl,
                 _descriptionNumber: destination.lp_opis2tabl,
+                night: false,
+                depot: false,
             } satisfies Route;
         }) satisfies Route[];
 
         return routes;
     }
 
-    getStops() {
+    generateStops() {
         // TODO Do this clever with .join()
         // TODO Move to sql
         // str.${SCHEMA.STREETS.__columns__.ID}, str.${SCHEMA.STREETS.__columns__.ID}
@@ -162,25 +165,24 @@ export class Schedule {
         return stops;
     }
 
-    getSalesPoints(){
-        const sql = `SELECT * FROM ${SCHEMA.SALES_POINTS.__table__}`
+    generateSalesPoints() {
+        const sql = `SELECT * FROM ${SCHEMA.SALES_POINTS.__table__}`;
         const pointsSql = this.db.prepare(sql);
         const pointsRaw = pointsSql.all() as SalesPointSql[];
 
-        const points = pointsRaw.map(point => {
-
+        const points = pointsRaw.map((point) => {
             return {
-              id: point.id,
-              name: point.nazwa.trim(),
-              type: getSalesPointType(point.id_pktp),
-              longitude: point.lon,
-              latitude: point.lat
+                id: point.id,
+                name: point.nazwa.trim(),
+                type: getSalesPointType(point.id_pktp),
+                longitude: point.lon,
+                latitude: point.lat,
             } satisfies SalesPoint;
         }) satisfies SalesPoint[];
         return points;
     }
-    
-    // private get
+
+    // public get;
 }
 
 export function parseStopDestinations(idSip: number, db: DatabaseSync) {
