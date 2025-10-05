@@ -39,7 +39,7 @@ if (import.meta.main) {
 
     const schedule = new Schedule(filename);
 
-    console.log(schedule);
+    // console.log(schedule);
     
     // console.log(parseStopDescription({
     //     id: 103,
@@ -62,10 +62,10 @@ if (import.meta.main) {
 
     // console.log(metaSql);
     // schedule.getStops();
-    // Deno.writeTextFile("./stops.json", JSON.stringify(schedule.getStops()))
-
-
-    // Deno.writeTextFile("./routes.json", JSON.stringify(schedule.getRoutes()))
+    
+    
+    Deno.writeTextFile("./stops.json", JSON.stringify(schedule.generateStops()))
+    Deno.writeTextFile("./routes.json", JSON.stringify(schedule.generateRoutes()))
     // Deno.writeTextFile("./points.json", JSON.stringify(schedule.generateSalesPoints()))
 
     // type ScheduleMetadata = {

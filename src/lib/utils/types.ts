@@ -2,6 +2,7 @@
 export type SomeOtherString = string & NonNullable<unknown>;
 export type SomeOtherNumber = number & NonNullable<unknown>;
 export type ValuesToKeys<T> = T[keyof T];
+
 // deno-lint-ignore no-explicit-any
 export type RequiredRecord<K extends keyof any, V> = {
     [P in K]-?: V;

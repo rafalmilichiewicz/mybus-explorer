@@ -13,6 +13,11 @@ export type UnknownVehicleType = {
 
 export type VehicleType = keyof typeof VEHICLE_TYPES;
 export type VehicleTypeValid = keyof Omit<typeof VEHICLE_TYPES, UnknownVehicleType>;
+
+// TODO Add docs that state when modes are involved they will be in this order exactly
+export const TRANSPORT_MODES = ['bus', 'tram', 'trolleybus'] as const satisfies VehicleTypeValid[];
+
+
 export type VehicleTypeLetter = Exclude<
     (typeof VEHICLE_TYPES)[keyof typeof VEHICLE_TYPES],
     typeof VEHICLE_TYPES._unknown

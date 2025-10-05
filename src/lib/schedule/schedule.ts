@@ -7,7 +7,12 @@ import { StopSql, Stop } from '../db/schema/stop.ts';
 import { StreetSql } from '../db/schema/street.ts';
 import { getStopsDestinations } from '../db/sql.ts';
 import { DepartureSql } from '../db/schema/departure.ts';
-import { getRouteDirectionType, getVehicleType } from '../db/schema/ztm-types.ts';
+import {
+    getRouteDirectionType,
+    getVehicleType,
+    TRANSPORT_MODES,
+    VehicleTypeValid,
+} from '../db/schema/ztm-types.ts';
 import { getSalesPointType, SalesPoint, SalesPointSql } from '../db/schema/sales-point.ts';
 type PickAsObject<T, K extends keyof T> = { [P in K]: T[P] };
 
@@ -43,6 +48,38 @@ function prefixedSelect<T extends Record<string, string>, Prefix extends string>
     );
 }
 
+// TODO Force either id or number to be present
+// ? identifier: { id, number }
+type RoutePatch = {
+    id?: Route['id'];
+    number?: Route['number'][];
+    patch: Partial<Route>;
+};
+
+const patchesRoute = [
+    {
+        number: ['160', '950'],
+        patch: {
+            transportMode: {
+                id: 'R',
+                type: 'trolleybus',
+            },
+        },
+    },
+    {
+        number: ['N1', 'N2', 'N3'],
+        patch: {
+            night: true,
+        },
+    },
+    {
+        number: ['950', 'B', 'Z'],
+        patch: {
+            depot: true,
+        },
+    },
+] satisfies RoutePatch[];
+
 export class Schedule {
     private db: DatabaseSync;
     public metadata: Metadata;
@@ -74,7 +111,7 @@ export class Schedule {
                 -- INNER JOIN ${SCHEMA.DEPARTURES.__table__} dep 
                 -- ON dest.${SCHEMA.DESTINATIONS.__columns__.ID} = dep.${SCHEMA.DEPARTURES.__columns__.DESTINATION_ID}`
         );
-        console.log(routesSql.expandedSQL);
+        // console.log(routesSql.expandedSQL);
         const routesRaw = routesSql.all() as DestinationSql[];
         // console.log(routesSql);
 
@@ -85,11 +122,11 @@ export class Schedule {
             }
             const routeNumber = destination.numer.trim();
 
-            return {
+            let defaultRoute = {
                 id: destination.id_krn,
                 number: routeNumber,
                 transportMode: getVehicleType(destination.transport),
-                direction: destination.kierunek,
+                direction: destination.opis_tabl,
                 stops,
                 variant: destination.war_trasy,
                 routeKey: `${routeNumber}-${destination.war_trasy}`,
@@ -101,6 +138,19 @@ export class Schedule {
                 night: false,
                 depot: false,
             } satisfies Route;
+
+            const patches = patchesRoute.filter((patch) => patch.number.includes(routeNumber));
+            if (patches.length > 0) {
+                const mergedPatches = patches.reduce((acc, p) => ({ ...acc, ...p.patch }), {});
+                defaultRoute = {
+                    ...defaultRoute,
+                    ...mergedPatches,
+                };
+
+                console.log(defaultRoute);
+            }
+
+            return defaultRoute;
         }) satisfies Route[];
 
         return routes;
@@ -123,25 +173,20 @@ export class Schedule {
         } || ',%'
         `;
 
-        console.log(sql);
+        // console.log(sql);
 
         const stopsSqlRaw = this.db.prepare(sql);
-
-        //     .prepare(`SELECT DISTINCT st.id as sip, st.nazwa as nazwa_przy, srt.${SCHEMA.STREETS.__columns__.ID}, srt.${SCHEMA.STREETS.__columns__.ID},
-        //         st.${SCHEMA.STOPS.__columns__.DEPARTURES}, st.${SCHEMA.STOPS.__columns__.DESTINATIONS}
-        // FROM ${SCHEMA.STOPS.__table__} st
-        // INNER JOIN ${SCHEMA.STREETS.__table__} srt ON ${SCHEMA.STOPS.__columns__.STREET_ID} = srt.${SCHEMA.STREETS.__columns__.ID}
-        // INNER JOIN ${SCHEMA.DEPARTURES.__table__} dep ON dep.${SCHEMA.DEPARTURES.__columns__.STOP_ID} = st.${SCHEMA.STOPS.__columns__.ID_SIP}
-        // `);
-        console.log(stopsSqlRaw.expandedSQL);
+        // console.log(stopsSqlRaw.expandedSQL);
         const stopsSql = stopsSqlRaw.all() as (PrefixedStop & PrefixedStreet)[];
-        // console.log(stopsSql);
 
         const patched = getStopsDestinations(this.db);
 
         const stops = stopsSql.map((el) => {
-            const [groupName, groupNumber] = parseStopDescription(el.stop_id, el.stop_nazwa.trim());
             const sip = el.stop_id;
+            const [groupName, groupNumber] = parseStopDescription(el.stop_id, el.stop_nazwa.trim());
+            const stopRoutes = this.routes.filter((route) => route.stops.includes(sip));
+
+            const [routesBus, routesTram, routesTrolleybus] = getRoutesForStop(stopRoutes);
             return {
                 idSip: sip,
                 idZtm: el.stop_numer,
@@ -153,15 +198,25 @@ export class Schedule {
                 groupNumber,
                 longitude: el.stop_lon,
                 latitude: el.stop_lat,
-                linesBus: el.stop_linieA.split(','),
-                linesTram: el.stop_linieT.split(','),
-                linesTrolleybus: el.stop_linieR.split(','),
+                linesBus: routesBus,
+                linesTram: routesTram,
+                linesTrolleybus: routesTrolleybus,
                 destinations: patched.find((p) => p.id === sip)?.dest ?? [],
-                // destinations: el.stop_kierunek.split(',').map((el) => el.trim()),
                 transportMode: el.stop_transport,
             } satisfies Stop;
+
+            function getRoutesForStop(stopRoutes: Route[]) {
+                return TRANSPORT_MODES.map((mode) => {
+                    const uniqueRoutes = new Set(
+                        stopRoutes
+                            .filter((route) => route.transportMode.type === mode)
+                            .map((route) => route.number)
+                            .sort(naturalSort)
+                    );
+                    return Array.from(uniqueRoutes);
+                });
+            }
         });
-        console.log(stops);
         return stops;
     }
 
@@ -186,7 +241,7 @@ export class Schedule {
 }
 
 export function parseStopDestinations(idSip: number, db: DatabaseSync) {
-    console.log(idSip);
+    // console.log(idSip);
 }
 
 export function parseStopDescription(idSip: number, description: string) {

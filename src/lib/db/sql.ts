@@ -4,7 +4,7 @@ import { Stop } from './schema/stop.ts';
 
 const stopId = SCHEMA.STOPS.__columns__.ID_SIP;
 const stop = 'stop';
-const dest = 'dest';
+const dest = 'destinations';
 
 type z = ({ id: Stop['idSip'] } & { destinations: string })[];
 export function getStopsDestinations(db: DatabaseSync) {
