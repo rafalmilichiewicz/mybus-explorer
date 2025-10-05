@@ -67,7 +67,7 @@ if (import.meta.main) {
     // // Deno.writeTextFile("./points.json", JSON.stringify(schedule.generateSalesPoints()))
 
     // !
-    // schedule.saveSchedule();
+    schedule.saveSchedule();
 
     // console.log(toDepartureTime("18120"));
 

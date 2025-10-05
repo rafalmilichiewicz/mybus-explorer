@@ -117,22 +117,30 @@ export class Schedule {
         this.routes = this.generateRoutes();
 
         // TODO Extract function
+        // TODO fix non unique
         const uniqueRoutesByTransportMode = TRANSPORT_MODES.map((mode) => {
-            const uniqueRoutes = new Set(
-                this.routes
-                    .filter((route) => route.transportMode.type === mode)
-                    .map((route) => {
-                        return {
-                            number: route.number,
-                            transportMode: route.transportMode,
-                            night: route.night,
-                            depot: route.depot,
-                        } satisfies RouteDto;
-                    })
-                    .sort((route1, route2) => naturalSort(route1.number, route2.number))
-            );
-            return Array.from(uniqueRoutes);
+            const seenNumbers = new Set<string>();
+
+            return this.routes
+                .filter((route) => route.transportMode.type === mode)
+                .filter((route) => {
+                    if (seenNumbers.has(route.number)) {
+                        return false;
+                    }
+                    seenNumbers.add(route.number);
+                    return true;
+                })
+                .map((route) => {
+                    return {
+                        number: route.number,
+                        transportMode: route.transportMode,
+                        night: route.night,
+                        depot: route.depot,
+                    } satisfies RouteDto;
+                })
+                .sort((route1, route2) => naturalSort(route1.number, route2.number));
         });
+
         this.routeList = {
             routesBus: uniqueRoutesByTransportMode[0],
             routesTram: uniqueRoutesByTransportMode[1],
@@ -356,7 +364,6 @@ export class Schedule {
         await Deno.writeTextFile('./points_of_sale.json', JSON.stringify(this.salesPoints));
         await Deno.writeTextFile('./calendar.json', JSON.stringify(this.calendar));
         await Deno.writeTextFile('./departures.json', JSON.stringify(this.departures));
-
     }
 
     // public get;
