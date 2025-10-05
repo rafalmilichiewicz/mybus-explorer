@@ -6,7 +6,12 @@ import { Route, DestinationSql } from '../db/schema/destination.ts';
 import { StopSql, Stop } from '../db/schema/stop.ts';
 import { StreetSql } from '../db/schema/street.ts';
 import { getStopsDestinations } from '../db/sql.ts';
-import { DepartureSql } from '../db/schema/departure.ts';
+import {
+    Departure,
+    DepartureSql,
+    splitDeparturesString,
+    toDepartureTime,
+} from '../db/schema/departure.ts';
 import {
     getRouteDirectionType,
     getVehicleType,
@@ -104,6 +109,7 @@ export class Schedule {
         types: Day[];
         entries: CalendarEntry[];
     };
+    private departures: Departure[];
 
     constructor(filename: string) {
         this.db = new DatabaseSync(filename, { readOnly: true, open: true });
@@ -139,6 +145,7 @@ export class Schedule {
             types: this.generateDayTypes(),
             entries: this.generateCalendarEntries(),
         };
+        this.departures = this.generateDepartures();
     }
 
     private getMetadata(): Metadata {
@@ -176,7 +183,7 @@ export class Schedule {
                 id: destination.id_krn,
                 number: routeNumber,
                 transportMode: getVehicleType(destination.transport),
-                direction: destination.opis_tabl,
+                direction: destination.opis_tabl.trim().replaceAll('  ', ' '), // TODO Extract parsing and cleaning to func
                 stops,
                 variant: destination.war_trasy,
                 routeKey: `${routeNumber}-${destination.war_trasy}`,
@@ -218,8 +225,7 @@ export class Schedule {
             INNER JOIN ${SCHEMA.DESTINATIONS.__table__} dest
             ON  ',' || dest.${SCHEMA.DESTINATIONS.__columns__.ROUTE} || ',' LIKE '%,' || stop.${
             SCHEMA.STOPS.__columns__.ID_SIP
-        } || ',%'
-        `;
+        } || ',%'`;
 
         // console.log(sql);
 
@@ -322,12 +328,35 @@ export class Schedule {
         return calendar;
     }
 
+    generateDepartures() {
+        const sql = `SELECT * FROM ${SCHEMA.DEPARTURES.__table__}`;
+        const departuresSql = this.db.prepare(sql);
+        const departuresRaw = departuresSql.all() as DepartureSql[];
+
+        const departures = departuresRaw.map((departure) => {
+            return {
+                destinationId: departure.id_krn,
+                dayType: departure.typ_dnia,
+                routeVariant: departure.war_trasy,
+                stopIdSip: departure.bus_stop_id, // TODO Compute in code
+                stopNumberOnRoute: departure.lp_przyst,
+                lineNumber: departure.numer_lini,
+                departureTimes: splitDeparturesString(departure.odjazdy).map(toDepartureTime),
+            } satisfies Departure;
+        }) satisfies Departure[];
+
+        // console.log(departures);
+        return departures;
+    }
+
     public async saveSchedule() {
         await Deno.writeTextFile('./stops.json', JSON.stringify(this.stops));
         await Deno.writeTextFile('./routes.json', JSON.stringify(this.routes));
         await Deno.writeTextFile('./routes_list.json', JSON.stringify(this.routeList));
         await Deno.writeTextFile('./points_of_sale.json', JSON.stringify(this.salesPoints));
         await Deno.writeTextFile('./calendar.json', JSON.stringify(this.calendar));
+        await Deno.writeTextFile('./departures.json', JSON.stringify(this.departures));
+
     }
 
     // public get;
