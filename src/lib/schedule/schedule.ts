@@ -117,7 +117,6 @@ export class Schedule {
         this.routes = this.generateRoutes();
 
         // TODO Extract function
-        // TODO fix non unique
         const uniqueRoutesByTransportMode = TRANSPORT_MODES.map((mode) => {
             const seenNumbers = new Set<string>();
 
@@ -348,7 +347,7 @@ export class Schedule {
                 routeVariant: departure.war_trasy,
                 stopIdSip: departure.bus_stop_id, // TODO Compute in code
                 stopNumberOnRoute: departure.lp_przyst,
-                lineNumber: departure.numer_lini,
+                lineNumber: departure.numer_lini.trim(),
                 departureTimes: splitDeparturesString(departure.odjazdy).map(toDepartureTime),
             } satisfies Departure;
         }) satisfies Departure[];
