@@ -2,6 +2,7 @@
 *.json
 *.xml
 *.sql
+*.sqlite
 
 # Files to keep
 !deno.json
