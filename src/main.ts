@@ -26,15 +26,16 @@ if (import.meta.main) {
     // Deno.writeTextFile("test.json", JSON.stringify((await getVehicles())));
 
     // ^ Schedule file
-    const filename = './schedule.sql';
-    // const schedule = await getSchedule('./schedule.sql');
+    const filename = './schedule_2025_10-05.sql';
+    // const filename = './schedule_2025_10-05.sql';
+    // const schedule = await getSchedule(filename);
 
     // if (!schedule) {
     //     console.error('DB Not loaded');
     //     exit();
     // }
 
-    const db = new DatabaseSync(filename, { readOnly: true, open: true });
+    // const db = new DatabaseSync(filename, { readOnly: true, open: true });
 
     const schedule = new Schedule(filename);
 
@@ -67,12 +68,9 @@ if (import.meta.main) {
     // // Deno.writeTextFile("./points.json", JSON.stringify(schedule.generateSalesPoints()))
 
     // !
-    schedule.saveSchedule();
+    // schedule.saveSchedule();
 
-    // console.log(toDepartureTime("18120"));
-
-    const test =
-        '18120,,19920,,21540,,22440,,23340,,24180,,25080,,25980,,26880,,27780,,28680,,29580,,30720,,32520,,34320,,36120,,37920,,39720,,41520,,43320,,45120,,46920,,48720,,49620,,50520,,51420,,52320,,53220,,54120,,55020,,55920,,56820,,57720,,58800,,60780,,62580,,64380,,66180,,67980,,69780,,71640,,73440,,75300,,77100,,78900,,80700,';
+    // console.log(schedule.generateConfig());
 
     // console.log(splitDeparturesString(test).map(timeString => toDepartureTime(timeString)));
 

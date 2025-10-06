@@ -1,4 +1,5 @@
 import { DatabaseSchema, Row, ValuesToKeys } from '../../utils/types.ts';
+import { Route } from './destination.ts';
 
 export const NOTICES_TABLE = {
     __table__: 'UWAGI',
@@ -19,7 +20,7 @@ export const _noticeSql = {
 export type NoticeSql = typeof _noticeSql;
 
 export type Notice = {
-    id: number;
+    routeNumber: Route['number'];
     name: string;
     content: string;
 };

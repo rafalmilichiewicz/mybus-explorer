@@ -4,7 +4,7 @@ import { SCHEMA } from '../db/schema.ts';
 import { Metadata, MetadataSql } from '../db/schema/metadata.ts';
 import { Route, DestinationSql } from '../db/schema/destination.ts';
 import { StopSql, Stop } from '../db/schema/stop.ts';
-import { StreetSql } from '../db/schema/street.ts';
+import { Street, StreetSql } from '../db/schema/street.ts';
 import { getStopsDestinations } from '../db/sql.ts';
 import {
     Departure,
@@ -21,6 +21,15 @@ import {
 import { getSalesPointType, SalesPoint, SalesPointSql } from '../db/schema/sales-point.ts';
 import { Day, DaySql } from '../db/schema/day.ts';
 import { CalendarEntry, CalendarEntrySql } from '../db/schema/calendar.ts';
+import {
+    Config,
+    ConfigFlag,
+    ConfigSql,
+    convertConfigFlag,
+    KNOWN_CONFIG_KEYS,
+} from '../db/schema/config.ts';
+import { Notice, NoticeSql } from '../db/schema/notice.ts';
+import { constrainedMemory } from 'node:process';
 type PickAsObject<T, K extends keyof T> = { [P in K]: T[P] };
 
 function naturalSort(a: string, b: string) {
@@ -94,6 +103,31 @@ type RouteDto = {
     depot: boolean;
 };
 
+type TimetableEntry = Omit<Departure, 'stopIdSip | dayType'>;
+type Timetable = {
+    [stopIdSip: Departure['stopIdSip']]: {
+        [dayType: Departure['dayType']]: TimetableEntry[];
+    };
+};
+
+function groupByStopAndDay(data: TimetableEntry[]): Timetable {
+    return data.reduce<Timetable>((acc, entry) => {
+        const { stopIdSip, dayType } = entry;
+
+        if (!acc[stopIdSip]) {
+            acc[stopIdSip] = {};
+        }
+
+        if (!acc[stopIdSip][dayType]) {
+            acc[stopIdSip][dayType] = [];
+        }
+
+        acc[stopIdSip][dayType].push(entry);
+
+        return acc;
+    }, {});
+}
+
 export class Schedule {
     private db: DatabaseSync;
     public metadata: Metadata;
@@ -110,6 +144,10 @@ export class Schedule {
         entries: CalendarEntry[];
     };
     private departures: Departure[];
+    private timetable: Timetable;
+    private streets: Street[];
+    private config: Config;
+    private notices: Notice[];
 
     constructor(filename: string) {
         this.db = new DatabaseSync(filename, { readOnly: true, open: true });
@@ -153,6 +191,11 @@ export class Schedule {
             entries: this.generateCalendarEntries(),
         };
         this.departures = this.generateDepartures();
+
+        this.timetable = groupByStopAndDay(this.departures);
+        this.streets = this.generateStreets();
+        this.notices = this.generateNotices();
+        this.config = this.generateConfig();
     }
 
     private getMetadata(): Metadata {
@@ -356,6 +399,83 @@ export class Schedule {
         return departures;
     }
 
+    generateStreets(): Street[] {
+        const sql = `SELECT * FROM ${SCHEMA.STREETS.__table__}`;
+        const streetsSql = this.db.prepare(sql);
+        const streetsRaw = streetsSql.all() as StreetSql[];
+
+        const streets = streetsRaw.map((street) => {
+            return {
+                id: street.id,
+                name: street.nazwa,
+            } satisfies Street;
+        }) satisfies Street[];
+
+        return streets;
+    }
+
+    generateConfig(): Config {
+        const sql = `SELECT * FROM ${SCHEMA.CONFIG.__table__}`;
+        const configSql = this.db.prepare(sql);
+        const configRaw = configSql.all() as ConfigSql[];
+
+        // Default blank config
+        const config: Config = {
+            TripPlannerEnabled: false,
+            TripPlannerVersion: '',
+            StreetsEnabled: false,
+            VehicleNotesEnabled: false,
+            VehicleVarianceEnabled: false,
+            _others: {},
+            VehicleSideNumberEnabled: false,
+        };
+
+        configRaw.forEach(({ name, value }) => {
+            console.log(name, value);
+            const flag: boolean | undefined = convertConfigFlag(value);
+            switch (true) {
+                case name === KNOWN_CONFIG_KEYS.TripPlannerEnabled && flag !== undefined:
+                    config.TripPlannerEnabled = flag;
+                    break;
+                case name === KNOWN_CONFIG_KEYS.TripPlannerVersion:
+                    config.TripPlannerVersion = value;
+                    break;
+                case name === KNOWN_CONFIG_KEYS.StreetsEnabled && flag !== undefined:
+                    config.StreetsEnabled = flag;
+                    break;
+                case name === KNOWN_CONFIG_KEYS.VehicleNotesEnabled && flag !== undefined:
+                    config.VehicleNotesEnabled = flag;
+                    break;
+                case name === KNOWN_CONFIG_KEYS.VehicleSideNumberEnabled && flag !== undefined:
+                    config.VehicleSideNumberEnabled = flag;
+                    break;
+                case name === KNOWN_CONFIG_KEYS.VehicleVarianceEnabled && flag !== undefined:
+                    config.VehicleVarianceEnabled = flag;
+                    break;
+                default:
+                    config._others[name] = value;
+                    break;
+            }
+        });
+
+        return config;
+    }
+    generateNotices(): Notice[] {
+        const sql = `SELECT * FROM ${SCHEMA.NOTICES.__table__}`;
+        const noticesSql = this.db.prepare(sql);
+        const noticesRaw = noticesSql.all() as NoticeSql[];
+
+        const notices = noticesRaw.map((notice) => {
+            return {
+                routeNumber: notice.numer_linii,
+                name: notice.ozn_uwagi,
+                content: notice.tresc_uwag,
+            } satisfies Notice;
+        }) satisfies Notice[];
+
+        return notices;
+    }
+
     public async saveSchedule() {
         await Deno.writeTextFile('./stops.json', JSON.stringify(this.stops));
         await Deno.writeTextFile('./routes.json', JSON.stringify(this.routes));
@@ -363,6 +483,10 @@ export class Schedule {
         await Deno.writeTextFile('./points_of_sale.json', JSON.stringify(this.salesPoints));
         await Deno.writeTextFile('./calendar.json', JSON.stringify(this.calendar));
         await Deno.writeTextFile('./departures.json', JSON.stringify(this.departures));
+        await Deno.writeTextFile('./timetable.json', JSON.stringify(this.timetable));
+        await Deno.writeTextFile('./streets.json', JSON.stringify(this.streets));
+        await Deno.writeTextFile('./notices.json', JSON.stringify(this.notices));
+        await Deno.writeTextFile('./config.json', JSON.stringify(this.config));
     }
 
     // public get;
