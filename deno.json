@@ -3,8 +3,14 @@
         "dev": "deno run --watch --allow-net --allow-write --allow-read --unstable-temporal ./src/main.ts"
         // TODO Define tests and build commands
     },
+    "lint": {
+        "include": ["src/"],
+        "rules": {
+            "tags": ["recommended", "jsr"]
+        }
+    },
     "imports": {
-        "fast-xml-parser": "npm:fast-xml-parser@^5.2.5",
+        "fast-xml-parser": "npm:fast-xml-parser@^5.2.5"
         // "sqlite": "https://deno.land/x/sqlite@v3.9.1/mod.ts"
     }
 }
