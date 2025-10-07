@@ -1,4 +1,4 @@
-import { SomeOtherString } from '../../utils/types.ts';
+import type { SomeOtherString } from '../../utils/types.ts';
 
 export const VEHICLE_TYPES = {
     bus: 'A',

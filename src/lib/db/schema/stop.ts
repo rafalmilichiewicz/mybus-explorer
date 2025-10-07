@@ -1,5 +1,5 @@
-import { DatabaseSchema, Row, ValuesToKeys } from '../../utils/types.ts';
-import { Street } from './street.ts';
+import type { DatabaseSchema, Row, ValuesToKeys } from '../../utils/types.ts';
+import type { Street } from './street.ts';
 
 export const STOPS_TABLE = {
     __table__: 'PRZYSTANKI',

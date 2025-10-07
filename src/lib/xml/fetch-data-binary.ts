@@ -1,4 +1,4 @@
-import { ZTM_Headers } from '../token/token.ts';
+import type { ZTM_Headers } from '../token/token.ts';
 import { fetchBase } from './fetch-base.ts';
 
 export default async function fetchDataBinary(url: string, headers: ZTM_Headers) {

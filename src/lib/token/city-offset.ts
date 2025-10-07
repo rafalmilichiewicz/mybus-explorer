@@ -1,4 +1,4 @@
-import { CityCode } from './cities.ts';
+import type { CityCode } from './cities.ts';
 
 // TODO Example
 /**

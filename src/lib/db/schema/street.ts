@@ -1,4 +1,4 @@
-import { DatabaseSchema, Row, ValuesToKeys } from "../../utils/types.ts";
+import type { DatabaseSchema, Row, ValuesToKeys } from "../../utils/types.ts";
 
 export const STREETS_TABLE = {
     __table__: 'ULICE',

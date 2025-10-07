@@ -1,6 +1,6 @@
-import { DatabaseSchema, Row, ValuesToKeys } from '../../utils/types.ts';
-import { Stop } from './stop.ts';
-import { RouteDirection, TransportMode } from './ztm-types.ts';
+import type { DatabaseSchema, Row, ValuesToKeys } from '../../utils/types.ts';
+import type { Stop } from './stop.ts';
+import type { RouteDirection, TransportMode } from './ztm-types.ts';
 
 export const DESTINATIONS_TABLE = {
     __table__: 'KIERUNKI',

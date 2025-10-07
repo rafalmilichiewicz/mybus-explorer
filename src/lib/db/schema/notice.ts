@@ -1,5 +1,5 @@
-import { DatabaseSchema, Row, ValuesToKeys } from '../../utils/types.ts';
-import { Route } from './destination.ts';
+import type { DatabaseSchema, Row, ValuesToKeys } from '../../utils/types.ts';
+import type { Route } from './destination.ts';
 
 export const NOTICES_TABLE = {
     __table__: 'UWAGI',

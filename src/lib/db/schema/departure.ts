@@ -1,7 +1,7 @@
-import { DatabaseSchema, SomeOtherString, Row, ValuesToKeys } from '../../utils/types.ts';
-import { Day } from './day.ts';
-import { Route } from './destination.ts';
-import { Stop } from './stop.ts';
+import type { DatabaseSchema, SomeOtherString, Row, ValuesToKeys } from '../../utils/types.ts';
+import type { Day } from './day.ts';
+import type { Route } from './destination.ts';
+import type { Stop } from './stop.ts';
 
 export const DEPARTURES_TABLE = {
     __table__: 'ODJAZDY',

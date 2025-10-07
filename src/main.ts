@@ -1,21 +1,8 @@
-import { exit } from 'node:process';
-import { LUBLIN_AGE, TIME_ZONE } from './lib/consts/magic-numbers.ts';
-import { getSchedule } from './lib/schedule/get-schedule.ts';
-import { generateAgeHeader } from './lib/token/age.ts';
-import { CITY_CODES } from './lib/token/cities.ts';
-import generateCityOffset from './lib/token/city-offset.ts';
-import generateHeaders from './lib/token/header.ts';
-import generateToken from './lib/token/token.ts';
-import getVehicles from './lib/vehicles/vehicles.ts';
-
-// @ts-types="node:sqlite"
+//@ts-types="node:sqlite"
 import { DatabaseSync } from 'node:sqlite';
 
-// import { DB } from 'sqlite';
-
-import { compareSchedule } from './lib/schedule/compare-schedule.ts';
-import { parseStopDescription, Schedule } from './lib/schedule/schedule.ts';
-import { splitDeparturesString, toDepartureTime } from './lib/db/schema/departure.ts';
+import { ScheduleDatabase } from './lib/db/sql.ts';
+import { Schedule } from './lib/schedule/schedule.ts';
 
 if (import.meta.main) {
     console.log('Starting ZDiTM Thing...');
@@ -37,7 +24,9 @@ if (import.meta.main) {
 
     // const db = new DatabaseSync(filename, { readOnly: true, open: true });
 
-    const schedule = new Schedule(filename);
+    const schedule = new Schedule(
+        new ScheduleDatabase(new DatabaseSync(filename, { readOnly: true, open: true }))
+    );
 
     // console.log(schedule);
 
@@ -68,13 +57,11 @@ if (import.meta.main) {
     // // Deno.writeTextFile("./points.json", JSON.stringify(schedule.generateSalesPoints()))
 
     // !
-    // schedule.saveSchedule();
+    schedule.saveSchedule();
 
     // console.log(schedule.generateConfig());
 
     // console.log(splitDeparturesString(test).map(timeString => toDepartureTime(timeString)));
-
-    
 
     // type ScheduleMetadata = {
     //     validFrom: string;

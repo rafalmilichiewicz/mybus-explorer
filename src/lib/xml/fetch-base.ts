@@ -1,4 +1,4 @@
-import { ZTM_Headers } from "../token/token.ts";
+import type { ZTM_Headers } from "../token/token.ts";
 
 export async function fetchBase(url: string, headers: ZTM_Headers) {
     console.log(headers);

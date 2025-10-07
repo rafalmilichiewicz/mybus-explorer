@@ -1,4 +1,4 @@
-import { ZTM_Headers } from "../token/token.ts";
+import type { ZTM_Headers } from "../token/token.ts";
 import { fetchBase } from "./fetch-base.ts";
 import parseXml from './parse.ts';
 
