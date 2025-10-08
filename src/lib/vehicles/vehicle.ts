@@ -10,7 +10,7 @@ const _example = {
     'nr': '25', // Route number
     'wt': 'B', // Route variant
     'kr': 'T', // Route direction (inbound/outbound/depot) T | P | Z
-    'ik': '2085', // ? Current destination Id
+    'ik': '2085', // ? Current route Id
     'lp': '18', // Number of next stop on route (1 indexed)
     'dp': '768', // ?
     'dw': '935', // ?
@@ -23,7 +23,7 @@ const _example = {
     'p': '14:17', // Time of planned departure (from first stop)
     'op': 'PANCERNIAKÓW  FELICITY', // Current destination
     'c': 'BKN', // Icons - vehicle attributes - AC / low-floor and such
-    'nk': '2086', // ? Next destination Id
+    'nk': '2086', // ? Next route Id
     'nnr': '25', // Next route number
     'nwt': 'C', // Next route variant
     'nkr': 'P', // Next route direction
@@ -38,13 +38,6 @@ const _shape = {
         'V': [_example],
     },
 };
-
-// TODO add safeguards
-const vehicleMapping = {
-    id: 'id',
-    sideNumber: 'nb',
-    routeNumber: 'nr',
-} as const;
 
 export type VehicleApi = typeof _shape;
 
@@ -67,15 +60,18 @@ export type VehicleFlags = null;
 // TODO
 export type VehicleStatus = null;
 
-export type Vehicle = {
+export type VehicleEnRoute = {
     id: string;
     sideNumer: string;
     position: Position;
     _positionP: Position;
     status: VehicleStatus;
-    current: RouteInfo;
+    currentRoute: RouteInfo;
+    nextRoute: RouteInfo; // TODO Optional
     delay: number;
-    next: RouteInfo; // TODO Optional
     flags: VehicleFlags;
     type: TransportMode;
+    nextStopOnRouteIndex: number;
+    brigade: string;
+    plannedDepartureTime: string;
 };
