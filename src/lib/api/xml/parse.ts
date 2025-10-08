@@ -1,6 +1,7 @@
 import { XMLParser } from 'fast-xml-parser';
 
 const parser = new XMLParser({
+    // TODO 
     // ignoreAttributes: true,
     // parseTagValue: true,
     // parseAttributeValue: false,

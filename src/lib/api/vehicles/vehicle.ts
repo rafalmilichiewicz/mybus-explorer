@@ -1,4 +1,4 @@
-import { RouteDirection, TransportMode, VehicleType } from '../db/schema/ztm-types.ts';
+import type { RouteDirection, TransportMode } from '../../db/schema/ztm-types.ts';
 
 const _example = {
     // Id of some sort

@@ -1,5 +1,6 @@
-import { ENDPOINTS } from '../consts/endpoints.ts';
-import { USER_AGENT } from '../consts/magic-numbers.ts';
+
+import { ENDPOINTS } from "../../consts/endpoints.ts";
+import { USER_AGENT } from "../../consts/magic-numbers.ts";
 import fetchDataXml from '../xml/fetch-data-xml.ts';
 
 export type ResponsePing = {

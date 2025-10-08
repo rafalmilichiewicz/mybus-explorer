@@ -1,9 +1,9 @@
 //@ts-types="node:sqlite"
-import { DatabaseSync } from 'node:sqlite';
+import type { DatabaseSync } from 'node:sqlite';
 
-import { ScheduleDatabase } from './lib/db/sql.ts';
-import { Schedule } from './lib/schedule/schedule.ts';
-import getVehicles from './lib/vehicles/vehicles.ts';
+import type { ScheduleDatabase } from './lib/db/sql.ts';
+import type { Schedule } from './lib/schedule/schedule.ts';
+import getVehicles from './lib/api/vehicles/vehicles.ts';
 
 if (import.meta.main) {
     console.log('Starting ZDiTM Thing...');

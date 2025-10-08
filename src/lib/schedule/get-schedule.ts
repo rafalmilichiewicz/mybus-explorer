@@ -1,12 +1,7 @@
-import type Stream from 'node:stream';
 import { ENDPOINTS } from '../consts/endpoints.ts';
 import { LUBLIN_AGE } from '../consts/magic-numbers.ts';
-import generateHeaders from '../token/header.ts';
-import fetchDataBinary from '../xml/fetch-data-binary.ts';
-
-// @ts-types="node:sqlite"
-import type { DatabaseSync } from 'node:sqlite';
-import type { buffer } from 'node:stream/consumers';
+import generateHeaders from "../api/token/header.ts";
+import fetchDataBinary from "../api/xml/fetch-data-binary.ts";
 
 export async function getSchedule(filename: string) {
     const headers = await generateHeaders(LUBLIN_AGE);

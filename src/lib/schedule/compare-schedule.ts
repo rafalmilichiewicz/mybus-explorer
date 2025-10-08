@@ -1,7 +1,7 @@
+import generateHeaders from "../api/token/header.ts";
+import fetchDataXml from "../api/xml/fetch-data-xml.ts";
 import { ENDPOINTS } from "../consts/endpoints.ts";
 import { LUBLIN_AGE } from "../consts/magic-numbers.ts";
-import generateHeaders from "../token/header.ts";
-import fetchDataXml from "../xml/fetch-data-xml.ts";
 
 export type ResponseCompareSchedule = {
     int: 0 | 1
