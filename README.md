@@ -2,10 +2,18 @@
 
 # Used technologies
 
+## Code
+
 -   TypeScript
 -   Deno 2
--   Sqlite
+-   Sqlite 3
 -   JSON streaming (NDJSON)
+
+## Utility
+
+-   DBeaver - Sqlite exploration
+-   D-Tale - rapid data exploration of Pandas DataFrames (produced JSONs)
+-   Insomnia - Postman alternative for testing API calls
 
 # Caveats and Challenges
 
