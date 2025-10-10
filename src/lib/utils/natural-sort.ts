@@ -1,3 +1,7 @@
+/**
+ * String comparison where numbers are first and other strings at the end
+ */
+
 export function naturalSort(a: string, b: string) {
     const aNum = Number(a);
     const bNum = Number(b);

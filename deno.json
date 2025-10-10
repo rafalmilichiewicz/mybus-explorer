@@ -1,6 +1,14 @@
 {
+    "permissions": {
+        "default": {
+            "env": true,
+            "net": true,
+            "read": true,
+            "write": true
+        }
+    },
     "tasks": {
-        "dev": "deno run --watch --allow-net --allow-write --allow-read --unstable-temporal ./src/main.ts"
+        "dev": "deno run --watch -P --unstable-temporal ./src/main.ts"
         // TODO Define tests and build commands
     },
     "lint": {

@@ -1,7 +1,8 @@
 import { ENDPOINTS } from '../../consts/endpoints.ts';
 import { CONFIG } from '../../consts/env.ts';
+import fetchDataXml from '../requests/fetch.ts';
 import generateHeaders from '../token/header.ts';
-import fetchDataXml from '../xml/fetch-data-xml.ts';
+
 import type { VehicleApi, VehicleEnRoute } from './vehicle.ts';
 
 // Empty string = all vehicles
