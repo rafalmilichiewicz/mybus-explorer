@@ -1,4 +1,3 @@
-// @ts-types="node:sqlite"
 import type { Metadata } from '../db/schema/metadata.ts';
 import type { Route } from '../db/schema/destination.ts';
 import type { Stop } from '../db/schema/stop.ts';

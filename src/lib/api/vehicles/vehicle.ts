@@ -1,4 +1,5 @@
 import type { RouteDirection, TransportMode } from '../../db/schema/ztm-types.ts';
+import type { Position } from "../../utils/types.ts";
 
 const _example = {
     // Id of some sort
@@ -49,10 +50,6 @@ export type RouteInfo = {
     id: string;
 };
 
-export type Position = {
-    longitude: number;
-    latitude: number;
-};
 
 // TODO
 export type VehicleFlags = null;

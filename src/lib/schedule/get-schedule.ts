@@ -1,10 +1,10 @@
 import { ENDPOINTS } from '../consts/endpoints.ts';
-import { LUBLIN_AGE } from '../consts/magic-numbers.ts';
-import generateHeaders from "../api/token/header.ts";
-import fetchDataBinary from "../api/xml/fetch-data-binary.ts";
+import generateHeaders from '../api/token/header.ts';
+import fetchDataBinary from '../api/xml/fetch-data-binary.ts';
+import { CONFIG } from '../consts/env.ts';
 
 export async function getSchedule(filename: string) {
-    const headers = await generateHeaders(LUBLIN_AGE);
+    const headers = await generateHeaders(CONFIG.CITY.AGE);
     const response = await fetchDataBinary(`${ENDPOINTS.SCHEDULE.GET}`, headers);
     const file = await Deno.open(filename, { create: true, write: true });
     console.log(response.headers);

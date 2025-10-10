@@ -13,3 +13,8 @@ export type DatabaseSchema = {
     __table__: string;
     __columns__: Record<string, string>;
 };
+
+export type Position = {
+    longitude: number;
+    latitude: number;
+};

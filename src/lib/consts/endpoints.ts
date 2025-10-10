@@ -1,4 +1,6 @@
-const BASE = 'http://sip.ztm.lublin.eu/AndroidService/SchedulesService.svc';
+import { CONFIG } from './env.ts';
+
+const BASE = CONFIG.API.BASE_URL;
 
 export const ENDPOINTS = {
     PING_SERVICE: `${BASE}/PingService`,
