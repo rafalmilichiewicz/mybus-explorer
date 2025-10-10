@@ -1,15 +1,15 @@
-import type { Metadata } from '../db/schema/metadata.ts';
-import type { Route } from '../db/schema/destination.ts';
-import type { Stop } from '../db/schema/stop.ts';
-import type { Street } from '../db/schema/street.ts';
-import type { ScheduleDatabase } from '../db/sql.ts';
-import type { Departure } from '../db/schema/departure.ts';
-import { TRANSPORT_MODES } from '../db/schema/ztm-types.ts';
-import type { SalesPoint } from '../db/schema/sales-point.ts';
-import type { Day } from '../db/schema/day.ts';
-import type { CalendarEntry } from '../db/schema/calendar.ts';
-import type { Config } from '../db/schema/config.ts';
-import type { Notice } from '../db/schema/notice.ts';
+import type { Metadata } from './schema/metadata.ts';
+import type { Route } from './schema/destination.ts';
+import type { Stop } from './schema/stop.ts';
+import type { Street } from './schema/street.ts';
+import type { ScheduleDatabase } from './sql.ts';
+import type { Departure } from './schema/departure.ts';
+import { TRANSPORT_MODES } from './schema/ztm-types.ts';
+import type { SalesPoint } from './schema/sales-point.ts';
+import type { Day } from './schema/day.ts';
+import type { CalendarEntry } from './schema/calendar.ts';
+import type { Config } from './schema/config.ts';
+import type { Notice } from './schema/notice.ts';
 import { naturalSort } from '../utils/natural-sort.ts';
 
 // TODO Rename and move

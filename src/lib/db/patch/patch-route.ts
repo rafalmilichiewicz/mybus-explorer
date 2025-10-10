@@ -1,4 +1,4 @@
-import type { Route } from "../db/schema/destination.ts";
+import type { Route } from "../schema/destination.ts";
 
 
 // TODO Force either id or number to be present

@@ -1,7 +1,7 @@
-import { ENDPOINTS } from '../consts/endpoints.ts';
-import generateHeaders from '../api/token/header.ts';
-import fetchDataBinary from '../api/xml/fetch-data-binary.ts';
-import { CONFIG } from '../consts/env.ts';
+import { ENDPOINTS } from '../../consts/endpoints.ts';
+import generateHeaders from '../token/header.ts';
+import fetchDataBinary from '../xml/fetch-data-binary.ts';
+import { CONFIG } from '../../consts/env.ts';
 
 export async function getSchedule(filename: string) {
     const headers = await generateHeaders(CONFIG.CITY.AGE);

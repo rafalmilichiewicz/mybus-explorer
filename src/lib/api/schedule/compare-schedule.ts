@@ -1,7 +1,7 @@
-import generateHeaders from "../api/token/header.ts";
-import fetchDataXml from "../api/xml/fetch-data-xml.ts";
-import { ENDPOINTS } from "../consts/endpoints.ts";
-import { LUBLIN_AGE } from "../consts/magic-numbers.ts";
+import generateHeaders from "../token/header.ts";
+import fetchDataXml from "../xml/fetch-data-xml.ts";
+import { ENDPOINTS } from "../../consts/endpoints.ts";
+import { CONFIG } from "../../consts/env.ts";
 
 export type ResponseCompareSchedule = {
     int: 0 | 1
@@ -11,7 +11,7 @@ export type ResponseCompareSchedule = {
 // False if not
 export async function compareSchedule(version: number, generation: number) {
 
-    const headers = await generateHeaders(LUBLIN_AGE);
+    const headers = await generateHeaders(CONFIG.CITY.AGE);
     const query = `?nGeneracja=${generation}&nIdWersja=${version}`
     const url = `${ENDPOINTS.SCHEDULE.COMPARE}${query}`
     console.log(url)

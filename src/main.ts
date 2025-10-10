@@ -2,7 +2,7 @@
 import type { DatabaseSync } from 'node:sqlite';
 
 import type { ScheduleDatabase } from './lib/db/sql.ts';
-import type { Schedule } from './lib/schedule/schedule.ts';
+import type { Schedule } from './lib/db/schedule.ts';
 import getVehicles from './lib/api/vehicles/vehicles.ts';
 
 if (import.meta.main) {

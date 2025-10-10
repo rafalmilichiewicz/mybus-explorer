@@ -22,7 +22,7 @@ import type { Notice, NoticeSql } from './schema/notice.ts';
 import { type SalesPointSql, getSalesPointType, type SalesPoint } from './schema/sales-point.ts';
 import type { Street, StreetSql } from './schema/street.ts';
 import { getVehicleType, getRouteDirectionType, TRANSPORT_MODES } from './schema/ztm-types.ts';
-import { patchesRoute } from '../schedule/patch.ts';
+import { patchesRoute } from './patch/patch-route.ts';
 
 type PickAsObject<T, K extends keyof T> = { [P in K]: T[P] };
 
