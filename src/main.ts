@@ -4,6 +4,7 @@ import type { DatabaseSync } from 'node:sqlite';
 import type { ScheduleDatabase } from './lib/db/sql.ts';
 import type { Schedule } from './lib/db/schedule.ts';
 import getVehicles from './lib/api/vehicles/vehicles.ts';
+import { getVehicleFlags, getVehicleStatus } from './lib/db/schema/ztm-types.ts';
 
 if (import.meta.main) {
     console.log('Starting ZDiTM Thing...');
@@ -23,10 +24,12 @@ if (import.meta.main) {
     // const schedule = new Schedule(
     //     new ScheduleDatabase(new DatabaseSync(filename, { readOnly: true, open: true }))
     // );
-    const vehicles = await getVehicles();
-
-    await Deno.writeTextFile("vehicles.json", JSON.stringify(vehicles))
+    const vehicles = await getVehicles("40");
     console.log(vehicles);
+
+    // await Deno.writeTextFile("vehicles.json", JSON.stringify(vehicles))
+    // console.log(vehicles);
+
 
     // Download database
     // Set version and gen

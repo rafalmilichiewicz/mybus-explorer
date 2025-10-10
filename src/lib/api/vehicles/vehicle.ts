@@ -1,5 +1,5 @@
-import type { RouteDirection, TransportMode } from '../../db/schema/ztm-types.ts';
-import type { Position } from "../../utils/types.ts";
+import type { RouteDirection, TransportMode, VehicleFlag, VehicleStatus } from '../../db/schema/ztm-types.ts';
+import type { Position } from '../../utils/types.ts';
 
 const _example = {
     // Id of some sort
@@ -17,13 +17,13 @@ const _example = {
     'dw': '935', // ?
     'x': '22.54847', // Longitude
     'y': '51.21101', // Latitude
-    'px': '22.54848', // ?
+    'px': '22.54848', // ? Possibly predicted location
     'py': '51.21103', // ?
     'o': '-90', // Delay - if positive advance else delay
     's': '1', // Vehicle status
     'p': '14:17', // Time of planned departure (from first stop)
     'op': 'PANCERNIAKÓW  FELICITY', // Current destination
-    'c': 'BKN', // Icons - vehicle attributes - AC / low-floor and such
+    'c': 'BKN', // Feature/Icons - vehicle flags - AC / low-floor and such
     'nk': '2086', // ? Next route Id
     'nnr': '25', // Next route number
     'nwt': 'C', // Next route variant
@@ -50,13 +50,6 @@ export type RouteInfo = {
     id: string;
 };
 
-
-// TODO
-export type VehicleFlags = null;
-
-// TODO
-export type VehicleStatus = null;
-
 export type VehicleEnRoute = {
     id: string;
     sideNumer: string;
@@ -64,9 +57,9 @@ export type VehicleEnRoute = {
     _positionP: Position;
     status: VehicleStatus;
     currentRoute: RouteInfo;
-    nextRoute: RouteInfo; // TODO Optional
+    nextRoute: RouteInfo;
     delay: number;
-    flags: VehicleFlags;
+    flags: VehicleFlag[];
     type: TransportMode;
     nextStopOnRouteIndex: number;
     brigade: string;

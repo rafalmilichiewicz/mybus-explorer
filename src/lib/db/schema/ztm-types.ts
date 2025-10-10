@@ -17,7 +17,6 @@ export type VehicleTypeValid = keyof Omit<typeof VEHICLE_TYPES, UnknownVehicleTy
 // TODO Add docs that state when modes are involved they will be in this order exactly
 export const TRANSPORT_MODES = ['bus', 'tram', 'trolleybus'] as const satisfies VehicleTypeValid[];
 
-
 export type VehicleTypeLetter = Exclude<
     (typeof VEHICLE_TYPES)[keyof typeof VEHICLE_TYPES],
     typeof VEHICLE_TYPES._unknown
@@ -94,5 +93,106 @@ export function getRouteDirectionType(routeCode: string): RouteDirection {
     return {
         id: routeCode,
         type: '_unknown',
+    };
+}
+
+export const VEHICLE_FEATURES = {
+    accessibility: 'N',
+    air_conditioning: 'K',
+    bicycle: 'R',
+    card_payments: 'Z',
+    electric: 'E',
+    ticket_machine: 'B',
+    _unknown: '',
+} as const;
+
+export type UnknownVehicleFeature = {
+    [K in keyof typeof VEHICLE_FEATURES]: (typeof VEHICLE_FEATURES)[K] extends '' ? K : never;
+}[keyof typeof VEHICLE_FEATURES];
+export type VehicleFeature = keyof typeof VEHICLE_FEATURES;
+export type VehicleFeatureValid = keyof Omit<typeof VEHICLE_FEATURES, UnknownVehicleFeature>;
+export type VehicleFeatureLetter = Exclude<
+    (typeof VEHICLE_FEATURES)[keyof typeof VEHICLE_FEATURES],
+    typeof VEHICLE_TYPES._unknown
+>;
+
+export const VEHICLE_FEATURES_REV = {
+    N: 'accessibility',
+    K: 'air_conditioning',
+    R: 'bicycle',
+    Z: 'card_payments',
+    E: 'electric',
+    B: 'ticket_machine',
+} as const satisfies Record<VehicleFeatureLetter, VehicleFeature>;
+
+export type VehicleFlag = {
+    id: VehicleFeature | SomeOtherString;
+    feature: VehicleFeature;
+};
+export function getVehicleFlags(featuresString: string): VehicleFlag[] {
+    const flags: VehicleFlag[] = [];
+    for (const char of featuresString) {
+        if (char in VEHICLE_FEATURES_REV) {
+            const feature = char as VehicleFeatureLetter;
+            flags.push({
+                id: feature,
+                feature: VEHICLE_FEATURES_REV[feature],
+            });
+        } else {
+            flags.push({
+                id: char,
+                feature: '_unknown',
+            });
+        }
+    }
+
+    return flags;
+}
+
+const VEHICLE_STATUSES = {
+    EN_ROUTE_STATIONARY: 1,
+    EN_ROUTE_MOVING: 2,
+    AWAITING_STATIONARY: 6,
+    AWAITING_MOVING: 7,
+    _unknown: -1,
+} as const;
+export type UnknownVehicleStatus = {
+    [K in keyof typeof VEHICLE_STATUSES]: (typeof VEHICLE_STATUSES)[K] extends -1 ? K : never;
+}[keyof typeof VEHICLE_STATUSES];
+export type VehicleStatusCode = keyof typeof VEHICLE_STATUSES;
+export type VehicleStatusValid = keyof Omit<typeof VEHICLE_STATUSES, UnknownVehicleFeature>;
+export type VehicleStatusNumber = Exclude<
+    (typeof VEHICLE_STATUSES)[keyof typeof VEHICLE_STATUSES],
+    typeof VEHICLE_STATUSES._unknown
+>;
+const VEHICLE_STATUSES_REV = {
+    '1': 'EN_ROUTE_STATIONARY',
+    '2': 'EN_ROUTE_MOVING',
+    '6': 'AWAITING_STATIONARY',
+    '7': 'AWAITING_MOVING',
+} as const satisfies Record<VehicleStatusNumber, VehicleStatusCode>;
+
+export type VehicleStatus = {
+    id: number;
+    flags?: {
+        moving: boolean;
+        enRoute: boolean;
+    };
+};
+
+export function getVehicleStatus(statusNumber: number): VehicleStatus {
+    if (statusNumber in VEHICLE_STATUSES_REV) {
+        const status = statusNumber as VehicleStatusNumber;
+        return {
+            id: status,
+            flags: {
+                moving: status === 2 || status === 7 ? true : false,
+                enRoute: status === 1 || status === 6 ? true : false,
+            },
+        };
+    }
+
+    return {
+        id: statusNumber,
     };
 }
