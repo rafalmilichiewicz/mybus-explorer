@@ -1,5 +1,7 @@
 # MyBus Explorer
 
+This project is done for research and learning purposes. Please don't misuse public APIs and use this project ethically.
+
 # Used technologies
 
 ## Code
