@@ -1,4 +1,4 @@
-import { CONFIG } from '../../consts/env.ts';
+import { CONFIG } from '../../consts/config.ts';
 import generateToken from './token.ts';
 
 export default async function generateHeaders(ageHeader: number) {

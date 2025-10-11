@@ -1,4 +1,4 @@
-import { CONFIG } from '../../consts/env.ts';
+import { CONFIG } from '../../consts/config.ts';
 import { ENDPOINTS } from '../../consts/endpoints.ts';
 import fetchDataXml from "../requests/fetch.ts";
 

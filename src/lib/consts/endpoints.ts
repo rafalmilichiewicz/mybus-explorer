@@ -1,4 +1,4 @@
-import { CONFIG } from './env.ts';
+import { CONFIG } from './config.ts';
 
 const BASE = CONFIG.API.BASE_URL;
 

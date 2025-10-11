@@ -16,7 +16,7 @@ async function fetchBase(url: string, headers: ZTM_Headers) {
     return response;
 }
 
-export async function fetchDataBinary(url: string, headers: ZTM_Headers) {
+export async function fetchDataBinary(url: string, headers: ZTM_Headers): Promise<Response> {
     const response = await fetchBase(url, {
         ...headers,
         'Accept-Encoding': 'gzip, deflate',
@@ -30,12 +30,12 @@ export async function fetchDataBinary(url: string, headers: ZTM_Headers) {
     return response;
 }
 
-export default async function fetchDataXml<T>(url: string, headers: ZTM_Headers) {
+export async function fetchDataXml<T>(url: string, headers: ZTM_Headers) {
     const response = await fetchBase(url, headers);
     const responseBody = await response.text();
     const parsedResponse = parseXml(responseBody);
 
-    console.log(responseBody, parsedResponse);
+    // console.log(responseBody, parsedResponse);
 
     return parsedResponse as T;
 }

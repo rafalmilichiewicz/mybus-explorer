@@ -1,5 +1,5 @@
 import { ENDPOINTS } from '../../consts/endpoints.ts';
-import { CONFIG } from '../../consts/env.ts';
+import { CONFIG } from '../../consts/config.ts';
 import generateHeaders from '../token/header.ts';
 import fetchDataXml from '../xml/fetch-data-xml.ts';
 

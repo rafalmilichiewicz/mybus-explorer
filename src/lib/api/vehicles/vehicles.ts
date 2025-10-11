@@ -1,7 +1,12 @@
 import { ENDPOINTS } from '../../consts/endpoints.ts';
-import { CONFIG } from '../../consts/env.ts';
-import { getRouteDirectionType, getVehicleFlags, getVehicleStatus, getVehicleType } from "../../db/schema/ztm-types.ts";
-import fetchDataXml from '../requests/fetch.ts';
+import { CONFIG } from '../../consts/config.ts';
+import {
+    getRouteDirectionType,
+    getVehicleFlags,
+    getVehicleStatus,
+    getVehicleType,
+} from '../../db/schema/ztm-types.ts';
+import { fetchDataXml } from '../requests/fetch.ts';
 import generateHeaders from '../token/header.ts';
 
 import type { VehicleApi, VehicleEnRoute } from './vehicle.ts';
