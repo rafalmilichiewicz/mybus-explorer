@@ -11,6 +11,15 @@ This project is done for research and learning purposes. Please don't misuse pub
 -   Sqlite 3
 -   JSON streaming (NDJSON)
 
+## Testing
+
+-   Deno's built in suite
+-   JSR standard libraries like `@std/assert`
+
+## Documentation
+
+-   Docusaurus
+
 ## Utility
 
 -   DBeaver - Sqlite exploration
