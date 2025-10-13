@@ -21,7 +21,7 @@ This project is done for research and learning purposes. Please don't misuse pub
 -   Docusaurus
 
 ## Utility
-
+-   Proxyman - iOS/macOS HTTP traffic capture tool 
 -   DBeaver - Sqlite exploration
 -   D-Tale - rapid data exploration of Pandas DataFrames (produced JSONs)
 -   Insomnia - Postman alternative for testing API calls
