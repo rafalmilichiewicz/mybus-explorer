@@ -18,6 +18,7 @@
         }
     },
     "imports": {
+        "@std/async": "jsr:@std/async@^1.0.15",
         "fast-xml-parser": "npm:fast-xml-parser@^5.2.5"
         // "sqlite": "https://deno.land/x/sqlite@v3.9.1/mod.ts"
     }
