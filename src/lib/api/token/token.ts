@@ -1,7 +1,6 @@
 import { CONFIG } from '../../consts/config.ts';
 import { ENDPOINTS } from '../../consts/endpoints.ts';
-import fetchDataXml from "../requests/fetch.ts";
-
+import { fetchDataXml } from '../requests/fetch.ts';
 
 export type ResponsePing = {
     int: number;
