@@ -8,6 +8,7 @@ import { getTimetableForStop } from './lib/api/timetable/timetable-stop.ts';
 import { delay } from '@std/async/delay';
 import { CONFIG } from './lib/consts/config.ts';
 import { getSchedule } from './lib/api/schedule/get-schedule.ts';
+import { getTimetableForVehicle } from "./lib/api/timetable/timetable-vehicle.ts";
 
 if (import.meta.main) {
     console.log('Starting ZDiTM Thing...');
@@ -30,12 +31,14 @@ if (import.meta.main) {
     // // const vehicles = await getVehicles("40");
     ;
     // await getTimetableForStop(2);
-    console.log(await getTimetableForStop(2));
+    // console.log(await getTimetableForStop(2));
     // console.log((await getTimetableForStop(355)));
 
     // console.log((await getTimetableForStop(364)));
     // console.log((await getTimetableForStop(365)));
     // console.log(vehicles);
+
+    console.log(await getTimetableForVehicle("30884"))
 
     // await Deno.writeTextFile("vehicles.json", JSON.stringify(vehicles))
     // console.log(vehicles);
