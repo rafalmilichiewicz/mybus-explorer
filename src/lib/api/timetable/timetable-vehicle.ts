@@ -1,1 +1,0 @@
-// ?cRoute=&cRouteVariant=&nIdKursu=1429
