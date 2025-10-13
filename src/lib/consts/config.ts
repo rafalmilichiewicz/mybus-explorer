@@ -1,3 +1,5 @@
+import { generateAgeHeader } from '../api/token/age.ts';
+import generateCityOffset from '../api/token/city-offset.ts';
 import { CITIES } from './cities.ts';
 import { ENV_VARS } from './env_vars.ts';
 
@@ -14,6 +16,8 @@ type EnvVarValues<T> = {
     [K in keyof T]: T[K] extends Record<string, string> ? { [P in keyof T[K]]: unknown } : unknown;
 };
 
+const defaultCity = CITIES.LUBLIN;
+
 export const CONFIG = {
     API: {
         BASE_URL: Deno.env.get(ENV_VARS.API.BASE_URL) ?? CITIES.LUBLIN.url,
@@ -25,14 +29,14 @@ export const CONFIG = {
     // TODO Add parsing (No CITY.CODE => Lublin else CITY.CODE present => Compute)
     // Currently assumes (No value => Lublin)
     CITY: {
-        CODE: Deno.env.get(ENV_VARS.CITY.CODE) ?? CITIES.LUBLIN.code,
+        CODE: Deno.env.get(ENV_VARS.CITY.CODE) ?? defaultCity.code,
         OFFSET:
             Deno.env.get(ENV_VARS.CITY.OFFSET) !== undefined
                 ? parseIntEnv(Deno.env.get(ENV_VARS.CITY.OFFSET) as string)
-                : 376,
+                : generateCityOffset(defaultCity.code),
         AGE:
             Deno.env.get(ENV_VARS.CITY.AGE) !== undefined
                 ? parseIntEnv(Deno.env.get(ENV_VARS.CITY.AGE) as string)
-                : 436,
+                : generateAgeHeader(generateCityOffset(defaultCity.code)),
     },
 } as const satisfies EnvVarValues<typeof ENV_VARS>;
