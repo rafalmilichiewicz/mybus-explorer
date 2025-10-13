@@ -8,7 +8,8 @@ import { getTimetableForStop } from './lib/api/timetable/timetable-stop.ts';
 import { delay } from '@std/async/delay';
 import { CONFIG } from './lib/consts/config.ts';
 import { getSchedule } from './lib/api/schedule/get-schedule.ts';
-import { getTimetableForVehicle } from "./lib/api/timetable/timetable-vehicle.ts";
+import { getTimetableForVehicle } from './lib/api/timetable/timetable-vehicle.ts';
+import { getRouteTransitPoints } from './lib/api/route-points/route-points.ts';
 
 if (import.meta.main) {
     console.log('Starting ZDiTM Thing...');
@@ -22,14 +23,13 @@ if (import.meta.main) {
     //     exit();
     // }
 
-    // const filename = './schedule_2025_10-05.sql';
-    // const db = new DatabaseSync(filename, { readOnly: true, open: true });
+    const filename = './schedule_2025_10-05.sql';
+    const db = new DatabaseSync(filename, { readOnly: true, open: true });
 
-    // const schedule = new Schedule(
-    //     new ScheduleDatabase(new DatabaseSync(filename, { readOnly: true, open: true }))
-    // );
+    const schedule = new Schedule(
+        new ScheduleDatabase(new DatabaseSync(filename, { readOnly: true, open: true }))
+    );
     // // const vehicles = await getVehicles("40");
-    ;
     // await getTimetableForStop(2);
     // console.log(await getTimetableForStop(2));
     // console.log((await getTimetableForStop(355)));
@@ -38,7 +38,21 @@ if (import.meta.main) {
     // console.log((await getTimetableForStop(365)));
     // console.log(vehicles);
 
-    console.log(await getTimetableForVehicle("30884"))
+    // console.log(await getTimetableForVehicle("30884"))
+    const routeTransitPoints = await getRouteTransitPoints('159', 'A');
+    const withStops = routeTransitPoints.map((el) => {
+        if (el.type === 'stop') {
+            const stopData = schedule.stops.find((stop) => stop.idSip === el.id);
+            return {
+                type: el.type,
+                position: { longitude: stopData?.longitude!, latitude: stopData?.latitude! },
+            };
+        } else {
+            return el;
+        }
+    });
+    console.log(JSON.stringify(withStops, null));
+    // console.log();
 
     // await Deno.writeTextFile("vehicles.json", JSON.stringify(vehicles))
     // console.log(vehicles);
