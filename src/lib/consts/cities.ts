@@ -15,15 +15,17 @@ const locales = {
  *
  **/
 type CityInfo = {
+    id: string;
     code: string;
     carrier: string;
     position: Position;
     url: string;
     locale: (typeof locales)[keyof typeof locales];
 };
-
+// TODO Add city id = key
 export const CITIES = {
     BIALA_PODLASKA: {
+        id: "biala-podlaska",
         code: 'BIALA',
         carrier: 'BIAŁA PODLASKA (MZK)',
         position: { longitude: 23.12557, latitude: 52.03408 },
@@ -31,6 +33,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     CHELM: {
+        id: "chelm",
         code: 'CHELM',
         carrier: 'CHEŁM (CLA)',
         position: { longitude: 23.477778, latitude: 51.132222 },
@@ -38,6 +41,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     CIESZYN: {
+        id: "cieszyn",
         code: 'CIESZ',
         carrier: 'CIESZYN (ZGK)',
         position: { longitude: 18.63333, latitude: 49.75 },
@@ -45,6 +49,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     DEBICA: {
+        id:"debica",
         code: 'DEBIC',
         carrier: 'DĘBICA (MKS)',
         position: { longitude: 21.41127, latitude: 50.05135 },
@@ -52,6 +57,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     ELBLAG: {
+        id:"elglag",
         code: 'ELBLA',
         carrier: 'ELBLĄG (ZKM)',
         position: { longitude: 19.39826, latitude: 54.16248 },
@@ -59,6 +65,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     GDANSK: {
+        id: "gdansk",
         code: 'GDANS',
         carrier: 'GDAŃSK (GAiT)',
         position: { longitude: 18.61703, latitude: 54.34899 },
@@ -66,6 +73,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     GLOGOW: {
+        id:"glogow",
         code: 'GLOGO',
         carrier: 'GŁOGÓW (KM)',
         position: { longitude: 16.08406, latitude: 51.6598 },
@@ -73,6 +81,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     JASTRZEBIE_ZDROJ: {
+        id:"jastrzebie-zdroj",
         code: 'JASTR',
         carrier: 'JASTRZĘBIE-ZDRÓJ (MZK)',
         position: { longitude: 18.61703, latitude: 49.94616 },
@@ -80,6 +89,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     INNOWROCLAW: {
+        id:"innowroclaw",
         code: 'INOWR',
         carrier: 'INOWROCŁAW (MPK)',
         position: { longitude: 18.26122, latitude: 52.79277 },
@@ -87,6 +97,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     JELENIA_GORA: {
+        id:"jelenia-gora",
         code: 'JELGO',
         carrier: 'JELENIA GÓRA (MZK)',
         position: { longitude: 15.73512, latitude: 50.9014 },
@@ -94,6 +105,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     KEDZIERZYN_KOZLE: {
+        id:"kedzierzyn-kozle",
         code: 'KKOZL',
         carrier: 'KĘDZIERZYN KOŹLE (MZK)',
         position: { longitude: 18.21259, latitude: 50.34446 },
@@ -101,6 +113,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     KIELCE: {
+        id:"kielce",
         code: 'KIELC',
         carrier: 'KIELCE (ZTM)',
         position: { longitude: 20.6199, latitude: 50.86905 },
@@ -108,6 +121,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     KOLOBRZEG: {
+        id:"kolobrzeg",
         code: 'KOLOB',
         carrier: 'KOŁOBRZEG (KM)',
         position: { longitude: 15.56642, latitude: 54.1742 },
@@ -115,6 +129,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     KRASNIK: {
+        id:"krasnik",
         code: 'KRASN',
         carrier: 'KRAŚNIK (MPK)',
         position: { longitude: 22.22521, latitude: 50.92251 },
@@ -122,6 +137,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     KROSNO: {
+        id:"krosno",
         code: 'KROSN',
         carrier: 'KROSNO (MKS)',
         position: { longitude: 21.76651, latitude: 49.68239 },
@@ -129,6 +145,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     KUTNO: {
+        id:"kutno",
         code: 'KUTNO',
         carrier: 'KUTNO (MZK)',
         position: { longitude: 19.35545, latitude: 52.2312 },
@@ -136,6 +153,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     LEGNICA: {
+        id:"legnica",
         code: 'LEGNI',
         carrier: 'LEGNICA (MPK)',
         position: { longitude: 16.1572, latitude: 51.20518 },
@@ -143,6 +161,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     LESZNO: {
+        id:"leszno",
         code: 'LESZN',
         carrier: 'LESZNO (MZK)',
         position: { longitude: 16.58186, latitude: 51.82734 },
@@ -150,6 +169,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     LUBLIN: {
+        id:"lublin",
         code: 'LUBLI',
         carrier: 'LUBLIN (ZTM)',
         position: { longitude: 22.55673, latitude: 51.24343 },
@@ -157,6 +177,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     LODZ: {
+        id:"lodz",
         code: 'LODZ ',
         carrier: 'ŁÓDŹ (ZDiT)',
         position: { longitude: 19.4947, latitude: 51.74394 },
@@ -164,6 +185,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     LOWICZ: {
+        id:"lowicz",
         code: 'LOWIC',
         carrier: 'ŁOWICZ (MZK)',
         position: { longitude: 19.94504, latitude: 52.1059 },
@@ -171,6 +193,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     MIELEC: {
+        id:"mielec",
         code: 'MIELE',
         carrier: 'MIELEC (MKS)',
         position: { longitude: 21.45125, latitude: 50.28866 },
@@ -178,6 +201,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     OLSZTYN: {
+        id:"olsztyn",
         code: 'OLSZT',
         carrier: 'OLSZTYN (ZDZiT)',
         position: { longitude: 20.47823, latitude: 53.77241 },
@@ -185,6 +209,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     OSTROLEKA: {
+        id:"ostroleka",
         code: 'OLEKA',
         carrier: 'OSTROŁĘKA (MZK)',
         position: { longitude: 21.58662, latitude: 53.07538 },
@@ -192,6 +217,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     OSTROW_WIELKOPOLSKI: {
+        id:"ostrow-wielkopolski",
         code: 'OSTRO',
         carrier: 'OSTRÓW WIELKOPOLSKI (MZK)',
         position: { longitude: 17.80945, latitude: 51.65058 },
@@ -199,6 +225,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     OSTROWIEC_SWIETOKRZYSKI: {
+        id:"ostrowiec-swietokrzyski",
         code: 'OSTSW',
         carrier: 'OSTROWIEC ŚWIĘTOKRZYSKI (MZK)',
         position: { longitude: 21.38691, latitude: 50.94004 },
@@ -206,6 +233,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     PABIANICE: {
+        id:"pabianice",
         code: 'PABIA',
         carrier: 'PABIANICE (MZK)',
         position: { longitude: 19.35787, latitude: 51.65661 },
@@ -213,6 +241,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     PLOCK: {
+        id:"plock",
         code: 'PLOCK',
         carrier: 'PŁOCK (KM)',
         position: { longitude: 19.71528, latitude: 52.53927 },
@@ -220,6 +249,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     POLKOWICE: {
+        id:'polkowice',
         code: 'POLKO',
         carrier: 'POLKOWICE (ZKM)',
         position: { longitude: 16.0717, latitude: 51.50207 },
@@ -227,6 +257,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     PRZEMYSL: {
+        id:'przemysl',
         code: 'PRMZK',
         carrier: 'PRZEMYŚL (MZK)',
         position: { longitude: 22.77997, latitude: 49.77799 },
@@ -234,6 +265,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     PULAWY: {
+        id:"pulawy",
         code: 'PULAW',
         carrier: 'PUŁAWY (MZK)',
         position: { longitude: 21.95587, latitude: 51.41101 },
@@ -241,6 +273,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     RADOM: {
+        id:'radom',
         code: 'RADOM',
         carrier: 'RADOM (MZDiK)',
         position: { longitude: 21.15922, latitude: 51.39989 },
@@ -248,6 +281,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     RADOMSKO: {
+        id:"radomsko",
         code: 'RDMSK',
         carrier: 'RADOMSKO (MPK)',
         position: { longitude: 19.44421, latitude: 51.06443 },
@@ -255,6 +289,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     RYBNIK: {
+        id:"rybnik",
         code: 'RYBNI',
         carrier: 'RYBNIK (KM)',
         position: { longitude: 18.540189, latitude: 50.10213 },
@@ -262,6 +297,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     RZESZOW: {
+        id:"rzeszow",
         code: 'RZZTM',
         carrier: 'RZESZÓW (ZTM)',
         position: { longitude: 21.99771, latitude: 50.04152 },
@@ -269,6 +305,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     SANOK: {
+        id:"sanok",
         code: 'SANOK',
         carrier: 'SANOK (SPGK)',
         position: { longitude: 22.212388, latitude: 49.55282 },
@@ -276,6 +313,7 @@ export const CITIES = {
         locale: locales.LT,
     },
     SIAULIAI: {
+        id:"siauliai",
         code: 'SIAUL',
         carrier: 'ŠIAULIAI (Busturas)',
         position: { longitude: 23.30905, latitude: 55.93047 },
@@ -283,6 +321,7 @@ export const CITIES = {
         locale: locales.SK,
     },
     SIEDLCE: {
+        id:"siedlce",
         code: 'SIEDL',
         carrier: 'SIEDLCE (MPK)',
         position: { longitude: 22.28428, latitude: 52.15917 },
@@ -290,6 +329,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     SLUPSK: {
+        id:"slupsk",
         code: 'ZIMSL',
         carrier: 'SŁUPSK (ZIM)',
         position: { longitude: 17.02892, latitude: 54.46268 },
@@ -297,6 +337,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     STALOWA_WOLA: {
+        id:"stalowa-wola",
         code: 'STALO',
         carrier: 'STALOWA WOLA (MZK)',
         position: { longitude: 22.0931, latitude: 50.56276 },
@@ -304,6 +345,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     STARACHOWICE: {
+        id:"starachowice",
         code: 'STRCH',
         carrier: 'STARACHOWICE (ZEC)',
         position: { longitude: 21.07949, latitude: 51.04295 },
@@ -311,6 +353,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     SUWALKI: {
+        id:"suwalki",
         code: 'SUWAL',
         carrier: 'SUWAŁKI (PGK)',
         position: { longitude: 22.94944, latitude: 54.1066 },
@@ -318,6 +361,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     SWIDNICA: {
+        id:"swidnica",
         code: 'SWIDN',
         carrier: 'ŚWIDNICA (MPK)',
         position: { longitude: 16.4776, latitude: 50.83697 },
@@ -325,6 +369,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     SWIEBODZICE: {
+        id:"swiebodzice",
         code: 'SWIEB',
         carrier: 'ŚWIEBODZICE (ZGK)',
         position: { longitude: 16.31952, latitude: 50.85805 },
@@ -332,6 +377,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     TABOR: {
+        id:"tabor",
         code: 'TABOR',
         carrier: 'TABOR (COMETT PLUS)',
         position: { longitude: 14.67515, latitude: 49.41406 },
@@ -339,6 +385,7 @@ export const CITIES = {
         locale: locales.CZ,
     },
     TARNOWSKIE_GORY: {
+        id:"tarnowskie-gory",
         code: 'NOWAK',
         carrier: 'TARNOWSKIE GÓRY (MZKP)',
         position: { longitude: 18.86591, latitude: 50.42355 },
@@ -346,6 +393,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     TARNOW: {
+        id:"tarnow",
         code: 'TARNO',
         carrier: 'TARNÓW (ZDiK)',
         position: { longitude: 20.98254, latitude: 50.01224 },
@@ -353,6 +401,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     TCZEW: {
+        id:"tczew",
         code: 'TCZEW',
         carrier: 'TCZEW (Gryf)',
         position: { longitude: 18.78423, latitude: 54.08889 },
@@ -360,6 +409,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     WALBRZYCH: {
+        id:"walbrzych",
         code: 'WALBR',
         carrier: 'WAŁBRZYCH (ZDKiUM)',
         position: { longitude: 16.28885, latitude: 50.78282 },
@@ -367,6 +417,7 @@ export const CITIES = {
         locale: locales.PL,
     },
     ZILINA: {
+        id:"zilina",
         code: 'ZILIN',
         carrier: 'ŽILINA (DPMZ)',
         position: { longitude: 18.74, latitude: 49.22277 },
