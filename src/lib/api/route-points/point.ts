@@ -1,4 +1,4 @@
-import { Position, ValuesToKeys } from '../../utils/types.ts';
+import type{ Position, ValuesToKeys } from '../../utils/types.ts';
 
 const _pointExample = {
     'l': '1', // Number in sequence
