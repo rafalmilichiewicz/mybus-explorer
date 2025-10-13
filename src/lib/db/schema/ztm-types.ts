@@ -1,4 +1,6 @@
-import type { SomeOtherString } from '../../utils/types.ts';
+import type { SomeOtherNumber, SomeOtherString } from '../../utils/types.ts';
+
+// TODO move to utils and rename
 
 export const VEHICLE_TYPES = {
     bus: 'A',
@@ -166,10 +168,10 @@ export type VehicleStatusNumber = Exclude<
     typeof VEHICLE_STATUSES._unknown
 >;
 const VEHICLE_STATUSES_REV = {
-    '1': 'EN_ROUTE_STATIONARY',
-    '2': 'EN_ROUTE_MOVING',
-    '6': 'AWAITING_STATIONARY',
-    '7': 'AWAITING_MOVING',
+    1: 'EN_ROUTE_STATIONARY',
+    2: 'EN_ROUTE_MOVING',
+    6: 'AWAITING_STATIONARY',
+    7: 'AWAITING_MOVING',
 } as const satisfies Record<VehicleStatusNumber, VehicleStatusCode>;
 
 export type VehicleStatus = {
@@ -194,5 +196,48 @@ export function getVehicleStatus(statusNumber: number): VehicleStatus {
 
     return {
         id: statusNumber,
+    };
+}
+
+const TRACKING_STATUS = {
+    WITHIN_STOP_AREA: 1,
+    GPS_TRACKING: 2,
+    NO_TRACKING: 3,
+    _unknown: -1,
+} as const;
+
+export type UnknownTrackingStatus = {
+    [K in keyof typeof TRACKING_STATUS]: (typeof TRACKING_STATUS)[K] extends -1 ? K : never;
+}[keyof typeof TRACKING_STATUS];
+export type TrackingStatusCode = keyof typeof TRACKING_STATUS;
+export type TrackingStatusValid = keyof Omit<typeof TRACKING_STATUS, UnknownTrackingStatus>;
+export type TrackingStatusNumber = Exclude<
+    (typeof TRACKING_STATUS)[keyof typeof TRACKING_STATUS],
+    typeof TRACKING_STATUS._unknown
+>;
+
+const TRACKING_STATUS_REV = {
+    1: 'WITHIN_STOP_AREA',
+    2: 'GPS_TRACKING',
+    3: 'NO_TRACKING',
+} as const satisfies Record<TrackingStatusNumber, TrackingStatusCode>;
+
+export type TrackingStatus = {
+    id: TrackingStatusNumber | SomeOtherNumber;
+    status: TrackingStatusCode;
+};
+
+export function getTrackingStatus(statusNumber: number): TrackingStatus {
+    if (statusNumber in TRACKING_STATUS_REV) {
+        const status = statusNumber as TrackingStatusNumber;
+        return {
+            id: status,
+            status: TRACKING_STATUS_REV[status],
+        };
+    }
+
+    return {
+        id: statusNumber,
+        status: '_unknown',
     };
 }
