@@ -49,23 +49,23 @@ export class Schedule {
     // private db: DatabaseSync;
     private db: ScheduleDatabase;
     public metadata: Metadata;
-    private routes: Route[];
-    private routeList: {
+    public routes: Route[];
+    public routeList: {
         routesBus: RouteDto[];
         routesTram: RouteDto[];
         routesTrolleybus: RouteDto[];
     };
-    private stops: Stop[];
-    private salesPoints: SalesPoint[];
-    private calendar: {
+    public stops: Stop[];
+    public salesPoints: SalesPoint[];
+    public calendar: {
         types: Day[];
         entries: CalendarEntry[];
     };
-    private departures: Departure[];
-    private timetable: Timetable;
-    private streets: Street[];
-    private config: Config;
-    private notices: Notice[];
+    public departures: Departure[];
+    public timetable: Timetable;
+    public streets: Street[];
+    public config: Config;
+    public notices: Notice[];
 
     constructor(schedule: ScheduleDatabase) {
         this.db = schedule;
