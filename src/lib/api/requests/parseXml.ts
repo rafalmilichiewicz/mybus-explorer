@@ -10,6 +10,6 @@ const parser = new XMLParser({
     ignoreDeclaration: true,
 });
 
-export default function parseXml(data: string | BufferSource) {
+export default function parseXml(data: string) {
     return parser.parse(data);
 }
