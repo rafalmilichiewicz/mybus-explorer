@@ -23,13 +23,18 @@ function validateContinuityBetweenStops(data: RouteTransitPointsApi['R']['T']): 
 function validateContinuityBetweenPoints(data: RouteTransitPointsApi['R']['T']): boolean {
     for (let i = 0; i < data.length; i++) {
         let points = data[i].Pkt ?? [];
-
         points = Array.isArray(points) ? points : [points];
 
         if (points.length > 0) {
-            const lValues = points.map((p) => Number(p.l));
-            for (let j = 1; j < lValues.length; j++) {
-                if (lValues[j] <= lValues[j - 1]) {
+            const pointNumbers = points.map((p) => Number.parseInt(p.l));
+            // Length check
+            if (pointNumbers[pointNumbers.length - 1] !== pointNumbers.length) {
+                return false;
+            }
+
+            // Sequence check
+            for (let j = 1; j < pointNumbers.length; j++) {
+                if (pointNumbers[j] !== pointNumbers[j - 1]) {
                     return false;
                 }
             }
