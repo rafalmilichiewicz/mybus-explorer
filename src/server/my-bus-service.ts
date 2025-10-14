@@ -13,48 +13,16 @@ import { getVehicles } from '../lib/api/vehicles/vehicles.ts';
 export class MyBusApiWrapper {
     constructor() {}
 
-    public async saveScheduleDatabase(filename: string): Promise<boolean> {
-        const result = await getScheduleDatabase(async (response) => {
-            const file = await Deno.open(filename, { create: true, write: true });
+    public schedule = {
+        save: getScheduleDatabase,
+        compare: compareSchedule,
+    };
 
-            try {
-                const decompressionStream = new DecompressionStream('gzip');
-                response.body!.pipeThrough(decompressionStream).pipeTo(file.writable);
-                return true;
-            } catch (error) {
-                console.error('Failed to decompress gzip data:', error);
-            }
+    public timetable = {
+        getForVehicle: getTimetableForVehicle,
+        getForStop: getTimetableForStop,
+    };
 
-            return false;
-        });
-
-        return result;
-    }
-
-    public async compareScheduleMetadata(metadata: Metadata) {
-        return await compareSchedule(metadata.version, metadata.generation);
-    }
-
-    public async getOnlineVehicles(routeNumber: string): Promise<VehicleEnRoute[]> {
-        const vehicles = await getVehicles(routeNumber);
-        return vehicles;
-    }
-
-    public async getTimetableForVehicle(sideNumber: string): Promise<TimetableVehicle> {
-        const timetable = await getTimetableForVehicle(sideNumber);
-        return timetable;
-    }
-
-    public async getTimetableForStop(idSip: number): Promise<TimetableStop> {
-        const timetable = await getTimetableForStop(idSip);
-        return timetable;
-    }
-
-    public async getTransitPointForRoute(
-        routeNumber: string,
-        routeVariant: string
-    ): Promise<RouteTransitPoints> {
-        const route = await getRouteTransitPoints(routeNumber, routeVariant);
-        return route;
-    }
+    public getOnlineVehicles = getVehicles;
+    public getTransitPointsForRoute = getRouteTransitPoints;
 }

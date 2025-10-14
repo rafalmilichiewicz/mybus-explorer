@@ -10,6 +10,7 @@ This project is done for research and learning purposes. Please don't misuse pub
 -   Deno 2
 -   Sqlite 3
 -   JSON streaming (NDJSON)
+-   JSON schema
 
 ## Testing
 

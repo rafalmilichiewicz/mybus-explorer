@@ -8,7 +8,8 @@ export const ENV_VARS = {
     },
     CITY: {
         AGE: 'CITY_AGE',
-        CODE: 'CITY_CODE',
+        ID: 'CITY_CODE',
         OFFSET: 'CITY_OFFSET',
+        CITY_INFO: 'CITY_INFO',
     },
 } as const;

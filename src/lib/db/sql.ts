@@ -22,7 +22,9 @@ import type { Notice, NoticeSql } from './schema/notice.ts';
 import { type SalesPointSql, getSalesPointType, type SalesPoint } from './schema/sales-point.ts';
 import type { Street, StreetSql } from './schema/street.ts';
 import { getVehicleType, getRouteDirectionType, TRANSPORT_MODES } from './schema/ztm-types.ts';
-import { patchesRoute } from './patch/patch-route.ts';
+
+import type { DatabasePatches } from './patch/patch.ts';
+import { isRoutePatchByNumber } from './patch/patch-route.ts';
 
 type PickAsObject<T, K extends keyof T> = { [P in K]: T[P] };
 
@@ -67,10 +69,12 @@ type z = ({ id: Stop['idSip'] } & { destinations: string })[];
 
 export class ScheduleDatabase {
     private db: DatabaseSync;
+    private patches: DatabasePatches;
 
     // TODO Rename
-    constructor(dbHandle: DatabaseSync) {
+    constructor(dbHandle: DatabaseSync, patches: DatabasePatches) {
         this.db = dbHandle;
+        this.patches = patches;
     }
 
     public getStopsDestinations() {
@@ -130,9 +134,10 @@ export class ScheduleDatabase {
                 throw Error('Stop found to be not a integer');
             }
             const routeNumber = destination.numer.trim();
+            const routeId = destination.id_krn;
 
             let defaultRoute = {
-                id: destination.id_krn,
+                id: routeId,
                 number: routeNumber,
                 transportMode: getVehicleType(destination.transport),
                 direction: destination.opis_tabl.trim().replaceAll('  ', ' '), // TODO Extract parsing and cleaning to func
@@ -148,7 +153,16 @@ export class ScheduleDatabase {
                 depot: false,
             } satisfies Route;
 
-            const patches = patchesRoute.filter((patch) => patch.number.includes(routeNumber));
+            // TODO Add patches to stops
+            const patches = this.patches.routes.patches.filter((patch) => {
+                if (isRoutePatchByNumber(patch) && patch.number.includes(routeNumber)) {
+                    return true;
+                } else if (!isRoutePatchByNumber(patch) && patch.id === routeId) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
             if (patches.length > 0) {
                 const mergedPatches = patches.reduce((acc, p) => ({ ...acc, ...p.patch }), {});
                 defaultRoute = {
@@ -376,4 +390,3 @@ export class ScheduleDatabase {
         return notices;
     }
 }
-
