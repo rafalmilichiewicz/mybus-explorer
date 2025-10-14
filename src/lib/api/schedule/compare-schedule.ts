@@ -13,7 +13,6 @@ export async function compareSchedule(version: number, generation: number) {
     const headers = await generateHeaders(CONFIG.CITY.AGE);
     const query = `?nGeneracja=${generation}&nIdWersja=${version}`;
     const url = `${ENDPOINTS.SCHEDULE.COMPARE}${query}`;
-    console.log(url);
     const comparison = await fetchDataXml<ResponseCompareSchedule>(url, headers);
 
     return comparison.int == 0;

@@ -3,21 +3,9 @@ import { CONFIG } from '../../consts/config.ts';
 import generateHeaders from '../token/header.ts';
 import { fetchDataBinary } from '../requests/fetch.ts';
 
-export async function getSchedule(filename: string) {
+export async function getScheduleDatabase(callback: (response: Response) => Promise<boolean>) {
     const headers = await generateHeaders(CONFIG.CITY.AGE);
     const response = await fetchDataBinary(`${ENDPOINTS.SCHEDULE.GET}`, headers);
-    const file = await Deno.open(filename, { create: true, write: true });
-    console.log(response.headers);
 
-    try {
-        console.log('EEE');
-
-        const decompressionStream = new DecompressionStream('gzip');
-        response.body!.pipeThrough(decompressionStream).pipeTo(file.writable);
-        return true;
-    } catch (error) {
-        console.error('Failed to decompress gzip data:', error);
-    }
-
-    return false;
+    return callback(response);
 }
