@@ -18,3 +18,7 @@ export type Position = {
     longitude: number;
     latitude: number;
 };
+
+export function throwError(message: string): never {
+    throw new Error(message);
+}

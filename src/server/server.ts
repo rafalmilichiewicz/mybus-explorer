@@ -1,6 +1,10 @@
 import { DatabaseSync } from 'node:sqlite';
 import { CONFIG } from '../lib/consts/config.ts';
-import { RESOURCE_CONFIG } from '../lib/consts/resources.ts';
+import {
+    generateDynamicResourcePaths,
+    generateStaticResourcePaths,
+    type ResourcesDynamic,
+} from '../lib/consts/resources.ts';
 import { ScheduleDatabase } from '../lib/db/sql.ts';
 import { copyFile, createFolder, readJson, saveJson } from '../lib/utils/files.ts';
 import type { ServerMetadata } from './metadata.ts';
@@ -8,71 +12,16 @@ import type { ApiWrapper } from '../lib/api/wrapper.ts';
 import { Schedule } from '../lib/db/schedule.ts';
 import { type DatabasePatches, EMPTY_PATCHES } from '../lib/db/patch/patch.ts';
 import { hashObject, hashOfFile } from '../lib/utils/hash.ts';
-import type { Metadata } from '../lib/db/schema/metadata.ts';
-import { stringRepresentationOfMetadata } from '../lib/utils/dates.ts';
-
-function generateStaticResourcePaths() {
-    // ^ /resources/
-    const resourcesFolder = RESOURCE_CONFIG.FOLDERS.RESOURCES;
-    const metadataServerFile = `${resourcesFolder}/${RESOURCE_CONFIG.FILES.METADATA}`;
-    const databaseRootFile = `${resourcesFolder}/${RESOURCE_CONFIG.FILES.DATABASE}`;
-    const patchesSchemaFile = `${resourcesFolder}/${RESOURCE_CONFIG.FILES.PATCHES_SCHEMA}`;
-
-    // ^ /resources/city/
-    const cityFolder = `${resourcesFolder}/${CONFIG.CITY.ID}`;
-
-    return {
-        resourcesFolder,
-        cityFolder,
-        metadataServerFile,
-        databaseRootFile,
-        patchesSchemaFile,
-    } as const;
-}
-type ResourcesStatic = ReturnType<typeof generateStaticResourcePaths>;
-
-function generateDynamicResourcePaths(staticResources: ResourcesStatic, metadata: Metadata) {
-    const scheduleDate = stringRepresentationOfMetadata(metadata);
-    // ^ /resources/city/<date>/
-    const cityWithDateWithDate = `${staticResources.cityFolder}/${scheduleDate}`;
-
-    // ^ /resources/city/<date>/data/
-    const dataFolder = `${cityWithDateWithDate}/${RESOURCE_CONFIG.FOLDERS.DATA}`;
-    const patchesFile = `${dataFolder}/${RESOURCE_CONFIG.FILES.PATCHES}`;
-    const databaseFile = `${dataFolder}/${RESOURCE_CONFIG.FILES.DATABASE}`;
-
-    // ^ /resources/city/<date>/observations/
-    const observationsFolder = `${cityWithDateWithDate}/${RESOURCE_CONFIG.FOLDERS.OBSERVATIONS}`;
-    const vehicleObservations = `${observationsFolder}/${RESOURCE_CONFIG.FILES.OBSERVATIONS_VEHICLE}`;
-
-    return {
-        cityWithDateWithDate,
-        dataFolder,
-        observationsFolder,
-        patchesFile,
-        databaseFile,
-        vehicleObservations,
-    };
-}
-
-type ResourcesDynamic = ReturnType<typeof generateDynamicResourcePaths>;
-
-function throwError(message: string): never {
-    throw new Error(message);
-}
+import { throwError } from '../lib/utils/types.ts';
 
 export class MyBusServer {
     private readonly api: ApiWrapper;
     private readonly schedule: Schedule;
     private static readonly cityId = CONFIG.CITY.ID;
-    private static readonly resourcesStatic = generateStaticResourcePaths();
+    private static readonly resourcesStatic = generateStaticResourcePaths(this.cityId);
     private resourcesDynamic: ResourcesDynamic;
 
-    private constructor(
-        schedule: Schedule,
-        api: ApiWrapper,
-        resourcesDynamic: ResourcesDynamic
-    ) {
+    private constructor(schedule: Schedule, api: ApiWrapper, resourcesDynamic: ResourcesDynamic) {
         this.api = api;
         this.schedule = schedule;
         this.resourcesDynamic = resourcesDynamic;
