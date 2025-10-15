@@ -13,7 +13,7 @@ import { getRouteTransitPoints } from './lib/api/route-points/route-points.ts';
 import { generateSchemaJson } from './lib/db/patch/generate-schema.ts';
 import { saveJson } from './lib/utils/files.ts';
 import { hashObject, hashOfFile } from './lib/utils/hash.ts';
-import { AppRuntime } from './server/server.ts';
+import { AppRuntime } from './server/runtime/runtime.ts';
 import { ApiWrapper } from './lib/api/wrapper.ts';
 
 if (import.meta.main) {

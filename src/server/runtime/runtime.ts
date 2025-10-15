@@ -1,18 +1,18 @@
 import { DatabaseSync } from 'node:sqlite';
-import { CONFIG } from '../lib/consts/config.ts';
+import { CONFIG } from '../../lib/consts/config.ts';
 import {
     generateDynamicResourcePaths,
     generateStaticResourcePaths,
     type ResourcesDynamic,
-} from '../lib/consts/resources.ts';
-import { ScheduleDatabase } from '../lib/db/sql.ts';
-import { copyFile, createFolder, readJson, saveJson } from '../lib/utils/files.ts';
+} from '../../lib/consts/resources.ts';
+import { ScheduleDatabase } from '../../lib/db/sql.ts';
+import { copyFile, createFolder, readJson, saveJson } from '../../lib/utils/files.ts';
 import type { ServerMetadata } from './metadata.ts';
-import type { ApiWrapper } from '../lib/api/wrapper.ts';
-import { Schedule } from '../lib/db/schedule.ts';
-import { type DatabasePatches, EMPTY_PATCHES } from '../lib/db/patch/patch.ts';
-import { hashObject, hashOfFile } from '../lib/utils/hash.ts';
-import { throwError } from '../lib/utils/types.ts';
+import type { ApiWrapper } from '../../lib/api/wrapper.ts';
+import { Schedule } from '../../lib/db/schedule.ts';
+import { type DatabasePatches, EMPTY_PATCHES } from '../../lib/db/patch/patch.ts';
+import { hashObject, hashOfFile } from '../../lib/utils/hash.ts';
+import { throwError } from '../../lib/utils/types.ts';
 
 export class AppRuntime {
     private readonly api: ApiWrapper;
@@ -103,9 +103,13 @@ export class AppRuntime {
         await createFolder(resourcesDynamic.cityWithDateWithDate);
         await createFolder(resourcesDynamic.dataFolder);
         await createFolder(resourcesDynamic.observationsFolder);
-        await saveJson(this.resourcesStatic.metadataServerFile, metadata);
-        await saveJson(resourcesDynamic.patchesFile, patchesDefault);
+        await saveJson(this.resourcesStatic.metadataServerFile, metadata, true);
+        await saveJson(resourcesDynamic.patchesFile, patchesDefault, true);
         await copyFile(this.resourcesStatic.databaseRootFile, resourcesDynamic.databaseFile);
         return { metadata, resourcesDynamic };
+    }
+
+    private static async applyPatch(patch: DatabasePatches) {
+        // logic for applying and saving patch
     }
 }

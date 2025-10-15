@@ -1,4 +1,4 @@
-import type { Metadata } from '../lib/db/schema/metadata.ts';
+import type { Metadata } from '../../lib/db/schema/metadata.ts';
 
 export type ServerMetadata = {
     cityId: string;
