@@ -1,4 +1,4 @@
-import type { Metadata } from './schema/metadata.ts';
+import type { ScheduleMetadata } from './schema/metadata.ts';
 import type { Route } from './schema/destination.ts';
 import type { Stop } from './schema/stop.ts';
 import type { Street } from './schema/street.ts';
@@ -48,7 +48,7 @@ function groupByStopAndDay(data: TimetableEntry[]): Timetable {
 export class Schedule {
     // private db: DatabaseSync;
     private db: ScheduleDatabase;
-    public metadata: Metadata;
+    public metadata: ScheduleMetadata;
     public routes: Route[];
     public routeList: {
         routesBus: RouteDto[];

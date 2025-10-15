@@ -17,7 +17,7 @@ export const _metadataSql = {
 
 export type MetadataSql = typeof _metadataSql;
 
-export type Metadata = {
+export type ScheduleMetadata = {
     validFrom: string;
     version: number;
     generation: number;

@@ -1,18 +1,18 @@
-import { DatabaseSync } from 'node:sqlite';
+import type { DatabaseSync } from 'node:sqlite';
 
-import { ScheduleDatabase } from './lib/db/sql.ts';
-import { Schedule } from './lib/db/schedule.ts';
-import getVehicles from './lib/api/vehicles/vehicles.ts';
-import { getVehicleFlags, getVehicleStatus } from './lib/db/schema/ztm-types.ts';
-import { getTimetableForStop } from './lib/api/timetable/timetable-stop.ts';
-import { delay } from '@std/async/delay';
-import { CONFIG } from './lib/consts/config.ts';
-import { getScheduleDatabase } from './lib/api/schedule/get-schedule.ts';
-import { getTimetableForVehicle } from './lib/api/timetable/timetable-vehicle.ts';
-import { getRouteTransitPoints } from './lib/api/route-points/route-points.ts';
-import { generateSchemaJson } from './lib/db/patch/generate-schema.ts';
-import { saveJson } from './lib/utils/files.ts';
-import { hashObject, hashOfFile } from './lib/utils/hash.ts';
+import type { ScheduleDatabase } from './lib/db/sql.ts';
+import type { Schedule } from './lib/db/schedule.ts';
+import type getVehicles from './lib/api/vehicles/vehicles.ts';
+import type { getVehicleFlags, getVehicleStatus } from './lib/db/schema/ztm-types.ts';
+import type { getTimetableForStop } from './lib/api/timetable/timetable-stop.ts';
+import type { delay } from '@std/async/delay';
+import type { CONFIG } from './lib/consts/config.ts';
+import type { getScheduleDatabase } from './lib/api/schedule/get-schedule.ts';
+import type { getTimetableForVehicle } from './lib/api/timetable/timetable-vehicle.ts';
+import type { getRouteTransitPoints } from './lib/api/route-points/route-points.ts';
+import type { generateSchemaJson } from './lib/db/patch/generate-schema.ts';
+import type { saveJson } from './lib/utils/files.ts';
+import type { hashObject, hashOfFile } from './lib/utils/hash.ts';
 import { AppRuntime } from './server/runtime/runtime.ts';
 import { ApiWrapper } from './lib/api/wrapper.ts';
 

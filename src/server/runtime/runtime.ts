@@ -13,6 +13,8 @@ import { Schedule } from '../../lib/db/schedule.ts';
 import { type DatabasePatches, EMPTY_PATCHES } from '../../lib/db/patch/patch.ts';
 import { hashObject, hashOfFile } from '../../lib/utils/hash.ts';
 import { throwError } from '../../lib/utils/types.ts';
+import { generateSchemaJson } from '../../lib/db/patch/generate-schema.ts';
+import type { ScheduleMetadata as ScheduleMetadata } from '../../lib/db/schema/metadata.ts';
 
 export class AppRuntime {
     private readonly api: ApiWrapper;
@@ -37,12 +39,12 @@ export class AppRuntime {
 
         // ^ No metadata
         if (!metadata) {
-            ({ metadata, resourcesDynamic } = await AppRuntime.initializeResources(api, metadata));
+            ({ metadata, resourcesDynamic } = await AppRuntime.initializeResources(api));
         }
 
         // ^ Metadata present but something changed
         if (this.cityId !== metadata.cityId) {
-            ({ metadata, resourcesDynamic } = await AppRuntime.initializeResources(api, metadata));
+            ({ metadata, resourcesDynamic } = await AppRuntime.initializeResources(api));
         }
 
         resourcesDynamic = generateDynamicResourcePaths(
@@ -50,28 +52,36 @@ export class AppRuntime {
             metadata.scheduleMetadata
         );
 
-        const patches = await readJson<DatabasePatches>(resourcesDynamic.patchesFile);
         // TODO Validate patches
+        let patches = await readJson<DatabasePatches>(resourcesDynamic.patchesFile);
+        if (patches === null) {
+            patches = EMPTY_PATCHES;
+            patches.$schema = this.resourcesStatic.patchesSchemaFile;
+            await saveJson(resourcesDynamic.patchesFile, patches, true, true);
+            await this.updateAppMetadata(metadata.scheduleMetadata);
+        }
 
-        if ((await hashObject(patches)) !== metadata.checksum.patches) {
+        if (patches !== null && (await hashObject(patches)) !== metadata.checksum.patches) {
+            console.log('Patches path');
+            this.applyPatches(patches);
+            this.updateAppMetadata(metadata.scheduleMetadata, patches);
             // Apply patches + Update metadata
         }
 
         // ^ Check if new version of schedule is available
-
         const scheduleComparison = await api.schedule.checkIfChanged(
             metadata.scheduleMetadata.version,
             metadata.scheduleMetadata.generation
         );
         if (scheduleComparison) {
-            ({ metadata, resourcesDynamic } = await AppRuntime.initializeResources(api, metadata));
+            ({ metadata, resourcesDynamic } = await AppRuntime.initializeResources(api));
+            await this.updateAppMetadata(metadata.scheduleMetadata, patches);
         }
 
-        // TODO Schema update file
         // return new MyBusServer();
     }
 
-    private static async initializeResources(api: ApiWrapper, metadata: ServerMetadata | null) {
+    private static async initializeResources(api: ApiWrapper) {
         const savingResult = await api.schedule.save(this.resourcesStatic.databaseRootFile);
         if (!savingResult) throw new Error('Error while saving schedule database');
         const databaseHandle = new DatabaseSync(this.resourcesStatic.databaseRootFile);
@@ -80,36 +90,49 @@ export class AppRuntime {
         const schedule: Schedule = new Schedule(scheduleDatabase);
         const scheduleMetadata = schedule.metadata;
 
-        const patchesDefault = EMPTY_PATCHES;
-        patchesDefault.$schema = this.resourcesStatic.patchesSchemaFile;
-
-        metadata = {
-            lastEditDate: Temporal.Now.zonedDateTimeISO(CONFIG.CONFIG.TIME_ZONE),
-            cityId: this.cityId,
-            scheduleMetadata: scheduleMetadata,
-            checksum: {
-                patches: await hashObject(patchesDefault),
-                db:
-                    (await hashOfFile(this.resourcesStatic.databaseRootFile)) ??
-                    throwError('Database changed'),
-            },
-        };
+        const metadata = await AppRuntime.updateAppMetadata(scheduleMetadata);
 
         const resourcesDynamic = generateDynamicResourcePaths(
             this.resourcesStatic,
             scheduleMetadata
         );
+        const patchesDefault = EMPTY_PATCHES;
+        patchesDefault.$schema = this.resourcesStatic.patchesSchemaFileRelative;
 
         await createFolder(resourcesDynamic.cityWithDateWithDate);
         await createFolder(resourcesDynamic.dataFolder);
         await createFolder(resourcesDynamic.observationsFolder);
         await saveJson(this.resourcesStatic.metadataServerFile, metadata, true);
-        await saveJson(resourcesDynamic.patchesFile, patchesDefault, true);
+        await saveJson(resourcesDynamic.patchesFile, patchesDefault, true, true);
+        await saveJson(this.resourcesStatic.patchesSchemaFile, generateSchemaJson(), true);
         await copyFile(this.resourcesStatic.databaseRootFile, resourcesDynamic.databaseFile);
         return { metadata, resourcesDynamic };
     }
 
-    private static async applyPatch(patch: DatabasePatches) {
+    private static async updateAppMetadata(
+        scheduleMetadata: ScheduleMetadata,
+        patches?: DatabasePatches
+    ) {
+        const patchesDefault = EMPTY_PATCHES;
+        patchesDefault.$schema = this.resourcesStatic.patchesSchemaFileRelative;
+        const metadata = {
+            lastEditDate: Temporal.Now.zonedDateTimeISO(CONFIG.CONFIG.TIME_ZONE),
+            cityId: this.cityId,
+            scheduleMetadata: scheduleMetadata,
+            checksum: {
+                patches: await hashObject(patches ?? patchesDefault),
+                db:
+                    (await hashOfFile(this.resourcesStatic.databaseRootFile)) ??
+                    throwError('Database changed'),
+            },
+        };
+        await saveJson(this.resourcesStatic.metadataServerFile, metadata, true);
+        return metadata;
+    }
+
+    private static async applyPatches(patches: DatabasePatches) {
+        console.log('HEY', patches);
+
         // logic for applying and saving patch
     }
 }

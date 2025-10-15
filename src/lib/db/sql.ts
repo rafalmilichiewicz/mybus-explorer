@@ -1,7 +1,7 @@
 import type { DatabaseSync } from 'node:sqlite';
 import { SCHEMA } from './schema.ts';
 import type { Stop, StopSql } from './schema/stop.ts';
-import type { Metadata, MetadataSql } from './schema/metadata.ts';
+import type { ScheduleMetadata, MetadataSql } from './schema/metadata.ts';
 import { naturalSort } from '../utils/natural-sort.ts';
 import type { CalendarEntrySql, CalendarEntry } from './schema/calendar.ts';
 import {
@@ -104,7 +104,7 @@ export class ScheduleDatabase {
         return res;
     }
 
-    public getMetadata(): Metadata {
+    public getMetadata(): ScheduleMetadata {
         const metaSql = this.db
             .prepare(`SELECT * FROM ${SCHEMA.METADATA.__table__}`)
             .get() as MetadataSql;

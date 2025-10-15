@@ -1,8 +1,8 @@
-import type { Metadata } from '../../lib/db/schema/metadata.ts';
+import type { ScheduleMetadata } from '../../lib/db/schema/metadata.ts';
 
 export type ServerMetadata = {
     cityId: string;
-    scheduleMetadata: Metadata;
+    scheduleMetadata: ScheduleMetadata;
     lastEditDate: Temporal.ZonedDateTime;
     checksum: {
         patches: string;

@@ -22,6 +22,16 @@ export async function checkIfFileExists(path: string): Promise<boolean> {
     }
 }
 
+export async function checkIfResourceExists(path: string): Promise<boolean> {
+    try {
+        const stat = await Deno.stat(path);
+        return stat.isFile || stat.isDirectory;
+    } catch (err) {
+        if (err instanceof Deno.errors.NotFound) return false;
+        throw err;
+    }
+}
+
 export async function createFolder(path: string): Promise<void> {
     try {
         await Deno.mkdir(path, { recursive: true });
@@ -74,8 +84,13 @@ export async function readJson<T>(path: string): Promise<T | null> {
 export async function saveJson(
     path: string,
     data: unknown,
-    pretty: boolean = false
+    pretty?: boolean,
+    keepOld?: boolean
 ): Promise<void> {
+    const exists = await checkIfFolderExists(path);
+    if (keepOld === true && exists) {
+        await Deno.rename(path, `${path}.${crypto.randomUUID()}.old`);
+    }
     const json = JSON.stringify(data, null, pretty ? 4 : 0);
     await Deno.writeTextFile(path, json);
 }

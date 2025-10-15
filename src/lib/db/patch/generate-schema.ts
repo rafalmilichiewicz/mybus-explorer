@@ -4,7 +4,7 @@ import type { DatabasePatches } from './patch.ts';
 export function generateSchemaJson() {
     const config: Config = {
         path: 'src/lib/db/patch/patch.ts',
-        type: 'Patch',
+        type: 'DatabasePatches',
     };
 
     const schema = createGenerator(config).createSchema(config.type);
