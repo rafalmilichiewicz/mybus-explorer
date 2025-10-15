@@ -8,6 +8,7 @@ import type {
     RouteStop,
     RoutePoint,
     RouteTransitPoints,
+    TransitPoint,
 } from './point.ts';
 
 function validateContinuityBetweenStops(data: RouteTransitPointsApi['R']['T']): boolean {
@@ -29,12 +30,13 @@ function validateContinuityBetweenPoints(data: RouteTransitPointsApi['R']['T']):
             const pointNumbers = points.map((p) => Number.parseInt(p.l));
             // Length check
             if (pointNumbers[pointNumbers.length - 1] !== pointNumbers.length) {
+                console.log('length');
                 return false;
             }
 
             // Sequence check
             for (let j = 1; j < pointNumbers.length; j++) {
-                if (pointNumbers[j] !== pointNumbers[j - 1]) {
+                if (pointNumbers[j] - 1 !== pointNumbers[j - 1]) {
                     return false;
                 }
             }
@@ -50,17 +52,21 @@ function validateRouteData(data: RouteTransitPointsApi['R']['T']): boolean {
     return continuityBetweenStops && continuityBetweenPoints;
 }
 
-export async function getRouteTransitPoints(routeNumber: string, routeVariant: string) {
+export async function getRouteTransitPoints(
+    routeNumber: string,
+    routeVariant: string
+): Promise<RouteTransitPoints> {
     const headers = await generateHeaders(CONFIG.CITY.AGE);
     const data = await fetchDataXml<RouteTransitPointsApi>(
         `${ENDPOINTS.ROUTE_TRANSIT_POINTS}?cRoute=${routeNumber}&cRouteVariant=${routeVariant}`,
         headers
     );
+    console.log(JSON.stringify(data));
 
     if (!validateRouteData(data.R.T)) {
         console.log(`Encountered problem with route ${routeNumber}-${routeVariant}`);
     }
-    const transitPoints: RouteTransitPoints = [];
+    const transitPoints: TransitPoint[] = [];
 
     for (const routePoint of data.R.T) {
         transitPoints.push({
@@ -83,5 +89,11 @@ export async function getRouteTransitPoints(routeNumber: string, routeVariant: s
         }
     }
 
-    return transitPoints;
+    return {
+        route: {
+            number: routeNumber,
+            variant: routeVariant,
+        },
+        points: transitPoints,
+    };
 }
