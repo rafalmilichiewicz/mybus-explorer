@@ -71,8 +71,12 @@ export async function readJson<T>(path: string): Promise<T | null> {
     }
 }
 
-export async function saveJson(path: string, data: unknown): Promise<void> {
-    const json = JSON.stringify(data, null, 0);
+export async function saveJson(
+    path: string,
+    data: unknown,
+    pretty: boolean = false
+): Promise<void> {
+    const json = JSON.stringify(data, null, pretty ? 4 : 0);
     await Deno.writeTextFile(path, json);
 }
 
