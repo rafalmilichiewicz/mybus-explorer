@@ -4,7 +4,7 @@ import { RESOURCE_CONFIG } from '../lib/consts/resources.ts';
 import { ScheduleDatabase } from '../lib/db/sql.ts';
 import { copyFile, createFolder, readJson, saveJson } from '../lib/utils/files.ts';
 import type { ServerMetadata } from './metadata.ts';
-import type { MyBusApiWrapper } from './my-bus-service.ts';
+import type { ApiWrapper } from '../lib/api/wrapper.ts';
 import { Schedule } from '../lib/db/schedule.ts';
 import { type DatabasePatches, EMPTY_PATCHES } from '../lib/db/patch/patch.ts';
 import { hashObject, hashOfFile } from '../lib/utils/hash.ts';
@@ -57,12 +57,12 @@ function generateDynamicResourcePaths(staticResources: ResourcesStatic, metadata
 
 type ResourcesDynamic = ReturnType<typeof generateDynamicResourcePaths>;
 
-function throwError(message: string) {
+function throwError(message: string): never {
     throw new Error(message);
 }
 
 export class MyBusServer {
-    private readonly api: MyBusApiWrapper;
+    private readonly api: ApiWrapper;
     private readonly schedule: Schedule;
     private static readonly cityId = CONFIG.CITY.ID;
     private static readonly resourcesStatic = generateStaticResourcePaths();
@@ -70,7 +70,7 @@ export class MyBusServer {
 
     private constructor(
         schedule: Schedule,
-        api: MyBusApiWrapper,
+        api: ApiWrapper,
         resourcesDynamic: ResourcesDynamic
     ) {
         this.api = api;
@@ -79,7 +79,7 @@ export class MyBusServer {
     }
 
     // : Promise<typeof MyBusServer>
-    static async initialize(api: MyBusApiWrapper) {
+    static async initialize(api: ApiWrapper) {
         let resourcesDynamic: ResourcesDynamic;
         await createFolder(this.resourcesStatic.resourcesFolder);
         await createFolder(this.resourcesStatic.cityFolder);
@@ -107,7 +107,7 @@ export class MyBusServer {
                     patches: await hashObject(patchesDefault),
                     db:
                         (await hashOfFile(this.resourcesStatic.databaseRootFile)) ??
-                        throwError('Database changed')!,
+                        throwError('Database changed'),
                 },
             };
 

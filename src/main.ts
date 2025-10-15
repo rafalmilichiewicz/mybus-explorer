@@ -14,7 +14,7 @@ import { generateSchemaJson } from './lib/db/patch/generate-schema.ts';
 import { saveJson } from './lib/utils/files.ts';
 import { hashObject, hashOfFile } from './lib/utils/hash.ts';
 import { MyBusServer } from './server/server.ts';
-import { MyBusApiWrapper } from './server/my-bus-service.ts';
+import { ApiWrapper } from './lib/api/wrapper.ts';
 
 if (import.meta.main) {
     console.log('Starting ZDiTM Thing...');
@@ -84,7 +84,7 @@ if (import.meta.main) {
 
 
 
-    const server = MyBusServer.initialize(new MyBusApiWrapper());
+    const server = MyBusServer.initialize(new ApiWrapper());
 
     // await Deno.writeTextFile("vehicles.json", JSON.stringify(vehicles))
     // console.log(vehicles);
