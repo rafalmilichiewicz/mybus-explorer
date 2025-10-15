@@ -1,6 +1,7 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@hono/hono@^4.9.12": "4.9.12",
     "jsr:@std/async@^1.0.15": "1.0.15",
     "jsr:@std/bytes@^1.0.6": "1.0.6",
     "jsr:@std/internal@^1.0.10": "1.0.12",
@@ -15,6 +16,9 @@
     "npm:ts-json-schema-generator@^2.4.0": "2.4.0"
   },
   "jsr": {
+    "@hono/hono@4.9.12": {
+      "integrity": "d4a0fe012c2f890bb514e539b37393ed352c173957038e44e2e45457b0a8256f"
+    },
     "@std/async@1.0.15": {
       "integrity": "55d1d9d04f99403fe5730ab16bdcc3c47f658a6bf054cafb38a50f046238116e"
     },
@@ -327,6 +331,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@hono/hono@^4.9.12",
       "jsr:@std/async@^1.0.15",
       "jsr:@std/json@^1.0.2",
       "jsr:@std/path@^1.1.2",

@@ -12,4 +12,7 @@ export const ENV_VARS = {
         OFFSET: 'CITY_OFFSET',
         CITY_INFO: 'CITY_INFO',
     },
+    SERVER: {
+        PORT: 'SERVER_PORT',
+    },
 } as const;

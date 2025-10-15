@@ -32,13 +32,13 @@ function getCityEnvInfo() {
     const envAge = Deno.env.get(ENV_VARS.CITY.AGE);
     const ID = Deno.env.get(ENV_VARS.CITY.ID) ?? defaultCity.id;
     const OFFSET =
-            envOffset !== undefined ? parseIntEnv(envOffset) : generateCityOffset(defaultCity.code),
-        AGE =
-            envAge !== undefined
-                ? parseIntEnv(envAge)
-                : generateAgeHeader(generateCityOffset(defaultCity.code)),
-        CITY_INFO: CityInfo =
-            Deno.env.get(ENV_VARS.CITY.ID) !== undefined ? getCityInfoById(ID) : defaultCity;
+        envOffset !== undefined ? parseIntEnv(envOffset) : generateCityOffset(defaultCity.code);
+    const AGE =
+        envAge !== undefined
+            ? parseIntEnv(envAge)
+            : generateAgeHeader(generateCityOffset(defaultCity.code));
+    const CITY_INFO: CityInfo =
+        Deno.env.get(ENV_VARS.CITY.ID) !== undefined ? getCityInfoById(ID) : defaultCity;
     return {
         ID,
         OFFSET,
@@ -58,4 +58,10 @@ export const CONFIG = {
     // TODO Add parsing (No CITY.CODE => Lublin else CITY.CODE present => Compute)
     // Currently assumes (No value => Lublin)
     CITY: getCityEnvInfo(),
+    SERVER: {
+        PORT:
+            Deno.env.get(ENV_VARS.SERVER.PORT) !== undefined
+                ? parseIntEnv(Deno.env.get(ENV_VARS.SERVER.PORT) as string)
+                : 8069,
+    },
 } as const satisfies EnvVarValues<typeof ENV_VARS>;

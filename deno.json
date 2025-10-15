@@ -17,7 +17,13 @@
             "tags": ["recommended", "jsr"]
         }
     },
+    "compilerOptions": {
+        "jsx": "precompile",
+        "jsxImportSource": "hono/jsx"
+    },
+    
     "imports": {
+        "hono": "jsr:@hono/hono@^4.9.12",
         "@std/async": "jsr:@std/async@^1.0.15",
         "@std/json": "jsr:@std/json@^1.0.2",
         "@std/path": "jsr:@std/path@^1.1.2",
