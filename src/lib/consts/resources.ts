@@ -25,6 +25,7 @@ export const RESOURCE_CONFIG = {
         ROUTES: 'routes.json',
         STOPS: 'stops.json',
         STREETS: 'streets.json',
+        ROUTE_TRANSIT_POINTS: 'transit_points.json',
     },
 } as const;
 
@@ -93,6 +94,7 @@ export function generateScheduleResources(basePath: string) {
     const routesFile = `${basePath}/${RESOURCE_CONFIG.SCHEDULE.ROUTES}`;
     const stopsFile = `${basePath}/${RESOURCE_CONFIG.SCHEDULE.STOPS}`;
     const streetsFile = `${basePath}/${RESOURCE_CONFIG.SCHEDULE.STREETS}`;
+    const routeTransitPoints = `${basePath}/${RESOURCE_CONFIG.SCHEDULE.ROUTE_TRANSIT_POINTS}`;
 
     return {
         calendarFile,
@@ -104,6 +106,7 @@ export function generateScheduleResources(basePath: string) {
         routesFile,
         stopsFile,
         streetsFile,
+        routeTransitPoints
     };
 }
 

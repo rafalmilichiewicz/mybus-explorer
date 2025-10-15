@@ -15,6 +15,7 @@ import { hashObject, hashOfFile } from '../../lib/utils/hash.ts';
 import { throwError } from '../../lib/utils/types.ts';
 import { generateSchemaJson } from '../../lib/db/patch/generate-schema.ts';
 import type { ScheduleMetadata as ScheduleMetadata } from '../../lib/db/schema/metadata.ts';
+import { RouteTransitPoints } from '../../lib/api/route-points/point.ts';
 
 export class AppRuntime {
     private readonly api: ApiWrapper;
@@ -95,12 +96,13 @@ export class AppRuntime {
 
     private static async initializeResources(api: ApiWrapper) {
         const savingResult = await api.schedule.save(this.resourcesStatic.databaseRootFile);
+        const patchesDefault = EMPTY_PATCHES;
+        patchesDefault.$schema = this.resourcesStatic.patchesSchemaFileRelative;
         if (!savingResult) throw new Error('Error while saving schedule database');
         const databaseHandle = new DatabaseSync(this.resourcesStatic.databaseRootFile);
-        const scheduleDatabase = new ScheduleDatabase(databaseHandle, EMPTY_PATCHES);
+        const scheduleDatabase = new ScheduleDatabase(databaseHandle, patchesDefault);
 
-        const schedule: Schedule = Schedule.fromDatabase(scheduleDatabase);
-
+        const schedule: Schedule = await Schedule.fromDatabase(scheduleDatabase);
         const scheduleMetadata = schedule.metadata;
 
         const metadata = await AppRuntime.updateAppMetadata(scheduleMetadata);
@@ -109,8 +111,6 @@ export class AppRuntime {
             this.resourcesStatic,
             scheduleMetadata
         );
-        const patchesDefault = EMPTY_PATCHES;
-        patchesDefault.$schema = this.resourcesStatic.patchesSchemaFileRelative;
 
         await createFolder(resourcesDynamic.cityWithDateWithDate);
         await createFolder(resourcesDynamic.dataFolder);
@@ -119,8 +119,18 @@ export class AppRuntime {
         await saveJson(this.resourcesStatic.metadataServerFile, metadata, true);
         await saveJson(resourcesDynamic.patchesFile, patchesDefault, true, true);
         await saveJson(this.resourcesStatic.patchesSchemaFile, generateSchemaJson(), true);
-        schedule.saveToFiles(resourcesDynamic.generatedFolder);
         await copyFile(this.resourcesStatic.databaseRootFile, resourcesDynamic.databaseFile);
+
+        const transitPointsForRoutes: RouteTransitPoints[] = [];
+        for (const route of schedule.routes) {
+            transitPointsForRoutes.push(
+                await api.getTransitPointsForRoute(route.number, route.variant)
+            );
+        }
+        schedule.setRouteTransitPoints(transitPointsForRoutes);
+
+        await schedule.saveToFiles(resourcesDynamic.generatedFolder);
+
         return { metadata, resourcesDynamic };
     }
 
@@ -145,14 +155,17 @@ export class AppRuntime {
         return metadata;
     }
 
-    private static applyPatches(
+    private static async applyPatches(
         resourcesDynamic: ResourcesDynamic,
         patches: DatabasePatches
-    ): Schedule {
-        const databaseSync = new DatabaseSync(resourcesDynamic.databaseFile);
+    ): Promise<Schedule> {
+        const databaseSync = new DatabaseSync(resourcesDynamic.databaseFile, {
+            readOnly: true,
+            open: true,
+        });
         const scheduleDatabase = new ScheduleDatabase(databaseSync, patches);
-        const schedule = Schedule.fromDatabase(scheduleDatabase);
-        schedule.saveToFiles(resourcesDynamic.generatedFolder);
+        const schedule = await Schedule.fromDatabase(scheduleDatabase);
+        await schedule.saveToFiles(resourcesDynamic.generatedFolder);
         return schedule;
 
         // logic for applying and saving patch

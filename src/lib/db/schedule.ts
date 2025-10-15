@@ -12,7 +12,9 @@ import type { Config } from './schema/config.ts';
 import type { Notice } from './schema/notice.ts';
 import { naturalSort } from '../utils/natural-sort.ts';
 import { generateScheduleResources } from '../consts/resources.ts';
-import { readJson, saveJson } from '../utils/files.ts';
+import { checkIfFileExists, readJson, saveJson } from '../utils/files.ts';
+import { RouteTransitPoints } from '../api/route-points/point.ts';
+import { throwError } from '../utils/types.ts';
 
 // TODO Rename and move
 export type RouteDto = {
@@ -69,6 +71,7 @@ export class Schedule {
     public streets: Street[];
     public routeList: RouteList;
     public timetable: Timetable;
+    public transitPointsForRoutes?: RouteTransitPoints[];
 
     private constructor(
         calendar: Calendar,
@@ -79,7 +82,8 @@ export class Schedule {
         routes: Route[],
         salesPoints: SalesPoint[],
         stops: Stop[],
-        streets: Street[]
+        streets: Street[],
+        transitPointsForRoutes?: RouteTransitPoints[]
     ) {
         this.calendar = calendar;
         this.config = config;
@@ -90,6 +94,7 @@ export class Schedule {
         this.salesPoints = salesPoints;
         this.stops = stops;
         this.streets = streets;
+        this.transitPointsForRoutes = transitPointsForRoutes;
 
         const uniqueRoutesByTransportMode = TRANSPORT_MODES.map((mode) => {
             const seenNumbers = new Set<string>();
@@ -121,6 +126,10 @@ export class Schedule {
         };
 
         this.timetable = groupByStopAndDay(departures);
+    }
+
+    public setRouteTransitPoints(routeTransitPoints: RouteTransitPoints[]) {
+        this.transitPointsForRoutes = routeTransitPoints;
     }
 
     public static fromDatabase(schedule: ScheduleDatabase) {
@@ -162,6 +171,13 @@ export class Schedule {
         const salesPoints = await readJson<SalesPoint[]>(resources.pointsOfSaleFile);
         const stops = await readJson<Stop[]>(resources.stopsFile);
         const streets = await readJson<Street[]>(resources.streetsFile);
+        let transitPointsForRoutes: RouteTransitPoints[] | undefined;
+
+        if (await checkIfFileExists(resources.routeTransitPoints)) {
+            transitPointsForRoutes =
+                (await readJson<RouteTransitPoints[]>(resources.streetsFile)) ??
+                throwError('Transit points file could not be read');
+        }
 
         // TODO Add validation
         if (
@@ -187,7 +203,8 @@ export class Schedule {
             routes,
             salesPoints,
             stops,
-            streets
+            streets,
+            transitPointsForRoutes
         );
     }
 
@@ -202,5 +219,6 @@ export class Schedule {
         await saveJson(resources.pointsOfSaleFile, this.salesPoints);
         await saveJson(resources.stopsFile, this.stops);
         await saveJson(resources.streetsFile, this.streets);
+        await saveJson(resources.routeTransitPoints, this.transitPointsForRoutes);
     }
 }

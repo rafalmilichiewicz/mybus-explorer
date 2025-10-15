@@ -1,7 +1,7 @@
-import type { DatabaseSync } from 'node:sqlite';
+import { DatabaseSync } from 'node:sqlite';
 
-import type { ScheduleDatabase } from './lib/db/sql.ts';
-import type { Schedule } from './lib/db/schedule.ts';
+import { ScheduleDatabase } from './lib/db/sql.ts';
+import { Schedule } from './lib/db/schedule.ts';
 import type getVehicles from './lib/api/vehicles/vehicles.ts';
 import type { getVehicleFlags, getVehicleStatus } from './lib/db/schema/ztm-types.ts';
 import type { getTimetableForStop } from './lib/api/timetable/timetable-stop.ts';
@@ -15,6 +15,8 @@ import type { saveJson } from './lib/utils/files.ts';
 import type { hashObject, hashOfFile } from './lib/utils/hash.ts';
 import { AppRuntime } from './server/runtime/runtime.ts';
 import { ApiWrapper } from './lib/api/wrapper.ts';
+import { EMPTY_PATCHES } from './lib/db/patch/patch.ts';
+import { RouteTransitPoints } from './lib/api/route-points/point.ts';
 
 if (import.meta.main) {
     console.log('Starting ZDiTM Thing...');
@@ -28,12 +30,25 @@ if (import.meta.main) {
     //     exit();
     // }
 
-    // const filename = './schedule_2025_10-05.sql';
-    // const db = new DatabaseSync(filename, { readOnly: true, open: true });
+    // const filename = './resources/lublin/2025-10-01_4565_1/data/schedule.sqlite';
 
-    // const schedule = new Schedule(
-    //     new ScheduleDatabase(new DatabaseSync(filename, { readOnly: true, open: true }))
+    // const schedule = Schedule.fromDatabase(
+    //     new ScheduleDatabase(
+    //         new DatabaseSync(filename, { readOnly: true, open: true }),
+    //         EMPTY_PATCHES
+    //     )
     // );
+
+    // const api = new ApiWrapper();
+
+    // const transitPointsForRoutes: RouteTransitPoints[] = [];
+    // for (const route of schedule.routes) {
+    //     transitPointsForRoutes.push(
+    //         await api.getTransitPointsForRoute(route.number, route.variant)
+    //     );
+    // }
+
+    // await api.getTransitPointsForRoute('17', 'B');
     // // const vehicles = await getVehicles("40");
     // await getTimetableForStop(2);
     // console.log(await getTimetableForStop(2));
@@ -81,8 +96,6 @@ if (import.meta.main) {
     // console.log(Temporal.Now.zonedDateTimeISO().toPlainDate())
 
     // generateSchemaJson()
-
-
 
     const server = AppRuntime.initialize(new ApiWrapper());
 

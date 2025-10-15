@@ -29,14 +29,28 @@ function validateContinuityBetweenPoints(data: RouteTransitPointsApi['R']['T']):
         if (points.length > 0) {
             const pointNumbers = points.map((p) => Number.parseInt(p.l));
             // Length check
-            if (pointNumbers[pointNumbers.length - 1] !== pointNumbers.length) {
-                console.log('length');
+            // Sequence starts with 0 OR 1
+            const first = pointNumbers[0];
+            const arrayLength = pointNumbers.length;
+            const supposedLength = pointNumbers[pointNumbers.length - 1];
+            if (
+                (first === 0 && arrayLength !== supposedLength + 1) ||
+                (first === 1 && arrayLength !== supposedLength)
+            ) {
+                console.log(points);
+                console.log(`Length check failed: ${arrayLength} <> ${supposedLength}`);
                 return false;
             }
 
             // Sequence check
             for (let j = 1; j < pointNumbers.length; j++) {
-                if (pointNumbers[j] - 1 !== pointNumbers[j - 1]) {
+                const current = pointNumbers[j];
+                const previous = pointNumbers[j - 1];
+                if (current - 1 !== previous) {
+                    console.log(points);
+                    console.log(
+                        `Sequence check failed: ${current} does not come after ${previous}`
+                    );
                     return false;
                 }
             }
@@ -61,10 +75,9 @@ export async function getRouteTransitPoints(
         `${ENDPOINTS.ROUTE_TRANSIT_POINTS}?cRoute=${routeNumber}&cRouteVariant=${routeVariant}`,
         headers
     );
-    console.log(JSON.stringify(data));
 
     if (!validateRouteData(data.R.T)) {
-        console.log(`Encountered problem with route ${routeNumber}-${routeVariant}`);
+        throw new Error(`Encountered problem with route ${routeNumber}-${routeVariant}`);
     }
     const transitPoints: TransitPoint[] = [];
 

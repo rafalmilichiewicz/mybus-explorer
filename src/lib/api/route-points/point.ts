@@ -1,4 +1,5 @@
-import type{ Position, ValuesToKeys } from '../../utils/types.ts';
+import { Route } from '../../db/schema/destination.ts';
+import type { Position, ValuesToKeys } from '../../utils/types.ts';
 
 const _pointExample = {
     'l': '1', // Number in sequence
@@ -44,4 +45,10 @@ export type RouteStop = {
     id: number;
 };
 export type TransitPoint = RouteStop | RoutePoint;
-export type RouteTransitPoints = TransitPoint[];
+export type RouteTransitPoints = {
+    route: {
+        number: Route['number'];
+        variant: Route['variant'];
+    };
+    points: TransitPoint[];
+};
