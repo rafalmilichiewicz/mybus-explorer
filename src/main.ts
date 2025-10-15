@@ -13,7 +13,7 @@ import { getRouteTransitPoints } from './lib/api/route-points/route-points.ts';
 import { generateSchemaJson } from './lib/db/patch/generate-schema.ts';
 import { saveJson } from './lib/utils/files.ts';
 import { hashObject, hashOfFile } from './lib/utils/hash.ts';
-import { MyBusServer } from './server/server.ts';
+import { AppRuntime } from './server/server.ts';
 import { ApiWrapper } from './lib/api/wrapper.ts';
 
 if (import.meta.main) {
@@ -84,7 +84,7 @@ if (import.meta.main) {
 
 
 
-    const server = MyBusServer.initialize(new ApiWrapper());
+    const server = AppRuntime.initialize(new ApiWrapper());
 
     // await Deno.writeTextFile("vehicles.json", JSON.stringify(vehicles))
     // console.log(vehicles);

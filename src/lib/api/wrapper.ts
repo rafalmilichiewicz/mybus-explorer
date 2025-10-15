@@ -15,7 +15,7 @@ export class ApiWrapper {
 
     public schedule = {
         save: getScheduleDatabase,
-        compare: compareSchedule,
+        checkIfChanged: compareSchedule,
     };
 
     public timetable = {
