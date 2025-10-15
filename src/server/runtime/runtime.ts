@@ -19,19 +19,27 @@ import type { ScheduleMetadata as ScheduleMetadata } from '../../lib/db/schema/m
 export class AppRuntime {
     private readonly api: ApiWrapper;
     private readonly schedule: Schedule;
+    private readonly metadata: ServerMetadata;
     private static readonly cityId = CONFIG.CITY.ID;
     private static readonly resourcesStatic = generateStaticResourcePaths(this.cityId);
     private resourcesDynamic: ResourcesDynamic;
 
-    private constructor(schedule: Schedule, api: ApiWrapper, resourcesDynamic: ResourcesDynamic) {
+    private constructor(
+        schedule: Schedule,
+        api: ApiWrapper,
+        metadata: ServerMetadata,
+        resourcesDynamic: ResourcesDynamic
+    ) {
         this.api = api;
         this.schedule = schedule;
+        this.metadata = metadata;
         this.resourcesDynamic = resourcesDynamic;
     }
 
     // : Promise<typeof MyBusServer>
     static async initialize(api: ApiWrapper) {
         let resourcesDynamic: ResourcesDynamic;
+        let schedule: Schedule;
         await createFolder(this.resourcesStatic.resourcesFolder);
         await createFolder(this.resourcesStatic.cityFolder);
 
@@ -52,6 +60,9 @@ export class AppRuntime {
             metadata.scheduleMetadata
         );
 
+        schedule = await Schedule.fromFiles(resourcesDynamic.generatedFolder);
+
+        // ^ Patches
         // TODO Validate patches
         let patches = await readJson<DatabasePatches>(resourcesDynamic.patchesFile);
         if (patches === null) {
@@ -62,8 +73,8 @@ export class AppRuntime {
         }
 
         if (patches !== null && (await hashObject(patches)) !== metadata.checksum.patches) {
-            console.log('Patches path');
-            this.applyPatches(patches);
+            console.log('Applying patches...');
+            this.applyPatches(resourcesDynamic, patches);
             this.updateAppMetadata(metadata.scheduleMetadata, patches);
             // Apply patches + Update metadata
         }
@@ -76,9 +87,10 @@ export class AppRuntime {
         if (scheduleComparison) {
             ({ metadata, resourcesDynamic } = await AppRuntime.initializeResources(api));
             await this.updateAppMetadata(metadata.scheduleMetadata, patches);
+            schedule = await Schedule.fromFiles(resourcesDynamic.generatedFolder);
         }
 
-        // return new MyBusServer();
+        return new AppRuntime(schedule, api, metadata, resourcesDynamic);
     }
 
     private static async initializeResources(api: ApiWrapper) {
@@ -87,7 +99,8 @@ export class AppRuntime {
         const databaseHandle = new DatabaseSync(this.resourcesStatic.databaseRootFile);
         const scheduleDatabase = new ScheduleDatabase(databaseHandle, EMPTY_PATCHES);
 
-        const schedule: Schedule = new Schedule(scheduleDatabase);
+        const schedule: Schedule = Schedule.fromDatabase(scheduleDatabase);
+
         const scheduleMetadata = schedule.metadata;
 
         const metadata = await AppRuntime.updateAppMetadata(scheduleMetadata);
@@ -102,9 +115,11 @@ export class AppRuntime {
         await createFolder(resourcesDynamic.cityWithDateWithDate);
         await createFolder(resourcesDynamic.dataFolder);
         await createFolder(resourcesDynamic.observationsFolder);
+        await createFolder(resourcesDynamic.generatedFolder);
         await saveJson(this.resourcesStatic.metadataServerFile, metadata, true);
         await saveJson(resourcesDynamic.patchesFile, patchesDefault, true, true);
         await saveJson(this.resourcesStatic.patchesSchemaFile, generateSchemaJson(), true);
+        schedule.saveToFiles(resourcesDynamic.generatedFolder);
         await copyFile(this.resourcesStatic.databaseRootFile, resourcesDynamic.databaseFile);
         return { metadata, resourcesDynamic };
     }
@@ -130,8 +145,15 @@ export class AppRuntime {
         return metadata;
     }
 
-    private static async applyPatches(patches: DatabasePatches) {
-        console.log('HEY', patches);
+    private static applyPatches(
+        resourcesDynamic: ResourcesDynamic,
+        patches: DatabasePatches
+    ): Schedule {
+        const databaseSync = new DatabaseSync(resourcesDynamic.databaseFile);
+        const scheduleDatabase = new ScheduleDatabase(databaseSync, patches);
+        const schedule = Schedule.fromDatabase(scheduleDatabase);
+        schedule.saveToFiles(resourcesDynamic.generatedFolder);
+        return schedule;
 
         // logic for applying and saving patch
     }
