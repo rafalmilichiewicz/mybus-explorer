@@ -8,6 +8,7 @@ import type { Variables } from './types.ts';
 import { transitPoints } from './api/transit-points.ts';
 import { database } from './api/schedule/database.ts';
 import { schedule } from './api/schedule/index.ts';
+import { timetable } from './api/timetable/index.ts';
 
 const app = new OpenAPIHono<{ Variables: Variables }>({ strict: false });
 const api = new ApiWrapper();
@@ -49,6 +50,7 @@ app.openapi(
 app.route('/health', health);
 app.route('/transit-points', transitPoints);
 app.route('/schedule', schedule);
+app.route('/timetable', timetable);
 
 app.get('/ui', swaggerUI({ url: '/docs' }));
 Deno.serve({ port: CONFIG.SERVER.PORT }, app.fetch);
