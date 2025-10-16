@@ -18,5 +18,5 @@ export type CalendarEntrySql = typeof _calendarSql;
 
 export type CalendarEntry = {
     dayType: Day['type'];
-    date: Date;
+    date: Temporal.PlainDate;
 };

@@ -13,7 +13,7 @@ import type { Notice } from './schema/notice.ts';
 import { naturalSort } from '../utils/natural-sort.ts';
 import { generateScheduleResources } from '../consts/resources.ts';
 import { checkIfFileExists, readJson, saveJson } from '../utils/files.ts';
-import { RouteTransitPoints } from '../api/route-points/point.ts';
+import type { RouteTransitPoints } from '../api/route-points/point.ts';
 import { throwError } from '../utils/types.ts';
 
 // TODO Rename and move
@@ -193,9 +193,16 @@ export class Schedule {
         ) {
             throw new Error('Encountered problem while loading schedule data from files');
         }
+        calendar.types;
+        const parsedCalendar: Calendar = {
+            types: calendar.types,
+            entries: calendar.entries.map((el) => {
+                return { date: Temporal.PlainDate.from(el.date), dayType: el.dayType };
+            }),
+        };
 
         return new Schedule(
-            calendar,
+            parsedCalendar,
             config,
             departures,
             metadata,

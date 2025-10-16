@@ -15,15 +15,15 @@ import { hashObject, hashOfFile } from '../../lib/utils/hash.ts';
 import { throwError } from '../../lib/utils/types.ts';
 import { generateSchemaJson } from '../../lib/db/patch/generate-schema.ts';
 import type { ScheduleMetadata as ScheduleMetadata } from '../../lib/db/schema/metadata.ts';
-import { RouteTransitPoints } from '../../lib/api/route-points/point.ts';
+import type { RouteTransitPoints } from '../../lib/api/route-points/point.ts';
 
 export class AppRuntime {
     private readonly api: ApiWrapper;
-    private readonly schedule: Schedule;
+    public readonly schedule: Schedule;
     private readonly metadata: ServerMetadata;
     private static readonly cityId = CONFIG.CITY.ID;
     private static readonly resourcesStatic = generateStaticResourcePaths(this.cityId);
-    private resourcesDynamic: ResourcesDynamic;
+    private readonly resourcesDynamic: ResourcesDynamic;
 
     private constructor(
         schedule: Schedule,
@@ -45,9 +45,9 @@ export class AppRuntime {
         await createFolder(this.resourcesStatic.cityFolder);
 
         let metadata = await readJson<ServerMetadata>(this.resourcesStatic.metadataServerFile);
-
         // ^ No metadata
         if (!metadata) {
+            console.log("no meta");
             ({ metadata, resourcesDynamic } = await AppRuntime.initializeResources(api));
         }
 
@@ -164,10 +164,8 @@ export class AppRuntime {
             open: true,
         });
         const scheduleDatabase = new ScheduleDatabase(databaseSync, patches);
-        const schedule = await Schedule.fromDatabase(scheduleDatabase);
+        const schedule = Schedule.fromDatabase(scheduleDatabase);
         await schedule.saveToFiles(resourcesDynamic.generatedFolder);
         return schedule;
-
-        // logic for applying and saving patch
     }
 }

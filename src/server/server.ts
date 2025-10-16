@@ -10,6 +10,7 @@ import { schedule } from './api/routes/schedule/index.ts';
 import { timetable } from './api/routes/timetable/index.ts';
 import { vehicles } from './api/routes/vehicles/vehicles.ts';
 import { AppRuntime } from './runtime/runtime.ts';
+import { calendar } from './api/routes/calendar/index.ts';
 
 const app = new OpenAPIHono<{ Variables: VariablesWithRuntime }>({ strict: false });
 const api = new ApiWrapper();
@@ -57,10 +58,13 @@ app.route('/timetable', timetable);
 
 if (!CONFIG.SERVER.STANDALONE) {
     console.log('Initializing app runtime...');
+    const runtime = await AppRuntime.initialize(api);
     app.use('*', async (c, next) => {
-        c.set('app', await AppRuntime.initialize(api));
+        c.set('app', runtime);
         await next();
     });
+
+    app.route('/calendar', calendar);
 }
 
 app.get('/ui', swaggerUI({ url: '/docs' }));

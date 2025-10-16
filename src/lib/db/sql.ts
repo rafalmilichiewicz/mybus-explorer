@@ -280,10 +280,7 @@ export class ScheduleDatabase {
         const calendarRaw = calendarSql.all() as CalendarEntrySql[];
 
         const calendar = calendarRaw.map((entry) => {
-            const date = new Date(entry.dt_kal);
-            if (Number.isNaN(date.valueOf())) {
-                throw new Error('Encountered invalid date string');
-            }
+            const date = Temporal.PlainDate.from(entry.dt_kal);
             return {
                 dayType: entry.td_rj,
                 date: date,
