@@ -11,7 +11,6 @@ const checkDateRoute = createRoute({
         query: z.object({
             date: z.iso
                 .date()
-
                 .openapi({ example: '2025-10-16', description: 'Date in YYYY-MM-DD format' }),
         }),
     },
