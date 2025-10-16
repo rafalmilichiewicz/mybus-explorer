@@ -1,4 +1,4 @@
-import type { Variables } from '../../types.ts';
+import type { Variables } from '../../../types.ts';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { vehicle } from './vehicle.ts';
 import { stop } from './stop.ts';

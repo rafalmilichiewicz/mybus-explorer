@@ -1,4 +1,4 @@
-import type { Variables } from '../../types.ts';
+import type { Variables } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
 const checkScheduleChangedRoute = createRoute({

@@ -1,10 +1,11 @@
-import type { Variables } from '../types.ts';
-import { VehicleEnRouteSchema } from '../schemas.ts';
+import type { Variables } from '../../../types.ts';
+import { VehicleEnRouteSchema } from '../../../schemas/schemas.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
 const getOnlineVehiclesRoute = createRoute({
     method: 'get',
-    path: '/vehicles',
+    path: '/',
+    tags: ['Vehicles'],
     summary: 'Get online vehicles',
     description:
         'Returns a list of currently online vehicles, optionally filtered by route number.',
@@ -32,9 +33,9 @@ const getOnlineVehiclesRoute = createRoute({
     },
 });
 
-const onlineVehiclesApp = new OpenAPIHono<{ Variables: Variables }>();
+const vehicles = new OpenAPIHono<{ Variables: Variables }>();
 
-onlineVehiclesApp.openapi(getOnlineVehiclesRoute, async (c) => {
+vehicles.openapi(getOnlineVehiclesRoute, async (c) => {
     const { route } = c.req.valid('query');
     const api = c.get('api');
 
@@ -47,4 +48,4 @@ onlineVehiclesApp.openapi(getOnlineVehiclesRoute, async (c) => {
     }
 });
 
-export {};
+export { vehicles };

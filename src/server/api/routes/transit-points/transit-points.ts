@@ -1,6 +1,6 @@
+import type { Variables } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
-import type { Variables } from '../types.ts';
-import { TransitPointSchema } from '../schemas.ts';
+import { TransitPointSchema } from '../../../schemas/schemas.ts';
 
 const RouteTransitPointsSchema = z.object({
     route: z.object({
@@ -13,6 +13,7 @@ const RouteTransitPointsSchema = z.object({
 const getRouteTransitPointsRoute = createRoute({
     path: '/',
     method: 'get',
+    tags: ["Transit Points"],
     summary: 'Get route transit points',
     description:
         'Returns the ordered list of stops and intermediate points for a given route number and variant.',

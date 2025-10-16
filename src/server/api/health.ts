@@ -5,6 +5,7 @@ health.openapi(
     createRoute({
         path: '/',
         method: 'get',
+        tags: ['App'],
         description: 'Check app health',
         summary: 'App health status',
         responses: {

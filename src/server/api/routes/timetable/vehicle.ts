@@ -1,5 +1,5 @@
-import { TimetableVehicleSchema } from '../../schemas.ts';
-import type { Variables } from '../../types.ts';
+import { TimetableVehicleSchema } from '../../../schemas/schemas.ts';
+import type { Variables } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
 const getTimetableForVehicleRoute = createRoute({

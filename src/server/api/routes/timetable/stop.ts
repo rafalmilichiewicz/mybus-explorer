@@ -1,5 +1,5 @@
-import { TimetableStopSchema } from '../../schemas.ts';
-import type { Variables } from '../../types.ts';
+import { TimetableStopSchema } from '../../../schemas/schemas.ts';
+import type { Variables } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
 const getTimetableForStopRoute = createRoute({
