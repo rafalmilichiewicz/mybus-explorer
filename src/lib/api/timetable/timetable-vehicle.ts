@@ -16,7 +16,6 @@ export async function getTimetableForVehicle(sideNumber: string): Promise<Timeta
         `${ENDPOINTS.TIME_TABLE.VEHICLE}${sideNumber}`,
         headers
     );
-    console.log(data);
 
     const stopsData = data.Schedules.Stop ?? [];
     const timetableForVehicle: TimetableVehicle = {
