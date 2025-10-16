@@ -14,5 +14,6 @@ export const ENV_VARS = {
     },
     SERVER: {
         PORT: 'SERVER_PORT',
+        STANDALONE: 'SERVER_STANDALONE',
     },
 } as const;

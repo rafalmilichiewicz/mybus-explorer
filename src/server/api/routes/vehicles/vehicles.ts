@@ -1,4 +1,4 @@
-import type { Variables } from '../../../types.ts';
+import type { VariablesStandalone } from '../../../types.ts';
 import { VehicleEnRouteSchema } from '../../../schemas/schemas.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
@@ -33,7 +33,7 @@ const getOnlineVehiclesRoute = createRoute({
     },
 });
 
-const vehicles = new OpenAPIHono<{ Variables: Variables }>();
+const vehicles = new OpenAPIHono<{ Variables: VariablesStandalone }>();
 
 vehicles.openapi(getOnlineVehiclesRoute, async (c) => {
     const { route } = c.req.valid('query');

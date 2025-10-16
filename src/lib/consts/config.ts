@@ -11,6 +11,20 @@ function parseIntEnv(value: string): number | never {
     return numericValue;
 }
 
+function parseBooleanEnv(value: string): boolean | never {
+    const normalized = value.toLowerCase().trim();
+
+    if (normalized === 'true' || normalized === '1') {
+        return true;
+    }
+
+    if (normalized === 'false' || normalized === '0') {
+        return false;
+    }
+
+    throw new Error(`Cannot convert "${value}" to boolean`);
+}
+
 function getCityInfoById(id: string): CityInfo {
     const city = Object.values(CITIES).find((el) => el.id === id);
     if (city) {
@@ -63,6 +77,10 @@ export const CONFIG = {
             Deno.env.get(ENV_VARS.SERVER.PORT) !== undefined
                 ? parseIntEnv(Deno.env.get(ENV_VARS.SERVER.PORT) as string)
                 : 8069,
+        STANDALONE:
+            Deno.env.get(ENV_VARS.SERVER.STANDALONE) !== undefined
+                ? parseBooleanEnv(Deno.env.get(ENV_VARS.SERVER.STANDALONE) as string)
+                : false,
     },
 } as const satisfies EnvVarValues<typeof ENV_VARS>;
 

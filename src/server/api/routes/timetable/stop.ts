@@ -1,5 +1,5 @@
 import { TimetableStopSchema } from '../../../schemas/schemas.ts';
-import type { Variables } from '../../../types.ts';
+import type { VariablesStandalone } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
 const getTimetableForStopRoute = createRoute({
@@ -27,7 +27,7 @@ const getTimetableForStopRoute = createRoute({
     },
 });
 
-const stop = new OpenAPIHono<{ Variables: Variables }>();
+const stop = new OpenAPIHono<{ Variables: VariablesStandalone }>();
 
 stop.openapi(getTimetableForStopRoute, async (c) => {
     const { stop } = c.req.valid('query');

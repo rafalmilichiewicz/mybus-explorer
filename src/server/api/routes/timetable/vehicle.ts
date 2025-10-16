@@ -1,5 +1,5 @@
 import { TimetableVehicleSchema } from '../../../schemas/schemas.ts';
-import type { Variables } from '../../../types.ts';
+import type { VariablesStandalone } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
 const getTimetableForVehicleRoute = createRoute({
@@ -24,7 +24,7 @@ const getTimetableForVehicleRoute = createRoute({
     },
 });
 
-const vehicle = new OpenAPIHono<{ Variables: Variables }>();
+const vehicle = new OpenAPIHono<{ Variables: VariablesStandalone }>();
 
 vehicle.openapi(getTimetableForVehicleRoute, async (c) => {
     const { sideNumber } = c.req.valid('query');

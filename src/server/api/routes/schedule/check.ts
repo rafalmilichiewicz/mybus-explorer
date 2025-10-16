@@ -1,4 +1,4 @@
-import type { Variables } from '../../../types.ts';
+import type { VariablesStandalone } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
 const checkScheduleChangedRoute = createRoute({
@@ -38,7 +38,7 @@ const checkScheduleChangedRoute = createRoute({
     },
 });
 
-const check = new OpenAPIHono<{ Variables: Variables }>();
+const check = new OpenAPIHono<{ Variables: VariablesStandalone }>();
 
 check.openapi(checkScheduleChangedRoute, async (c) => {
     const { version, generation } = c.req.valid('query');

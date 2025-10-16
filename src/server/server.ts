@@ -1,4 +1,4 @@
-import type { Variables } from './types.ts';
+import type { VariablesWithRuntime } from './types.ts';
 import { CONFIG } from '../lib/consts/config.ts';
 import { health } from './api/health.ts';
 import { swaggerUI } from '@hono/swagger-ui';
@@ -9,8 +9,9 @@ import { transitPoints } from './api/routes/transit-points/transit-points.ts';
 import { schedule } from './api/routes/schedule/index.ts';
 import { timetable } from './api/routes/timetable/index.ts';
 import { vehicles } from './api/routes/vehicles/vehicles.ts';
+import { AppRuntime } from './runtime/runtime.ts';
 
-const app = new OpenAPIHono<{ Variables: Variables }>({ strict: false });
+const app = new OpenAPIHono<{ Variables: VariablesWithRuntime }>({ strict: false });
 const api = new ApiWrapper();
 
 app.use('*', async (c, next) => {
@@ -53,6 +54,14 @@ app.route('/transit-points', transitPoints);
 app.route('/vehicle', vehicles);
 app.route('/schedule', schedule);
 app.route('/timetable', timetable);
+
+if (!CONFIG.SERVER.STANDALONE) {
+    console.log('Initializing app runtime...');
+    app.use('*', async (c, next) => {
+        c.set('app', await AppRuntime.initialize(api));
+        await next();
+    });
+}
 
 app.get('/ui', swaggerUI({ url: '/docs' }));
 Deno.serve({ port: CONFIG.SERVER.PORT }, app.fetch);

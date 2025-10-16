@@ -1,4 +1,4 @@
-import type { Variables } from '../../../types.ts';
+import type { VariablesStandalone } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 import { TransitPointSchema } from '../../../schemas/schemas.ts';
 
@@ -39,7 +39,7 @@ const getRouteTransitPointsRoute = createRoute({
     },
 });
 
-const transitPoints = new OpenAPIHono<{ Variables: Variables }>();
+const transitPoints = new OpenAPIHono<{ Variables: VariablesStandalone }>();
 transitPoints.openapi(getRouteTransitPointsRoute, async (c) => {
     const api = c.get('api');
     const { routeNumber, routeVariant } = c.req.valid('query');
