@@ -6,7 +6,8 @@ import { z } from '@hono/zod-openapi';
 import { ApiWrapper } from '../lib/api/wrapper.ts';
 import type { Variables } from './types.ts';
 import { transitPoints } from './api/transit-points.ts';
-import { database } from './api/database.ts';
+import { database } from './api/schedule/database.ts';
+import { schedule } from './api/schedule/index.ts';
 
 const app = new OpenAPIHono<{ Variables: Variables }>({ strict: false });
 const api = new ApiWrapper();
@@ -47,7 +48,7 @@ app.openapi(
 );
 app.route('/health', health);
 app.route('/transit-points', transitPoints);
-app.route('/database', database);
+app.route('/schedule', schedule);
 
 app.get('/ui', swaggerUI({ url: '/docs' }));
 Deno.serve({ port: CONFIG.SERVER.PORT }, app.fetch);

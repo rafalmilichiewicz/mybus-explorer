@@ -1,9 +1,10 @@
-import type { Variables } from '../types.ts';
+import type { Variables } from '../../types.ts';
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 
-const getScheduleStreamRoute = createRoute({
+const getDatabaseRoute = createRoute({
     method: 'get',
-    path: '/',
+    path: '/database',
+    tags: ['Schedule'],
     summary: 'Get schedule database stream',
     description:
         'Returns a decompressed schedule database as a binary stream. The stream is generated from a gzip-compressed schedule source.',
@@ -26,7 +27,7 @@ const getScheduleStreamRoute = createRoute({
 });
 
 const database = new OpenAPIHono<{ Variables: Variables }>();
-database.openapi(getScheduleStreamRoute, async (c) => {
+database.openapi(getDatabaseRoute, async (c) => {
     const api = c.get('api');
     const config = c.get('config');
 

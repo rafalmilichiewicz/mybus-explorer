@@ -25,6 +25,7 @@ const getOnlineVehiclesRoute = createRoute({
                 },
             },
         },
+        400: { description: 'Invalid parameters' },
         500: {
             description: 'Internal server error',
         },
