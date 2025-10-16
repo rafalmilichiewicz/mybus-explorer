@@ -10,7 +10,11 @@ const getTimetableForStopRoute = createRoute({
     description: 'Returns timetable information for a specific stop identified by stop ID.',
     request: {
         query: z.object({
-            stop: z.string().openapi({ example: '330' }),
+            stop: z
+                .string()
+                .transform((v) => parseInt(v, 10))
+                .refine((v) => !isNaN(v), { message: 'stop must be a number' })
+                .openapi({ example: '330', description: 'Stop Sip Id' }),
         }),
     },
     responses: {
@@ -30,7 +34,7 @@ stop.openapi(getTimetableForStopRoute, async (c) => {
     const api = c.get('api');
 
     try {
-        const data = await api.timetable.getForStop(Number(stop));
+        const data = await api.timetable.getForStop(stop);
         return c.json(data, 200);
     } catch (err) {
         console.error('Failed to get stop timetable:', err);
