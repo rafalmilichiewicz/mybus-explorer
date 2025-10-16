@@ -65,3 +65,5 @@ export const CONFIG = {
                 : 8069,
     },
 } as const satisfies EnvVarValues<typeof ENV_VARS>;
+
+export type Config = typeof CONFIG;

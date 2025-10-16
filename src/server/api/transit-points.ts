@@ -1,22 +1,6 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 import type { Variables } from '../types.ts';
-
-const PositionSchema = z.object({
-    lat: z.number().openapi({ example: 60.192059 }),
-    lon: z.number().openapi({ example: 24.945831 }),
-});
-
-const RouteStopSchema = z.object({
-    type: z.literal('stop'),
-    id: z.number().openapi({ example: 12345 }),
-});
-
-const RoutePointSchema = z.object({
-    type: z.literal('point'),
-    position: PositionSchema,
-});
-
-const TransitPointSchema = z.union([RouteStopSchema, RoutePointSchema]);
+import { TransitPointSchema } from '../schemas.ts';
 
 const RouteTransitPointsSchema = z.object({
     route: z.object({
@@ -47,6 +31,9 @@ const getRouteTransitPointsRoute = createRoute({
                 },
             },
         },
+        500: {
+            description: 'Internal server error',
+        },
     },
 });
 
@@ -54,10 +41,16 @@ const transitPoints = new OpenAPIHono<{ Variables: Variables }>();
 transitPoints.openapi(getRouteTransitPointsRoute, async (c) => {
     const api = c.get('api');
     const { routeNumber, routeVariant } = c.req.valid('query');
-    const data = (await api.getTransitPointsForRoute(routeNumber, routeVariant)) as z.infer<
-        typeof RouteTransitPointsSchema
-    >;
-    return c.json(data, 200);
+
+    try {
+        const data = (await api.getTransitPointsForRoute(routeNumber, routeVariant)) as z.infer<
+            typeof RouteTransitPointsSchema
+        >;
+        return c.json(data, 200);
+    } catch (error) {
+        console.error('Failed to fetch vehicles:', error);
+        return c.text('Internal server error', 500);
+    }
 });
 
 export { transitPoints };

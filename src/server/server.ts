@@ -6,12 +6,14 @@ import { z } from '@hono/zod-openapi';
 import { ApiWrapper } from '../lib/api/wrapper.ts';
 import type { Variables } from './types.ts';
 import { transitPoints } from './api/transit-points.ts';
+import { database } from './api/database.ts';
 
 const app = new OpenAPIHono<{ Variables: Variables }>({ strict: false });
 const api = new ApiWrapper();
 
 app.use('*', async (c, next) => {
     c.set('api', api);
+    c.set('config', CONFIG);
     await next();
 });
 
@@ -26,8 +28,8 @@ app.openapi(
     createRoute({
         path: '/',
         method: 'get',
-        description: "Root of the app",
-        summary: "Hello message from app",
+        description: 'Root of the app',
+        summary: 'Hello message from app',
         responses: {
             200: {
                 content: {
@@ -45,7 +47,7 @@ app.openapi(
 );
 app.route('/health', health);
 app.route('/transit-points', transitPoints);
+app.route('/database', database);
 
 app.get('/ui', swaggerUI({ url: '/docs' }));
 Deno.serve({ port: CONFIG.SERVER.PORT }, app.fetch);
-

@@ -128,7 +128,7 @@ export const VEHICLE_FEATURES_REV = {
 } as const satisfies Record<VehicleFeatureLetter, VehicleFeature>;
 
 export type VehicleFlag = {
-    id: VehicleFeature | SomeOtherString;
+    id: VehicleFeatureLetter | SomeOtherString;
     feature: VehicleFeature;
 };
 export function getVehicleFlags(featuresString: string): VehicleFlag[] {
