@@ -19,3 +19,16 @@ export async function getScheduleDatabase(filename: string): Promise<boolean> {
 
     return false;
 }
+
+export async function getScheduleDatabaseStream() {
+    const headers = await generateHeaders(CONFIG.CITY.AGE);
+    const response = await fetchDataBinary(`${ENDPOINTS.SCHEDULE.GET}`, headers);
+
+    try {
+        const decompressionStream = new DecompressionStream('gzip');
+        const decompressed = response.body!.pipeThrough(decompressionStream);
+        return decompressed;
+    } catch (error) {
+        console.error('Failed to decompress gzip data:', error);
+    }
+}

@@ -97,7 +97,7 @@ if (import.meta.main) {
 
     // generateSchemaJson()
 
-    const server = AppRuntime.initialize(new ApiWrapper());
+    // const server = AppRuntime.initialize(new ApiWrapper());
 
     // await Deno.writeTextFile("vehicles.json", JSON.stringify(vehicles))
     // console.log(vehicles);

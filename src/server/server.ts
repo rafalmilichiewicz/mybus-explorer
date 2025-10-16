@@ -1,20 +1,33 @@
 import { CONFIG } from '../lib/consts/config.ts';
 import { health } from './api/health.ts';
-import { SwaggerUI, swaggerUI } from '@hono/swagger-ui';
-import { docs } from './docs.ts';
+import { swaggerUI } from '@hono/swagger-ui';
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
-
-const app = new OpenAPIHono({ strict: false });
-
 import { z } from '@hono/zod-openapi';
-import { Hono } from 'hono';
+import { ApiWrapper } from '../lib/api/wrapper.ts';
+import type { Variables } from './types.ts';
+import { transitPoints } from './api/transit-points.ts';
 
-app.route('/health', health);
-app.route('/docs', docs);
+const app = new OpenAPIHono<{ Variables: Variables }>({ strict: false });
+const api = new ApiWrapper();
+
+app.use('*', async (c, next) => {
+    c.set('api', api);
+    await next();
+});
+
+app.doc('/docs', {
+    openapi: '3.0.0',
+    info: {
+        version: '1.0.0',
+        title: 'MyBus Explorer API',
+    },
+});
 app.openapi(
     createRoute({
         path: '/',
         method: 'get',
+        description: "Root of the app",
+        summary: "Hello message from app",
         responses: {
             200: {
                 content: {
@@ -30,16 +43,9 @@ app.openapi(
         return c.text('Hello from MyBus Explorer!');
     }
 );
+app.route('/health', health);
+app.route('/transit-points', transitPoints);
 
-app.doc('/docs', {
-    openapi: '3.0.0',
-    info: {
-        version: '1.0.0',
-        title: 'My API',
-    },
-});
-app.get('/ui', swaggerUI({ url: '/docs' }),);
+app.get('/ui', swaggerUI({ url: '/docs' }));
 Deno.serve({ port: CONFIG.SERVER.PORT }, app.fetch);
 
-// const b = new Hono();
-// b.get('/swagger', swaggerUI({ url: '/doc' }));

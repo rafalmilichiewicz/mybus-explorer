@@ -5,7 +5,7 @@ import type { VehicleEnRoute } from './vehicles/vehicle.ts';
 import type { ScheduleMetadata } from '../db/schema/metadata.ts';
 import { getRouteTransitPoints } from './route-points/route-points.ts';
 import { compareSchedule } from './schedule/compare-schedule.ts';
-import { getScheduleDatabase } from './schedule/get-schedule.ts';
+import { getScheduleDatabase, getScheduleDatabaseStream } from './schedule/get-schedule.ts';
 import { getTimetableForStop } from './timetable/timetable-stop.ts';
 import { getTimetableForVehicle } from './timetable/timetable-vehicle.ts';
 import { getVehicles } from './vehicles/vehicles.ts';
@@ -14,7 +14,8 @@ export class ApiWrapper {
     constructor() {}
 
     public schedule = {
-        save: getScheduleDatabase,
+        saveToFile: getScheduleDatabase,
+        getStream: getScheduleDatabaseStream,
         checkIfChanged: compareSchedule,
     };
 

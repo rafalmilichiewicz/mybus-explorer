@@ -95,7 +95,7 @@ export class AppRuntime {
     }
 
     private static async initializeResources(api: ApiWrapper) {
-        const savingResult = await api.schedule.save(this.resourcesStatic.databaseRootFile);
+        const savingResult = await api.schedule.saveToFile(this.resourcesStatic.databaseRootFile);
         const patchesDefault = EMPTY_PATCHES;
         patchesDefault.$schema = this.resourcesStatic.patchesSchemaFileRelative;
         if (!savingResult) throw new Error('Error while saving schedule database');
