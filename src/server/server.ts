@@ -15,8 +15,9 @@ import { AppRuntime } from './runtime/runtime.ts';
 import { calendar } from './api/routes/calendar/index.ts';
 import { config } from './api/routes/config/index.ts';
 import { departures } from './api/routes/departures/index.ts';
-import { routes } from './api/routes/routes/index.ts';
+import { routes } from './api/routes/route/index.ts';
 import { metadata } from "./api/routes/metadata/index.ts";
+import { notices } from "./api/routes/notice/index.ts";
 
 const app = new OpenAPIHono<{ Variables: VariablesWithRuntime }>({ strict: false });
 const api = new ApiWrapper();
@@ -75,6 +76,7 @@ if (!CONFIG.SERVER.STANDALONE) {
     app.route('/departure', departures);
     app.route('/route', routes);
     app.route("/metadata", metadata);
+    app.route("/notice", notices);
 }
 
 app.get('/ui', swaggerUI({ url: '/docs' }));

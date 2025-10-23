@@ -10,7 +10,7 @@ const checkDateRoute = createRoute({
     responses: {
         200: {
             description: 'Server and schedule metadata',
-            content: { 'application/json': { schema: z.array(ServerMetadataSchema) } },
+            content: { 'application/json': { schema: ServerMetadataSchema } },
         },
         500: { description: 'Internal server error' },
     },
