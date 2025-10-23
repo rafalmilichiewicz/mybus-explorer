@@ -21,7 +21,6 @@ const departures = new OpenAPIHono<{ Variables: VariablesWithRuntime }>();
 departures.openapi(checkDateRoute, (c) => {
     const app = c.get('app');
     const departures = app.schedule.departures;
-    console.log(departures);
 
     return c.json(departures,200);
 });
