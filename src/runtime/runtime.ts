@@ -23,6 +23,7 @@ import {
 import { hashObject, hashOfFile } from '../lib/utils/hash.ts';
 import { throwError } from '../lib/utils/types.ts';
 import type { ServerMetadata } from './metadata.ts';
+import { convertScrapingToJson, scrapeVehiclesOnlineToNdjson } from './scrape.ts';
 
 export class AppRuntime {
     private readonly api: ApiWrapper;
@@ -45,20 +46,11 @@ export class AppRuntime {
     }
 
     public async scrapeVehiclesOnlineToNdjson() {
-        const date = Temporal.Now.instant().toJSON();
-        const vehiclesOnline = await this.api.getOnlineVehicles();
-        const data = vehiclesOnline.map((entry) => {
-            return {
-                date,
-                ...entry,
-            };
-        });
-
-        await appendToJson(this.resourcesDynamic.vehicleObservations, data);
+        await scrapeVehiclesOnlineToNdjson(this.resourcesDynamic.vehicleObservations, this.api);
     }
 
     public async convertScrapingToJson() {
-        return await readNdjson(this.resourcesDynamic.vehicleObservations);
+        return await convertScrapingToJson(this.resourcesDynamic.vehicleObservations);
     }
 
     /**
