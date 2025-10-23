@@ -132,7 +132,9 @@ export class AppRuntime {
         await copyFile(this.resourcesStatic.databaseRootFile, resourcesDynamic.databaseFile);
 
         const transitPointsForRoutes: RouteTransitPoints[] = [];
-        for (const route of schedule.routes) {
+        const routeLength = schedule.routes.length;
+        for (const [index, route] of schedule.routes.entries()) {
+            console.log(`Downloading route ${route.routeKey} ${index + 1}/${routeLength}`);
             transitPointsForRoutes.push(
                 await api.getTransitPointsForRoute(route.number, route.variant)
             );
