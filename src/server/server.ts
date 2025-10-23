@@ -1,3 +1,5 @@
+import denoInfo from "../../deno.json" with {type: "json"};
+
 import type { VariablesWithRuntime } from './types.ts';
 import { CONFIG } from '../lib/consts/config.ts';
 import { health } from './api/health.ts';
@@ -27,7 +29,7 @@ app.use('*', async (c, next) => {
 app.doc('/docs', {
     openapi: '3.0.0',
     info: {
-        version: '1.0.0',
+        version: denoInfo.version, // TODO Get app version from deno.json
         title: 'MyBus Explorer API',
     },
 });

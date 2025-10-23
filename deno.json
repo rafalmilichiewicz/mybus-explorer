@@ -1,4 +1,5 @@
 {
+    "version": "1.0.0",
     "permissions": {
         "default": {
             "env": true,
@@ -8,8 +9,9 @@
         }
     },
     "tasks": {
-        "dev": "deno run --watch -P --unstable-temporal ./src/main.ts"
-        // TODO Define tests and build commands
+        "dev": "deno run --watch -P --unstable-temporal ./src/main.ts",
+        "build": "",
+        "test": ""
     },
     "lint": {
         "include": ["src/"],
