@@ -20,7 +20,7 @@ import type { RouteTransitPoints } from '../../lib/api/route-points/point.ts';
 export class AppRuntime {
     private readonly api: ApiWrapper;
     public readonly schedule: Schedule;
-    private readonly metadata: ServerMetadata;
+    public readonly metadata: ServerMetadata;
     private static readonly cityId = CONFIG.CITY.ID;
     private static readonly resourcesStatic = generateStaticResourcePaths(this.cityId);
     private readonly resourcesDynamic: ResourcesDynamic;

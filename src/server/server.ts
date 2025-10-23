@@ -16,6 +16,7 @@ import { calendar } from './api/routes/calendar/index.ts';
 import { config } from './api/routes/config/index.ts';
 import { departures } from './api/routes/departures/index.ts';
 import { routes } from './api/routes/routes/index.ts';
+import { metadata } from "./api/routes/metadata/index.ts";
 
 const app = new OpenAPIHono<{ Variables: VariablesWithRuntime }>({ strict: false });
 const api = new ApiWrapper();
@@ -73,6 +74,7 @@ if (!CONFIG.SERVER.STANDALONE) {
     app.route('/config', config);
     app.route('/departure', departures);
     app.route('/route', routes);
+    app.route("/metadata", metadata);
 }
 
 app.get('/ui', swaggerUI({ url: '/docs' }));
