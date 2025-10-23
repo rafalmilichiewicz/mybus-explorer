@@ -12,14 +12,7 @@ import { type DatabasePatches, EMPTY_PATCHES } from '../lib/db/patch/patch.ts';
 import { Schedule } from '../lib/db/schedule.ts';
 import type { ScheduleMetadata } from '../lib/db/schema/metadata.ts';
 import { ScheduleDatabase } from '../lib/db/sql.ts';
-import {
-    appendToJson,
-    copyFile,
-    createFolder,
-    readJson,
-    readNdjson,
-    saveJson,
-} from '../lib/utils/files.ts';
+import { copyFile, createFolder, readJson, saveJson } from '../lib/utils/files.ts';
 import { hashObject, hashOfFile } from '../lib/utils/hash.ts';
 import { throwError } from '../lib/utils/types.ts';
 import type { ServerMetadata } from './metadata.ts';
