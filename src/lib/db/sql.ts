@@ -303,10 +303,12 @@ export class ScheduleDatabase {
             return {
                 destinationId: departure.id_krn,
                 dayType: departure.typ_dnia,
-                routeVariant: departure.war_trasy,
+                route: {
+                    variant: departure.war_trasy,
+                    number: departure.numer_lini.trim(),
+                },
                 stopIdSip: departure.bus_stop_id, // TODO Compute in code
                 stopNumberOnRoute: departure.lp_przyst,
-                lineNumber: departure.numer_lini.trim(),
                 departureTimes: splitDeparturesString(departure.odjazdy).map(toDepartureTime),
             } satisfies Departure;
         }) satisfies Departure[];

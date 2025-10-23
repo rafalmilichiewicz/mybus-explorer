@@ -77,9 +77,11 @@ export function toDepartureTime(timeString: string): DepartureTime {
 export type Departure = {
     destinationId: Route['id'];
     dayType: Day['type'];
-    routeVariant: Route['variant'];
+    route: {
+        number:Route['number'];
+        variant: Route['variant'];
+    }
     stopIdSip: Stop['idSip'];
     stopNumberOnRoute: number;
-    lineNumber: Route['number'];
     departureTimes: DepartureTime[];
 };

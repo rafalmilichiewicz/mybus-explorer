@@ -1,6 +1,6 @@
-import { z } from "@hono/zod-openapi";
+import { z } from '@hono/zod-openapi';
 
 export const StreetSchema = z.object({
-    id: z.number(),
-    name: z.string(),
-})
+    id: z.number().openapi({ example: 1 }),
+    name: z.string().openapi({ example: 'Lipowa' }),
+});
