@@ -37,7 +37,10 @@ export class AppRuntime {
         this.resourcesDynamic = resourcesDynamic;
     }
 
-    // : Promise<typeof MyBusServer>
+    /**
+     * Initializes the runtime — prepares folders, loads or regenerates metadata,
+     * applies patches, and ensures the schedule is current.
+     */
     static async initialize(api: ApiWrapper) {
         let resourcesDynamic: ResourcesDynamic;
         let schedule: Schedule;
@@ -47,7 +50,6 @@ export class AppRuntime {
         let metadata = await readJson<ServerMetadata>(this.resourcesStatic.metadataServerFile);
         // ^ No metadata
         if (!metadata) {
-            console.log("no meta");
             ({ metadata, resourcesDynamic } = await AppRuntime.initializeResources(api));
         }
 
@@ -77,7 +79,6 @@ export class AppRuntime {
             console.log('Applying patches...');
             this.applyPatches(resourcesDynamic, patches);
             this.updateAppMetadata(metadata.scheduleMetadata, patches);
-            // Apply patches + Update metadata
         }
 
         // ^ Check if new version of schedule is available
@@ -87,7 +88,7 @@ export class AppRuntime {
         );
         if (scheduleComparison) {
             ({ metadata, resourcesDynamic } = await AppRuntime.initializeResources(api));
-            await this.updateAppMetadata(metadata.scheduleMetadata, patches);
+            metadata = await this.updateAppMetadata(metadata.scheduleMetadata, patches);
             schedule = await Schedule.fromFiles(resourcesDynamic.generatedFolder);
         }
 
