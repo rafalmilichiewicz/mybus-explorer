@@ -1,5 +1,5 @@
 import type { VariablesStandalone } from '../../../types.ts';
-import { VehicleEnRouteSchema } from '../../../schemas/schemas.ts';
+import { VehicleEnRouteSchema } from '../../../schemas/standalone/vehicles.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
 const getOnlineVehiclesRoute = createRoute({

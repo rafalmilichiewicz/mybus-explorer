@@ -1,5 +1,5 @@
 import { z } from '@hono/zod-openapi';
-import { RouteDirectionSchema, TransportModeSchema } from '../schemas.ts';
+import { RouteDirectionSchema, TransportModeSchema } from '../common.ts';
 
 export const RouteSchema = z.object({
     id: z.number(),

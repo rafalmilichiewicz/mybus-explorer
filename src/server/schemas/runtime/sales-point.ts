@@ -1,5 +1,5 @@
 import { z } from '@hono/zod-openapi';
-import { PositionSchema } from '../schemas.ts';
+import { PositionSchema } from '../common.ts';
 
 export const SalesPointDescriptionSchema = z.enum([
     'ztm',

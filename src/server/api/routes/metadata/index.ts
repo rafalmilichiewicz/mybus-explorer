@@ -2,7 +2,7 @@ import { ServerMetadataSchema } from '../../../schemas/runtime/metadata.ts';
 import type { VariablesWithRuntime } from '../../../types.ts';
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 
-const checkDateRoute = createRoute({
+const metadataRoute = createRoute({
     method: 'get',
     path: '/',
     tags: ['Metadata', 'Runtime'],
@@ -18,7 +18,7 @@ const checkDateRoute = createRoute({
 
 const metadata = new OpenAPIHono<{ Variables: VariablesWithRuntime }>();
 
-metadata.openapi(checkDateRoute, (c) => {
+metadata.openapi(metadataRoute, (c) => {
     const app = c.get('app');
     const metadata = app.metadata;
 

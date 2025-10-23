@@ -1,4 +1,4 @@
-import { TimetableStopSchema } from '../../../schemas/schemas.ts';
+import { TimetableStopSchema } from '../../../schemas/standalone/timetable.ts';
 import type { VariablesStandalone } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 

@@ -2,7 +2,7 @@ import { SalesPointSchema } from '../../../schemas/runtime/sales-point.ts';
 import type { VariablesWithRuntime } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
-const checkDateRoute = createRoute({
+const salesPointsRoute = createRoute({
     method: 'get',
     path: '/',
     tags: ['Sales Point', 'Runtime'],
@@ -18,7 +18,7 @@ const checkDateRoute = createRoute({
 
 const salesPoints = new OpenAPIHono<{ Variables: VariablesWithRuntime }>();
 
-salesPoints.openapi(checkDateRoute, (c) => {
+salesPoints.openapi(salesPointsRoute, (c) => {
     const app = c.get('app');
     const salesPoints = app.schedule.salesPoints;
 

@@ -2,7 +2,7 @@ import { StreetSchema } from '../../../schemas/runtime/street.ts';
 import type { VariablesWithRuntime } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
-const checkDateRoute = createRoute({
+const streetsRoute = createRoute({
     method: 'get',
     path: '/',
     tags: ['Street', 'Runtime'],
@@ -18,7 +18,7 @@ const checkDateRoute = createRoute({
 
 const streets = new OpenAPIHono<{ Variables: VariablesWithRuntime }>();
 
-streets.openapi(checkDateRoute, (c) => {
+streets.openapi(streetsRoute, (c) => {
     const app = c.get('app');
     const streets = app.schedule.streets;
 

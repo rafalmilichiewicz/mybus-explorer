@@ -2,7 +2,7 @@ import { NoticeSchema } from '../../../schemas/runtime/notice.ts';
 import type { VariablesWithRuntime } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
-const checkDateRoute = createRoute({
+const noticesRoute = createRoute({
     method: 'get',
     path: '/',
     tags: ['Notice', 'Runtime'],
@@ -18,7 +18,7 @@ const checkDateRoute = createRoute({
 
 const notices = new OpenAPIHono<{ Variables: VariablesWithRuntime }>();
 
-notices.openapi(checkDateRoute, (c) => {
+notices.openapi(noticesRoute, (c) => {
     const app = c.get('app');
     const notices = app.schedule.notices;
 

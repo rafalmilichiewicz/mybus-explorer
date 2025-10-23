@@ -2,7 +2,7 @@ import { StopSchema } from '../../../schemas/runtime/stop.ts';
 import type { VariablesWithRuntime } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
 
-const checkDateRoute = createRoute({
+const getStopsAllRoute = createRoute({
     method: 'get',
     path: '/',
     tags: ['Stop', 'Runtime'],
@@ -18,7 +18,7 @@ const checkDateRoute = createRoute({
 
 const stopsAll = new OpenAPIHono<{ Variables: VariablesWithRuntime }>();
 
-stopsAll.openapi(checkDateRoute, (c) => {
+stopsAll.openapi(getStopsAllRoute, (c) => {
     const app = c.get('app');
     const stops = app.schedule.stops;
 

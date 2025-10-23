@@ -1,14 +1,8 @@
 import type { VariablesStandalone } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
-import { TransitPointSchema } from '../../../schemas/schemas.ts';
+import { RouteTransitPointsSchema } from "../../../schemas/standalone/transit-points.ts";
 
-const RouteTransitPointsSchema = z.object({
-    route: z.object({
-        number: z.string().openapi({ example: '550' }),
-        variant: z.string().openapi({ example: 'A' }),
-    }),
-    points: z.array(TransitPointSchema),
-});
+
 
 const getRouteTransitPointsRoute = createRoute({
     path: '/',

@@ -1,4 +1,4 @@
-import type { Variables } from '../../types.ts';
+import type { VariablesStandalone } from '../../../types.ts';
 import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 
 const getDatabaseRoute = createRoute({
@@ -26,7 +26,7 @@ const getDatabaseRoute = createRoute({
     },
 });
 
-const database = new OpenAPIHono<{ Variables: Variables }>();
+const database = new OpenAPIHono<{ Variables: VariablesStandalone }>();
 database.openapi(getDatabaseRoute, async (c) => {
     const api = c.get('api');
     const config = c.get('config');
