@@ -10,7 +10,8 @@
     },
     "tasks": {
         "dev": "deno run --watch -P --unstable-temporal ./src/main.ts",
-        "build": "",
+        "scrape": "deno run -P --unstable-temporal ./src/main.ts",
+        "server": "deno run -P --unstable-temporal ./src/server/server.ts",
         "test": ""
     },
     "lint": {
