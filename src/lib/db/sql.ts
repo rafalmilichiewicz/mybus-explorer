@@ -217,9 +217,11 @@ export class ScheduleDatabase {
                 groupNumber,
                 longitude: el.stop_lon,
                 latitude: el.stop_lat,
-                linesBus: routesBus,
-                linesTram: routesTram,
-                linesTrolleybus: routesTrolleybus,
+                routes: {
+                    bus: routesBus,
+                    tram: routesTram,
+                    trolleybus: routesTrolleybus,
+                },
                 destinations: patched.find((p) => p.id === sip)?.dest ?? [],
                 transportMode: el.stop_transport,
             } satisfies Stop;

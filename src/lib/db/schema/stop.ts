@@ -47,16 +47,18 @@ export type Stop = {
     idSip: number;
     idZtm: number;
     streetId: Street['id'];
-    streetName: Street["name"];
+    streetName: Street['name'];
     order: number;
     description: string;
     groupName: string;
     groupNumber: string;
     longitude: number;
     latitude: number;
-    linesBus: string[];
-    linesTram: string[];
-    linesTrolleybus: string[];
+    routes: {
+        bus: string[];
+        tram: string[];
+        trolleybus: string[];
+    };
     destinations: string[];
     transportMode: string;
     _post?: unknown;
