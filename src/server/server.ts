@@ -13,6 +13,7 @@ import { AppRuntime } from './runtime/runtime.ts';
 import { calendar } from './api/routes/calendar/index.ts';
 import { config } from './api/routes/config/index.ts';
 import { departures } from './api/routes/departures/index.ts';
+import { routes } from './api/routes/routes/index.ts';
 
 const app = new OpenAPIHono<{ Variables: VariablesWithRuntime }>({ strict: false });
 const api = new ApiWrapper();
@@ -69,6 +70,7 @@ if (!CONFIG.SERVER.STANDALONE) {
     app.route('/calendar', calendar);
     app.route('/config', config);
     app.route('/departure', departures);
+    app.route('/route', routes);
 }
 
 app.get('/ui', swaggerUI({ url: '/docs' }));
