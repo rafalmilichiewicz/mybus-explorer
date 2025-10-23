@@ -97,7 +97,7 @@ export async function saveJson(
 
 export async function appendToJson(path: string, data: unknown): Promise<void> {
     const line = JSON.stringify(data) + '\n';
-    await Deno.writeTextFile(path, line, { append: true });
+    await Deno.writeTextFile(path, line, { create: true, append: true });
 }
 export async function readNdjson(filename: string) {
     const file = await Deno.open(filename);
@@ -106,5 +106,7 @@ export async function readNdjson(filename: string) {
         .pipeThrough(new TextDecoderStream())
         .pipeThrough(new TextLineStream())
         .pipeThrough(new JsonParseStream());
-    console.log(Array.fromAsync(stream));
+
+    
+    return await Array.fromAsync(stream);
 }

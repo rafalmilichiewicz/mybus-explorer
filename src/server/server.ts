@@ -11,7 +11,7 @@ import { transitPoints } from './api/routes/transit-points/transit-points.ts';
 import { schedule } from './api/routes/schedule/index.ts';
 import { timetable } from './api/routes/timetable/index.ts';
 import { vehicles } from './api/routes/vehicles/vehicles.ts';
-import { AppRuntime } from './runtime/runtime.ts';
+import { AppRuntime } from '../runtime/runtime.ts';
 import { calendar } from './api/routes/calendar/index.ts';
 import { config } from './api/routes/config/index.ts';
 import { departures } from './api/routes/departures/index.ts';

@@ -1,21 +1,28 @@
 import { DatabaseSync } from 'node:sqlite';
-import { CONFIG } from '../../lib/consts/config.ts';
+import type { RouteTransitPoints } from '../lib/api/route-points/point.ts';
+import type { ApiWrapper } from '../lib/api/wrapper.ts';
+import { CONFIG } from '../lib/consts/config.ts';
 import {
-    generateDynamicResourcePaths,
     generateStaticResourcePaths,
     type ResourcesDynamic,
-} from '../../lib/consts/resources.ts';
-import { ScheduleDatabase } from '../../lib/db/sql.ts';
-import { copyFile, createFolder, readJson, saveJson } from '../../lib/utils/files.ts';
+    generateDynamicResourcePaths,
+} from '../lib/consts/resources.ts';
+import { generateSchemaJson } from '../lib/db/patch/generate-schema.ts';
+import { type DatabasePatches, EMPTY_PATCHES } from '../lib/db/patch/patch.ts';
+import { Schedule } from '../lib/db/schedule.ts';
+import type { ScheduleMetadata } from '../lib/db/schema/metadata.ts';
+import { ScheduleDatabase } from '../lib/db/sql.ts';
+import {
+    appendToJson,
+    copyFile,
+    createFolder,
+    readJson,
+    readNdjson,
+    saveJson,
+} from '../lib/utils/files.ts';
+import { hashObject, hashOfFile } from '../lib/utils/hash.ts';
+import { throwError } from '../lib/utils/types.ts';
 import type { ServerMetadata } from './metadata.ts';
-import type { ApiWrapper } from '../../lib/api/wrapper.ts';
-import { Schedule } from '../../lib/db/schedule.ts';
-import { type DatabasePatches, EMPTY_PATCHES } from '../../lib/db/patch/patch.ts';
-import { hashObject, hashOfFile } from '../../lib/utils/hash.ts';
-import { throwError } from '../../lib/utils/types.ts';
-import { generateSchemaJson } from '../../lib/db/patch/generate-schema.ts';
-import type { ScheduleMetadata as ScheduleMetadata } from '../../lib/db/schema/metadata.ts';
-import type { RouteTransitPoints } from '../../lib/api/route-points/point.ts';
 
 export class AppRuntime {
     private readonly api: ApiWrapper;
@@ -35,6 +42,23 @@ export class AppRuntime {
         this.schedule = schedule;
         this.metadata = metadata;
         this.resourcesDynamic = resourcesDynamic;
+    }
+
+    public async scrapeVehiclesOnlineToNdjson() {
+        const date = Temporal.Now.instant().toJSON();
+        const vehiclesOnline = await this.api.getOnlineVehicles();
+        const data = vehiclesOnline.map((entry) => {
+            return {
+                date,
+                ...entry,
+            };
+        });
+
+        await appendToJson(this.resourcesDynamic.vehicleObservations, data);
+    }
+
+    public async convertScrapingToJson() {
+        return await readNdjson(this.resourcesDynamic.vehicleObservations);
     }
 
     /**
