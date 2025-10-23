@@ -12,7 +12,7 @@ const checkScheduleChangedRoute = createRoute({
         query: z.object({
             version: z
                 .string()
-                .transform((v) => parseInt(v, 10))
+                .transform((v) => Number.parseInt(v, 10))
                 .refine((v) => !isNaN(v), { message: 'version must be a number' })
                 .openapi({ example: '1024', description: 'Schedule version number' }),
             generation: z
