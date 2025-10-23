@@ -18,6 +18,7 @@ import { departures } from './api/routes/departures/index.ts';
 import { routes } from './api/routes/route/index.ts';
 import { metadata } from "./api/routes/metadata/index.ts";
 import { notices } from "./api/routes/notice/index.ts";
+import { salesPoints } from "./api/routes/sales-point/index.ts";
 
 const app = new OpenAPIHono<{ Variables: VariablesWithRuntime }>({ strict: false });
 const api = new ApiWrapper();
@@ -77,6 +78,7 @@ if (!CONFIG.SERVER.STANDALONE) {
     app.route('/route', routes);
     app.route("/metadata", metadata);
     app.route("/notice", notices);
+    app.route("sales-point", salesPoints);
 }
 
 app.get('/ui', swaggerUI({ url: '/docs' }));
