@@ -1,4 +1,4 @@
-import type { DatabaseSchema, Row, SomeOtherNumber, ValuesToKeys } from '../../utils/types.ts';
+import type { DatabaseSchema, Position, Row, SomeOtherNumber, ValuesToKeys } from '../../utils/types.ts';
 // TODO Rename types
 export const SALES_POINTS_TABLE = {
     __table__: 'PUNKTY',
@@ -91,6 +91,5 @@ export type SalesPoint = {
     id: number;
     name: string;
     type: SalesPointType;
-    longitude: number;
-    latitude: number;
+    position: Position,
 };

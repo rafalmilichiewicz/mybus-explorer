@@ -249,8 +249,10 @@ export class ScheduleDatabase {
                 id: point.id,
                 name: point.nazwa.trim(),
                 type: getSalesPointType(point.id_pktp),
-                longitude: point.lon,
-                latitude: point.lat,
+                position: {
+                    longitude: point.lon,
+                    latitude: point.lat,
+                },
             } satisfies SalesPoint;
         }) satisfies SalesPoint[];
         return points;
