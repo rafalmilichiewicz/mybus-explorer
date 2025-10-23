@@ -24,7 +24,7 @@ export type DepartureTime = {
     seconds: number;
     hour: number;
     minute: number;
-    label: TimeString | SomeOtherString; // TODO ?
+    label: TimeString | SomeOtherString;
 };
 
 // TODO Docs

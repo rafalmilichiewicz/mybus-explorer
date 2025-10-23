@@ -34,7 +34,7 @@ app.use('*', async (c, next) => {
 app.doc('/docs', {
     openapi: '3.0.0',
     info: {
-        version: denoInfo.version, // TODO Get app version from deno.json
+        version: denoInfo.version,
         title: 'MyBus Explorer API',
     },
 });

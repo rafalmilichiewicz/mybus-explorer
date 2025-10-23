@@ -48,8 +48,6 @@ function prefixedSelect<T extends Record<string, string>, Prefix extends string>
     );
 }
 
-// TODO Add DTOs
-
 export function parseStopDescription(idSip: number, description: string) {
     // TODO Add patches system
     // console.log(stop);
@@ -278,7 +276,6 @@ export class ScheduleDatabase {
 
     generateCalendarEntries() {
         // TODO Add patches
-        // TODO Add "night" bus days as property to entry type
         const sql = `SELECT * FROM ${SCHEMA.CALENDAR.__table__}`;
         const calendarSql = this.db.prepare(sql);
         const calendarRaw = calendarSql.all() as CalendarEntrySql[];

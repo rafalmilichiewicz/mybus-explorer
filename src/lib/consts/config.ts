@@ -69,8 +69,6 @@ export const CONFIG = {
     CONFIG: {
         TIME_ZONE: Deno.env.get(ENV_VARS.CONFIG.TIME_ZONE) ?? 'Europe/Warsaw',
     },
-    // TODO Add parsing (No CITY.CODE => Lublin else CITY.CODE present => Compute)
-    // Currently assumes (No value => Lublin)
     CITY: getCityEnvInfo(),
     SERVER: {
         PORT:

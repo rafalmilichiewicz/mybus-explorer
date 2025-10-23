@@ -1,4 +1,3 @@
-// TODO Move Types
 export type SomeOtherString = string & NonNullable<unknown>;
 export type SomeOtherNumber = number & NonNullable<unknown>;
 export type ValuesToKeys<T> = T[keyof T];

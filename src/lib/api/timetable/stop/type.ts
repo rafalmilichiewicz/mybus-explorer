@@ -17,7 +17,6 @@ import {
 } from '../../../db/schema/ztm-types.ts';
 
 export async function getTimetableForStop(stop: number): Promise<TimetableStop> {
-    // TODO Add check if stop is present in Schedule db, but not here on the outside
 
     const headers = await generateHeaders(CONFIG.CITY.AGE);
     const data = await fetchDataXml<TimetableStopApi>(
