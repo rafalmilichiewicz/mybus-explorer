@@ -4,8 +4,8 @@
 // Or in a web form
 // https://sip.ztm.lublin.eu/RTT.aspx?id=469
 
-import type { DepartureTime } from '../../db/schema/departure.ts';
-import type { RouteDirection, TrackingStatus, TransportMode, VehicleFlag } from '../../db/schema/ztm-types.ts';
+import type { DepartureTime } from '../../../db/schema/departure.ts';
+import type { RouteDirection, TrackingStatus, TransportMode, VehicleFlag } from '../../../db/schema/ztm-types.ts';
 
 const _example = {
     i: '6350', // ? id

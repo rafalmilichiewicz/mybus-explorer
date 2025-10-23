@@ -1,20 +1,20 @@
-import { ENDPOINTS } from '../../consts/endpoints.ts';
-import { CONFIG } from '../../consts/config.ts';
-import generateHeaders from '../token/header.ts';
-import { fetchDataXml } from '../requests/fetch.ts';
+import { ENDPOINTS } from '../../../consts/endpoints.ts';
+import { CONFIG } from '../../../consts/config.ts';
+import generateHeaders from '../../token/header.ts';
+import { fetchDataXml } from '../../requests/fetch.ts';
 import type {
     StopDepartureInfo,
     TimetableStop,
     TimetableStopApi,
     TimeTableStopDepartureApi,
-} from './stop.ts';
-import { toDepartureTime } from '../../db/schema/departure.ts';
+} from './index.ts';
+import { toDepartureTime } from '../../../db/schema/departure.ts';
 import {
     getRouteDirectionType,
     getTrackingStatus,
     getVehicleFlags,
     getVehicleType,
-} from '../../db/schema/ztm-types.ts';
+} from '../../../db/schema/ztm-types.ts';
 
 export async function getTimetableForStop(stop: number): Promise<TimetableStop> {
     // TODO Add check if stop is present in Schedule db, but not here on the outside

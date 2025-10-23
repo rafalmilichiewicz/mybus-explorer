@@ -1,4 +1,4 @@
-import type { TrackingStatus } from '../../db/schema/ztm-types.ts';
+import type { TrackingStatus } from '../../../db/schema/ztm-types.ts';
 
 const _example = {
     lp: '32', // Stop number on route
