@@ -1,6 +1,6 @@
 import { generateAgeHeader } from '../api/token/age.ts';
 import generateCityOffset from '../api/token/city-offset.ts';
-import { CITIES, CityCode, type CityInfo } from './cities.ts';
+import { CITIES, type CityCode, type CityInfo } from './cities.ts';
 import { ENV_VARS } from './env_vars.ts';
 
 function parseIntEnv(value: string): number | never {
