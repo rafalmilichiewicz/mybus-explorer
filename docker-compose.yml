@@ -8,6 +8,5 @@ services:
     environment:
       SERVER_STANDALONE: true
       # CITY_ID: chelm # Visit docs to see what cities are supported
-      # - DENO_DIR=/app/.deno
     working_dir: /app
     command: deno task server
