@@ -1,0 +1,12 @@
+services:
+  deno-app:
+    build: .
+    ports:
+      - "8069:8069"
+    volumes:
+      - ./resources:/app/resources
+    environment:
+      SERVER_STANDALONE: true
+      # - DENO_DIR=/app/.deno
+    working_dir: /app
+    command: deno run -P ./src/server/server.ts

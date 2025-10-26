@@ -13,7 +13,7 @@
         "scrape": "deno run -P ./src/main.ts",
         "server": "deno run -P ./src/server/server.ts",
         "test": "",
-        "lint": "deno lint",
+        "lint": "deno lint"
     },
     "lint": {
         "include": ["src/"],
