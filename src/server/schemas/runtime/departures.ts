@@ -16,5 +16,7 @@ export const DepartureSchema = z.object({
     }),
     stopIdSip: z.number().openapi({ example: 1 }),
     stopNumberOnRoute: z.number().openapi({ example: 18 }),
-    departureTimes: z.array(DepartureTimeSchema),
+    departureTimes: z.array(
+        z.object(z.union([DepartureTimeSchema, z.object({ notice: z.string() })]))
+    ),
 });

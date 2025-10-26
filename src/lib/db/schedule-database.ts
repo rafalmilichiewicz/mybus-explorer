@@ -55,7 +55,9 @@ export function parseStopDescription(idSip: number, description: string) {
     const match = description.match(/^(.*?)(\d+)\s*$/);
 
     if (!match) {
-        throw new Error(idSip + description);
+        // throw new Error(idSip + description);
+        console.warn('Warning: Encountered stop not conforming to GROUP NUMBER scheme');
+        return ['', ''] as const;
     }
 
     const groupName = match[1].trim();

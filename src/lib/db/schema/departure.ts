@@ -41,18 +41,33 @@ export const _departureSql = {
 
 export type DepartureSql = typeof _departureSql;
 
-export function splitDeparturesString(departuresString: string) {
-    return departuresString.split(',').filter((str) => str.length > 0);
+type DepartureRawInfo = {
+    timeString: string;
+    notice: string;
+};
+export function splitDeparturesString(departuresString: string): DepartureRawInfo[] {
+    const split = departuresString.split(',');
+
+    const info: DepartureRawInfo[] = [];
+    for (let i = 0; i < split.length; i += 2) {
+        const current = split[i];
+        const next = split[i + 1];
+        info.push({
+            timeString: current,
+            notice: next,
+        });
+    }
+    return info;
 }
 
-export function toDepartureTime(timeString: string): DepartureTime {
+export function toDepartureTime(raw: DepartureRawInfo): DepartureTimeInfo {
     // timeString = seconds
     // 18120 => 05:02 (24-hour clock)
     // Label
-    const seconds = Number.parseInt(timeString);
+    const seconds = Number.parseInt(raw.timeString);
 
     if (Number.isNaN(seconds)) {
-        throw new Error('Passed time string is not valid');
+        throw new Error(`Passed time string is not valid: ${raw.timeString}`);
     }
 
     const totalMinutes = Math.floor(seconds / 60);
@@ -71,9 +86,10 @@ export function toDepartureTime(timeString: string): DepartureTime {
         label,
     };
 
-    return departureTime;
+    return { ...departureTime, notice: raw.notice };
 }
 
+export type DepartureTimeInfo = DepartureTime & { notice: string };
 export type Departure = {
     destinationId: Route['id'];
     dayType: Day['type'];
@@ -83,5 +99,5 @@ export type Departure = {
     };
     stopIdSip: Stop['idSip'];
     stopNumberOnRoute: number;
-    departureTimes: DepartureTime[];
+    departureTimes: DepartureTimeInfo[];
 };
