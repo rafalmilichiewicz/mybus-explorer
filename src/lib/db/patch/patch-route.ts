@@ -14,28 +14,3 @@ export type RoutePatch = RoutePatchByNumber | RoutePatchById;
 export function isRoutePatchByNumber(patch: RoutePatch): patch is RoutePatchByNumber {
     return 'number' in patch;
 }
-
-// // TODO Remove and add JSON read with schema
-// export const patchesRoute = [
-//     {
-//         number: ['160', '950'],
-//         patch: {
-//             transportMode: {
-//                 id: 'R',
-//                 type: 'trolleybus',
-//             },
-//         },
-//     },
-//     {
-//         number: ['N1', 'N2', 'N3'],
-//         patch: {
-//             night: true,
-//         },
-//     },
-//     {
-//         number: ['950', 'B', 'Z'],
-//         patch: {
-//             depot: true,
-//         },
-//     },
-// ] satisfies RoutePatch[];

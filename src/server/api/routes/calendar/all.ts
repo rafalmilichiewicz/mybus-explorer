@@ -5,7 +5,7 @@ import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 const getCalendarRoute = createRoute({
     method: 'get',
     path: '/',
-    tags: ['Calendar', "Runtime"],
+    tags: ['Calendar', 'Runtime'],
     summary: 'Get all calendar entries',
     description: 'Returns all calendar entries with their day types.',
     responses: {

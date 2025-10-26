@@ -1,27 +1,27 @@
 import type { DatabaseSync } from 'node:sqlite';
 import { SCHEMA } from './schema.ts';
 import type { Stop, StopSql } from './schema/stop.ts';
-import type { ScheduleMetadata, MetadataSql } from './schema/metadata.ts';
+import type { MetadataSql, ScheduleMetadata } from './schema/metadata.ts';
 import { naturalSort } from '../utils/natural-sort.ts';
-import type { CalendarEntrySql, CalendarEntry } from './schema/calendar.ts';
+import type { CalendarEntry, CalendarEntrySql } from './schema/calendar.ts';
 import {
     type Config,
     type ConfigSql,
     convertConfigFlag,
     KNOWN_CONFIG_KEYS,
 } from './schema/config.ts';
-import type { DaySql, Day } from './schema/day.ts';
+import type { Day, DaySql } from './schema/day.ts';
 import {
+    type Departure,
     type DepartureSql,
     splitDeparturesString,
     toDepartureTime,
-    type Departure,
 } from './schema/departure.ts';
 import type { DestinationSql, Route } from './schema/destination.ts';
 import type { Notice, NoticeSql } from './schema/notice.ts';
-import { type SalesPointSql, getSalesPointType, type SalesPoint } from './schema/sales-point.ts';
+import { getSalesPointType, type SalesPoint, type SalesPointSql } from './schema/sales-point.ts';
 import type { Street, StreetSql } from './schema/street.ts';
-import { getVehicleType, getRouteDirectionType, TRANSPORT_MODES } from './schema/ztm-types.ts';
+import { getRouteDirectionType, getVehicleType, TRANSPORT_MODES } from './schema/ztm-types.ts';
 
 import type { DatabasePatches } from './patch/patch.ts';
 import { isRoutePatchByNumber } from './patch/patch-route.ts';
@@ -117,7 +117,6 @@ export class ScheduleDatabase {
     public generateRoutes() {
         // TODO add patches
         const routesSql = this.db.prepare(
-            // `SELECT DISTINCT dest.${SCHEMA.DESTINATIONS.__columns__.DESTINATION}, dest.${SCHEMA.DESTINATIONS.__columns__.LINE_NUMBER}, dest.${SCHEMA.DESTINATIONS.__columns__.ROUTE_VARIANT}
             `SELECT * FROM ${SCHEMA.DESTINATIONS.__table__} dest 
                     -- INNER JOIN ${SCHEMA.DEPARTURES.__table__} dep 
                     -- ON dest.${SCHEMA.DESTINATIONS.__columns__.ID} = dep.${SCHEMA.DEPARTURES.__columns__.DESTINATION_ID}`
@@ -213,8 +212,10 @@ export class ScheduleDatabase {
                 description: el.stop_nazwa.trim(),
                 groupName,
                 groupNumber,
-                longitude: el.stop_lon,
-                latitude: el.stop_lat,
+                position: {
+                    longitude: el.stop_lon,
+                    latitude: el.stop_lat,
+                },
                 routes: {
                     bus: routesBus,
                     tram: routesTram,

@@ -1,5 +1,5 @@
-import type { DatabaseSchema, Row, ValuesToKeys } from "../../utils/types.ts";
-import type { Day } from "./day.ts";
+import type { DatabaseSchema, Row, ValuesToKeys } from '../../utils/types.ts';
+import type { Day } from './day.ts';
 
 export const CALENDAR_TABLE = {
     __table__: 'KALENDARZ',

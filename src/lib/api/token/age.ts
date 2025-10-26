@@ -1,8 +1,3 @@
-/**
- *
- *
- **/
-
 const AGE_BASE = 60;
 
 export function generateAgeHeader(cityOffset: number) {

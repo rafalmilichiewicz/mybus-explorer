@@ -1,4 +1,4 @@
-import type { AppRuntime } from './runtime/runtime.ts';
+import type { AppRuntime } from '../runtime/runtime.ts';
 import type { ApiWrapper } from '../lib/api/wrapper.ts';
 import type { Config } from '../lib/consts/config.ts';
 

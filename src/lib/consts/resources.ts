@@ -106,7 +106,7 @@ export function generateScheduleResources(basePath: string) {
         routesFile,
         stopsFile,
         streetsFile,
-        routeTransitPoints
+        routeTransitPoints,
     };
 }
 

@@ -1,4 +1,4 @@
-import { Route } from '../../db/schema/destination.ts';
+import type { Route } from '../../db/schema/destination.ts';
 import type { Position, ValuesToKeys } from '../../utils/types.ts';
 
 const _pointExample = {

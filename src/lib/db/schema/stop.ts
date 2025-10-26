@@ -1,4 +1,4 @@
-import type { DatabaseSchema, Row, ValuesToKeys } from '../../utils/types.ts';
+import type { DatabaseSchema, Position, Row, ValuesToKeys } from '../../utils/types.ts';
 import type { Street } from './street.ts';
 
 export const STOPS_TABLE = {
@@ -13,9 +13,9 @@ export const STOPS_TABLE = {
         LONGITUDE: 'lon',
         LATITUDE: 'lat',
         TRANSPORT_MODE: 'transport',
-        LINES_BUS: 'linieA',
-        LINES_TRAM: 'linieT',
-        LINES_TROLLEYBUS: 'linieR',
+        ROUTES_BUS: 'linieA',
+        ROUTES_TRAM: 'linieT',
+        ROUTES_TROLLEYBUS: 'linieR',
         ORDER: 'sort',
         DESTINATIONS: 'kierunek',
         _TAB_TYPE: 'typ_tab', // typ_tab ?= typ taboru
@@ -52,8 +52,7 @@ export type Stop = {
     description: string;
     groupName: string;
     groupNumber: string;
-    longitude: number;
-    latitude: number;
+    position: Position;
     routes: {
         bus: string[];
         tram: string[];

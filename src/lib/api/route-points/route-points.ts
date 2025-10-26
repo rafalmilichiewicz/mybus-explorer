@@ -3,12 +3,12 @@ import { ENDPOINTS } from '../../consts/endpoints.ts';
 import { fetchDataXml } from '../requests/fetch.ts';
 import generateHeaders from '../token/header.ts';
 import type {
-    RouteTransitPointsApi,
-    TransitPointApi,
-    RouteStop,
     RoutePoint,
+    RouteStop,
     RouteTransitPoints,
+    RouteTransitPointsApi,
     TransitPoint,
+    TransitPointApi,
 } from './point.ts';
 
 function validateContinuityBetweenStops(data: RouteTransitPointsApi['R']['T']): boolean {

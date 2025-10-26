@@ -9,10 +9,11 @@
         }
     },
     "tasks": {
-        "dev": "deno run --watch -P --unstable-temporal ./src/main.ts",
-        "scrape": "deno run -P --unstable-temporal ./src/main.ts",
-        "server": "deno run -P --unstable-temporal ./src/server/server.ts",
-        "test": ""
+        "dev": "deno run --watch -P ./src/main.ts",
+        "scrape": "deno run -P ./src/main.ts",
+        "server": "deno run -P ./src/server/server.ts",
+        "test": "",
+        "lint": "deno lint",
     },
     "lint": {
         "include": ["src/"],
@@ -20,6 +21,7 @@
             "tags": ["recommended", "jsr"]
         }
     },
+    "unstable": ["temporal"],
     "compilerOptions": {
         "jsx": "precompile",
         "jsxImportSource": "hono/jsx"

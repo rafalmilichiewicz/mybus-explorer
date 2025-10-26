@@ -1,4 +1,4 @@
-import type { DatabaseSchema, SomeOtherString, Row, ValuesToKeys } from '../../utils/types.ts';
+import type { DatabaseSchema, Row, SomeOtherString, ValuesToKeys } from '../../utils/types.ts';
 import type { Day } from './day.ts';
 import type { Route } from './destination.ts';
 import type { Stop } from './stop.ts';
@@ -8,7 +8,7 @@ export const DEPARTURES_TABLE = {
     __columns__: {
         STOP_ID: 'bus_stop_id',
         DAY_TYPE: 'typ_dnia',
-        LINE_NUMBER: 'numer_lini',
+        ROUTE_NUMBER: 'numer_lini',
         ROUTE_VARIANT: 'war_trasy',
         DEPARTURES: 'odjazdy',
         DESTINATION_ID: 'id_krn',
@@ -78,9 +78,9 @@ export type Departure = {
     destinationId: Route['id'];
     dayType: Day['type'];
     route: {
-        number:Route['number'];
+        number: Route['number'];
         variant: Route['variant'];
-    }
+    };
     stopIdSip: Stop['idSip'];
     stopNumberOnRoute: number;
     departureTimes: DepartureTime[];

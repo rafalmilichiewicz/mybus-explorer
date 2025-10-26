@@ -1,8 +1,8 @@
 import { XMLParser } from 'fast-xml-parser';
 
 const parser = new XMLParser({
-    attributeNamePrefix: "",
-    ignoreAttributes: ["?xml"],
+    attributeNamePrefix: '',
+    ignoreAttributes: ['?xml'],
     ignoreDeclaration: true,
 });
 

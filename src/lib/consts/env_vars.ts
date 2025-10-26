@@ -1,6 +1,5 @@
 export const ENV_VARS = {
     API: {
-        BASE_URL: 'BASE_URL',
         USER_AGENT: 'USER_AGENT',
     },
     CONFIG: {
@@ -11,6 +10,7 @@ export const ENV_VARS = {
         ID: 'CITY_ID',
         OFFSET: 'CITY_OFFSET',
         CITY_INFO: 'CITY_INFO',
+        BASE_URL: 'BASE_URL',
     },
     SERVER: {
         PORT: 'SERVER_PORT',

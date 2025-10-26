@@ -12,8 +12,7 @@ const locales = {
  * Each city in R&G's system has a unique *code*.
  *
  * This code is used in generating `cityOffset`.
- *
- **/
+ */
 export type CityInfo = {
     id: string;
     code: string;

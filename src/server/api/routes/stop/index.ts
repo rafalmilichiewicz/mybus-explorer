@@ -5,7 +5,7 @@ import { stopById } from './id.ts';
 
 const stops = new OpenAPIHono<{ Variables: VariablesStandalone }>();
 
-stops.route("/", stopsAll);
+stops.route('/', stopsAll);
 stops.route('/', stopById);
 
-export {stops};
+export { stops };

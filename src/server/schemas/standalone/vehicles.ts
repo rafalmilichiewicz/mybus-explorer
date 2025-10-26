@@ -1,10 +1,10 @@
 import { z } from '@hono/zod-openapi';
 import {
     PositionSchema,
-    VehicleStatusSchema,
     RouteInfoSchema,
-    VehicleFlagSchema,
     TransportModeSchema,
+    VehicleFlagSchema,
+    VehicleStatusSchema,
 } from '../common.ts';
 
 export const VehicleEnRouteSchema = z.object({

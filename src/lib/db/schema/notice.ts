@@ -4,7 +4,7 @@ import type { Route } from './destination.ts';
 export const NOTICES_TABLE = {
     __table__: 'UWAGI',
     __columns__: {
-        LINE_NUMBER: 'numer_linii',
+        ROUTE_NUMBER: 'numer_linii',
         TYPE: 'ozn_uwagi',
         CONTENT: 'tresc_uwag',
     },

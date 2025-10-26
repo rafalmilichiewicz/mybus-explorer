@@ -1,4 +1,9 @@
-import type { RouteDirection, TransportMode, VehicleFlag, VehicleStatus } from '../../db/schema/ztm-types.ts';
+import type {
+    RouteDirection,
+    TransportMode,
+    VehicleFlag,
+    VehicleStatus,
+} from '../../db/schema/ztm-types.ts';
 import type { Position } from '../../utils/types.ts';
 
 const _example = {

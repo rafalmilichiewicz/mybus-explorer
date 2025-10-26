@@ -2,7 +2,7 @@ import type { ScheduleMetadata } from './schema/metadata.ts';
 import type { Route } from './schema/destination.ts';
 import type { Stop } from './schema/stop.ts';
 import type { Street } from './schema/street.ts';
-import type { ScheduleDatabase } from './sql.ts';
+import type { ScheduleDatabase } from './schedule-database.ts';
 import type { Departure } from './schema/departure.ts';
 import { TRANSPORT_MODES } from './schema/ztm-types.ts';
 import type { SalesPoint } from './schema/sales-point.ts';

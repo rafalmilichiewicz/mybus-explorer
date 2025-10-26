@@ -1,12 +1,13 @@
 import { CONFIG } from './config.ts';
 
-const BASE = CONFIG.API.BASE_URL;
+const BASE = CONFIG.CITY.BASE_URL;
+console.log(BASE);
 
 export const ENDPOINTS = {
     PING_SERVICE: `${BASE}/PingService`,
     VEHICLES: `${BASE}/GetVehicles?cNbLst=&cTrackLst=&cDirLst=&cIdLst=&cKrsLst=&cRouteLst=`,
     ROUTE_TRANSIT_POINTS: `${BASE}/GetRouteVariantWithTransitPoints`,
-    
+
     TIME_TABLE: {
         STOP: `${BASE}/GetTimeTableReal?nBusStopId=`,
         VEHICLE: `${BASE}/GetVehicleTimeTable?&nNb=`,

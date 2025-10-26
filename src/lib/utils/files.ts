@@ -107,6 +107,5 @@ export async function readNdjson(filename: string) {
         .pipeThrough(new TextLineStream())
         .pipeThrough(new JsonParseStream());
 
-    
     return await Array.fromAsync(stream);
 }

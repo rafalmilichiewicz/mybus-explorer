@@ -31,7 +31,7 @@ const stopById = new OpenAPIHono<{ Variables: VariablesWithRuntime }>();
 
 stopById.openapi(stopByIdRoute, (c) => {
     const app = c.get('app');
-    const {id} = c.req.valid('param');
+    const { id } = c.req.valid('param');
 
     try {
         const stop = app.schedule.stops.find((el) => el.idSip === id);

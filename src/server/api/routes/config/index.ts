@@ -1,6 +1,6 @@
 import { ConfigSchema } from '../../../schemas/runtime/config.ts';
 import type { VariablesWithRuntime } from '../../../types.ts';
-import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
+import { createRoute, OpenAPIHono } from '@hono/zod-openapi';
 
 const configRoute = createRoute({
     method: 'get',

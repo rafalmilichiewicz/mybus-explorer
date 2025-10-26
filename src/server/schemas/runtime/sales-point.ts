@@ -11,8 +11,8 @@ export const SalesPointTypeSchema = z.object({
 });
 
 export const SalesPointSchema = z.object({
-    id: z.number().openapi({example: 3}),
-    name: z.string().openapi({example: "DWORZEC LUBLIN"}),
+    id: z.number().openapi({ example: 3 }),
+    name: z.string().openapi({ example: 'DWORZEC LUBLIN' }),
     type: SalesPointTypeSchema,
     position: PositionSchema,
 });

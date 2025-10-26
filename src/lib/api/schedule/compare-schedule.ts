@@ -3,12 +3,12 @@ import { fetchDataXml } from '../requests/fetch.ts';
 import { ENDPOINTS } from '../../consts/endpoints.ts';
 import { CONFIG } from '../../consts/config.ts';
 
+// True if schedule changed
+// False if not
 export type ResponseCompareSchedule = {
     int: 0 | 1;
 };
 
-// True if schedule changed
-// False if not
 export async function compareSchedule(version: number, generation: number) {
     const headers = await generateHeaders(CONFIG.CITY.AGE);
     const query = `?nGeneracja=${generation}&nIdWersja=${version}`;

@@ -9,9 +9,10 @@ const checkDateRoute = createRoute({
     summary: 'Check calendar for a given date',
     request: {
         query: z.object({
-            date: z.iso
-                .date()
-                .openapi({ example: '2025-10-16', description: 'Date in YYYY-MM-DD format' }),
+            date: z.iso.date().openapi({
+                example: '2025-10-16',
+                description: 'Date in YYYY-MM-DD format',
+            }),
         }),
     },
     responses: {

@@ -53,17 +53,21 @@ function getCityEnvInfo() {
             : generateAgeHeader(generateCityOffset(defaultCity.code));
     const CITY_INFO: CityInfo =
         Deno.env.get(ENV_VARS.CITY.ID) !== undefined ? getCityInfoById(ID) : defaultCity;
+    const BASE_URL =
+        Deno.env.get(ENV_VARS.CITY.BASE_URL) !== undefined
+            ? Deno.env.get(ENV_VARS.CITY.BASE_URL)
+            : defaultCity.url;
     return {
         ID,
         OFFSET,
         AGE,
         CITY_INFO,
+        BASE_URL,
     };
 }
 
 export const CONFIG = {
     API: {
-        BASE_URL: Deno.env.get(ENV_VARS.API.BASE_URL) ?? CITIES.LUBLIN.url,
         USER_AGENT: Deno.env.get(ENV_VARS.API.USER_AGENT) ?? 'myBusOnline',
     },
     CONFIG: {

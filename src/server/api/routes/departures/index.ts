@@ -22,6 +22,6 @@ departures.openapi(departuresRoute, (c) => {
     const app = c.get('app');
     const departures = app.schedule.departures;
 
-    return c.json(departures,200);
+    return c.json(departures, 200);
 });
 export { departures };

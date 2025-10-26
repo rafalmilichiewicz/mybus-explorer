@@ -1,5 +1,3 @@
-
-
 import type { VariablesWithRuntime } from '../../../types.ts';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { calendarAll } from './all.ts';

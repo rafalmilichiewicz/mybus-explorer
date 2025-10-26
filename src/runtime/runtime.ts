@@ -3,15 +3,15 @@ import type { RouteTransitPoints } from '../lib/api/route-points/point.ts';
 import type { ApiWrapper } from '../lib/api/wrapper.ts';
 import { CONFIG } from '../lib/consts/config.ts';
 import {
+    generateDynamicResourcePaths,
     generateStaticResourcePaths,
     type ResourcesDynamic,
-    generateDynamicResourcePaths,
 } from '../lib/consts/resources.ts';
 import { generateSchemaJson } from '../lib/db/patch/generate-schema.ts';
 import { type DatabasePatches, EMPTY_PATCHES } from '../lib/db/patch/patch.ts';
 import { Schedule } from '../lib/db/schedule.ts';
 import type { ScheduleMetadata } from '../lib/db/schema/metadata.ts';
-import { ScheduleDatabase } from '../lib/db/sql.ts';
+import { ScheduleDatabase } from '../lib/db/schedule-database.ts';
 import { copyFile, createFolder, readJson, saveJson } from '../lib/utils/files.ts';
 import { hashObject, hashOfFile } from '../lib/utils/hash.ts';
 import { throwError } from '../lib/utils/types.ts';

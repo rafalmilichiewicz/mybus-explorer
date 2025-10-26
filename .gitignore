@@ -1,11 +1,3 @@
 node_modules
 resources
 
-# Remove dev dump files
-*.json
-*.xml
-*.sql
-*.sqlite
-
-# Files to keep
-!deno.json

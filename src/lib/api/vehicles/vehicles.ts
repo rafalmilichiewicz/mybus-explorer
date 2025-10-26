@@ -11,7 +11,6 @@ import generateHeaders from '../token/header.ts';
 
 import type { VehicleApi, VehicleEnRoute } from './vehicle.ts';
 
-// Empty string = all vehicles
 export async function getVehicles(route: string = ''): Promise<VehicleEnRoute[]> {
     const headers = await generateHeaders(CONFIG.CITY.AGE);
     const data = await fetchDataXml<VehicleApi>(`${ENDPOINTS.VEHICLES}${route}`, headers);

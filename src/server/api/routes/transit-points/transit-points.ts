@@ -1,13 +1,11 @@
 import type { VariablesStandalone } from '../../../types.ts';
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi';
-import { RouteTransitPointsSchema } from "../../../schemas/standalone/transit-points.ts";
-
-
+import { RouteTransitPointsSchema } from '../../../schemas/standalone/transit-points.ts';
 
 const getRouteTransitPointsRoute = createRoute({
     path: '/',
     method: 'get',
-    tags: ["Transit Points"],
+    tags: ['Transit Points'],
     summary: 'Get route transit points',
     description:
         'Returns the ordered list of stops and intermediate points for a given route number and variant.',
