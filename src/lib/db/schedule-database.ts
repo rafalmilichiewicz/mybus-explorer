@@ -48,7 +48,7 @@ function prefixedSelect<T extends Record<string, string>, Prefix extends string>
     );
 }
 
-export function parseStopDescription(idSip: number, description: string) {
+export function parseStopDescription(_idSip: number, description: string) {
     // TODO Add patches system
     // console.log(stop);
 
