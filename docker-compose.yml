@@ -7,6 +7,7 @@ services:
       - ./resources:/app/resources
     environment:
       SERVER_STANDALONE: true
+      # CITY_ID: chelm # Visit docs to see what cities are supported
       # - DENO_DIR=/app/.deno
     working_dir: /app
-    command: deno run -P ./src/server/server.ts
+    command: deno task server

@@ -1,7 +1,10 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@hono/hono@^4.8.3": "4.9.12",
     "jsr:@hono/hono@^4.9.12": "4.9.12",
+    "jsr:@hono/standard-validator@~0.1.5": "0.1.5",
+    "jsr:@standard-schema/spec@1": "1.0.0",
     "jsr:@std/async@^1.0.15": "1.0.15",
     "jsr:@std/bytes@^1.0.6": "1.0.6",
     "jsr:@std/internal@^1.0.10": "1.0.12",
@@ -21,6 +24,16 @@
   "jsr": {
     "@hono/hono@4.9.12": {
       "integrity": "d4a0fe012c2f890bb514e539b37393ed352c173957038e44e2e45457b0a8256f"
+    },
+    "@hono/standard-validator@0.1.5": {
+      "integrity": "5c655632ba5e0a52d9590cb26dc244fc29261778a04f2b25f59487abe285c271",
+      "dependencies": [
+        "jsr:@hono/hono@^4.8.3",
+        "jsr:@standard-schema/spec"
+      ]
+    },
+    "@standard-schema/spec@1.0.0": {
+      "integrity": "4f20bbcf34e92b92f8c01589b958abc7c87385fa9a96170cecdc643d4d5737c0"
     },
     "@std/async@1.0.15": {
       "integrity": "55d1d9d04f99403fe5730ab16bdcc3c47f658a6bf054cafb38a50f046238116e"

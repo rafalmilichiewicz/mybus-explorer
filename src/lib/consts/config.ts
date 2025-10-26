@@ -25,13 +25,11 @@ function parseBooleanEnv(value: string): boolean | never {
     throw new Error(`Cannot convert "${value}" to boolean`);
 }
 
-function getCityInfoById(id: string): CityInfo {
+function getCityInfoById(id: string): CityInfo | undefined {
     const city = Object.values(CITIES).find((el) => el.id === id);
     if (city) {
         return city;
     }
-
-    throw new Error('City id not found');
 }
 
 // Preserve the shape of type, but allow for values to be of any other type
@@ -45,18 +43,23 @@ function getCityEnvInfo() {
     const envOffset = Deno.env.get(ENV_VARS.CITY.OFFSET);
     const envAge = Deno.env.get(ENV_VARS.CITY.AGE);
     const ID = Deno.env.get(ENV_VARS.CITY.ID) ?? defaultCity.id;
+
+    const currentCity = getCityInfoById(ID);
+    if (!currentCity) {
+        throw new Error('Passed city ID is not valid');
+    }
+
     const OFFSET =
-        envOffset !== undefined ? parseIntEnv(envOffset) : generateCityOffset(defaultCity.code);
+        envOffset !== undefined ? parseIntEnv(envOffset) : generateCityOffset(currentCity.code);
     const AGE =
         envAge !== undefined
             ? parseIntEnv(envAge)
-            : generateAgeHeader(generateCityOffset(defaultCity.code));
-    const CITY_INFO: CityInfo =
-        Deno.env.get(ENV_VARS.CITY.ID) !== undefined ? getCityInfoById(ID) : defaultCity;
+            : generateAgeHeader(generateCityOffset(currentCity.code));
+    const CITY_INFO: CityInfo = currentCity;
     const BASE_URL =
         Deno.env.get(ENV_VARS.CITY.BASE_URL) !== undefined
             ? Deno.env.get(ENV_VARS.CITY.BASE_URL)
-            : defaultCity.url;
+            : currentCity.url;
     return {
         ID,
         OFFSET,

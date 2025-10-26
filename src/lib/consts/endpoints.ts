@@ -1,7 +1,6 @@
 import { CONFIG } from './config.ts';
 
 const BASE = CONFIG.CITY.BASE_URL;
-console.log(BASE);
 
 export const ENDPOINTS = {
     PING_SERVICE: `${BASE}/PingService`,
