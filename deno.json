@@ -22,7 +22,7 @@
         }
     },
     "test": {
-        "include": ["tests/**"],
+        "include": ["tests/**"]
     },
     "unstable": ["temporal"],
     "compilerOptions": {
@@ -30,6 +30,7 @@
         "jsxImportSource": "hono/jsx"
     },
     "imports": {
+        "#src/": "./src/",
         "@hono/standard-validator": "jsr:@hono/standard-validator@^0.1.5",
         "@hono/swagger-ui": "npm:@hono/swagger-ui@^0.5.2",
         "@hono/zod-openapi": "npm:@hono/zod-openapi@^1.1.3",
