@@ -5,7 +5,7 @@ on:
     workflow_dispatch:
 
     # On docs change
-    pull_request:
+    push:
         paths:
             - "docs/**"
             - ".github/workflows/docs.yml"
