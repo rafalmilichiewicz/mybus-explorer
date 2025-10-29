@@ -6,6 +6,8 @@ on:
 
   # On docs change
   push:
+    branches:
+      - main
     paths:
       - "docs/**"
       - ".github/workflows/docs.yml"
