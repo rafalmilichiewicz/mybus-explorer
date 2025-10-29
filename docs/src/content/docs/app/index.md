@@ -33,3 +33,15 @@ sidebar:
 -   DBeaver - Sqlite exploration
 -   D-Tale - rapid data exploration of Pandas DataFrames (produced JSONs)
 -   Insomnia - Postman alternative for testing API calls
+
+## Folder structure
+
+```
+.
+├── docs // 
+├── src // App source code
+│   ├── lib // Common implementation code
+│   ├── runtime // App runtime
+│   └── server // Hono server
+└── tests // App tests
+```
