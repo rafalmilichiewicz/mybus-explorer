@@ -3,8 +3,8 @@ name: Code Test
 on:
   pull_request:
     paths-ignore:
-      - "docs/**"
-      - ".github/workflows/docs.yml"
+      - docs/**
+      - .github/workflows/docs.yml
 jobs:
   test-code:
     name: Lint & Test Code
