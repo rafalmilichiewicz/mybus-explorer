@@ -38,7 +38,7 @@ sidebar:
 
 ```
 .
-├── docs // 
+├── docs //
 ├── src // App source code
 │   ├── lib // Common implementation code
 │   ├── runtime // App runtime
