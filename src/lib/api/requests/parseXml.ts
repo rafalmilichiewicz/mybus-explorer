@@ -7,6 +7,5 @@ const parser = new XMLParser({
 });
 
 export default function parseXml(data: string) {
-    console.log(data);
     return parser.parse(data);
 }
