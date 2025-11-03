@@ -22,7 +22,7 @@ The main aim of this project is to deepen technical understanding through:
 
 # Scope
 
-### Included
+## Included
 
 -   Creating a proxy to transform API responses into human-readable formats,
 -   Documenting all public API endpoints,
