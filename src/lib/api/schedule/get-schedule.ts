@@ -1,6 +1,6 @@
 import { ENDPOINTS } from '../../consts/endpoints.ts';
 import { CONFIG } from '../../consts/config.ts';
-import generateHeaders from '../token/header.ts';
+import { generateHeaders } from '../token/header.ts';
 import { fetchDataBinary } from '../requests/fetch.ts';
 
 export async function getScheduleDatabase(filename: string): Promise<boolean> {

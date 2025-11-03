@@ -7,7 +7,7 @@ import {
     getVehicleType,
 } from '../../db/schema/ztm-types.ts';
 import { fetchDataXml } from '../requests/fetch.ts';
-import generateHeaders from '../token/header.ts';
+import { generateHeaders } from '../token/header.ts';
 
 import type { VehicleApi, VehicleEnRoute } from './vehicle.ts';
 

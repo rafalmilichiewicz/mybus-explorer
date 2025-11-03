@@ -1,7 +1,7 @@
 import { CONFIG } from '../../consts/config.ts';
 import { ENDPOINTS } from '../../consts/endpoints.ts';
 import { fetchDataXml } from '../requests/fetch.ts';
-import generateHeaders from '../token/header.ts';
+import { generateHeaders } from '../token/header.ts';
 import type {
     RoutePoint,
     RouteStop,
@@ -11,7 +11,7 @@ import type {
     TransitPointApi,
 } from './point.ts';
 
-function validateContinuityBetweenStops(data: RouteTransitPointsApi['R']['T']): boolean {
+export function validateContinuityBetweenStops(data: RouteTransitPointsApi['R']['T']): boolean {
     for (let i = 0; i < data.length - 1; i++) {
         const current = data[i];
         const next = data[i + 1];
@@ -21,7 +21,8 @@ function validateContinuityBetweenStops(data: RouteTransitPointsApi['R']['T']): 
     }
     return true;
 }
-function validateContinuityBetweenPoints(data: RouteTransitPointsApi['R']['T']): boolean {
+
+export function validateContinuityBetweenPoints(data: RouteTransitPointsApi['R']['T']): boolean {
     for (let i = 0; i < data.length; i++) {
         let points = data[i].Pkt ?? [];
         points = Array.isArray(points) ? points : [points];
@@ -59,7 +60,7 @@ function validateContinuityBetweenPoints(data: RouteTransitPointsApi['R']['T']):
     return true;
 }
 
-function validateRouteData(data: RouteTransitPointsApi['R']['T']): boolean {
+export function validateRouteData(data: RouteTransitPointsApi['R']['T']): boolean {
     const continuityBetweenStops = validateContinuityBetweenStops(data);
     const continuityBetweenPoints = validateContinuityBetweenPoints(data);
 
@@ -76,6 +77,14 @@ export async function getRouteTransitPoints(
         headers
     );
 
+    return parseRouteTransitPointsData(data, routeNumber, routeVariant);
+}
+
+export function parseRouteTransitPointsData(
+    data: RouteTransitPointsApi,
+    routeNumber: string,
+    routeVariant: string
+) {
     if (!validateRouteData(data.R.T)) {
         throw new Error(`Encountered problem with route ${routeNumber}-${routeVariant}`);
     }
