@@ -1,0 +1,12 @@
+services:
+  deno-app:
+    build: .
+    ports:
+      - "8069:8069"
+    volumes:
+      - ./resources:/app/resources
+    environment:
+      SERVER_STANDALONE: true
+      # CITY_ID: chelm # Visit docs to see what cities are supported
+    working_dir: /app
+    command: deno task server

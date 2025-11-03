@@ -1,0 +1,35 @@
+name: Build Docs
+
+on:
+  # Manual dispatch
+  workflow_dispatch:
+
+  # On docs change
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+      - ".github/workflows/docs.yml"
+
+jobs:
+  build-docs:
+    name: Build Astro Docs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v2.x
+
+      - name: Install dependencies
+        working-directory: ./docs
+        run: deno install --allow-scripts=npm:sharp
+
+      - name: Build site
+        working-directory: ./docs
+        run: deno task build
