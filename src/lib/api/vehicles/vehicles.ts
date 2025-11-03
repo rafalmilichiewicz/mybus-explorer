@@ -15,7 +15,16 @@ export async function getVehicles(route: string = ''): Promise<VehicleEnRoute[]>
     const headers = await generateHeaders(CONFIG.CITY.AGE);
     const data = await fetchDataXml<VehicleApi>(`${ENDPOINTS.VEHICLES}${route}`, headers);
 
-    return data.VL.V.map((vehicle) => {
+    return parseVehiclesEnRoute(data);
+}
+
+export function parseVehiclesEnRoute(
+    data: VehicleApi
+): VehicleEnRoute[] | PromiseLike<VehicleEnRoute[]> {
+    let vehicles = data.VL.V ?? [];
+    vehicles = Array.isArray(vehicles) ? vehicles : ([vehicles] as VehicleApi['VL']['V']);
+
+    return vehicles.map((vehicle) => {
         return {
             id: vehicle.id,
             sideNumer: vehicle.nb,
