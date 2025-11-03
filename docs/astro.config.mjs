@@ -7,6 +7,9 @@ import starlightOpenAPI, { openAPISidebarGroups } from 'starlight-openapi';
 
 // https://astro.build/config
 export default defineConfig({
+    output: 'static',
+    site: 'https://rafalmilichiewicz.github.io/',
+    base: '/mybus-explorer',
     integrations: [
         mermaid({
             theme: 'forest',
