@@ -56,7 +56,7 @@ export function parseStopDescription(_idSip: number, description: string) {
 
     if (!match) {
         // throw new Error(idSip + description);
-        console.warn('Warning: Encountered stop not conforming to GROUP NUMBER scheme');
+        console.warn(`Warning: Encountered stop not conforming to GROUP NUMBER scheme: ${_idSip}:${description}`);
         return ['', ''] as const;
     }
 
