@@ -9,7 +9,7 @@ import starlightOpenAPI, { openAPISidebarGroups } from 'starlight-openapi';
 export default defineConfig({
     output: 'static',
     site: 'https://rafalmilichiewicz.github.io/',
-    base: '/mybus-explorer',
+    base: '/mybus-explorer/',
     integrations: [
         mermaid({
             theme: 'forest',
