@@ -60,14 +60,14 @@ export function splitDeparturesString(departuresString: string): DepartureRawInf
     return info;
 }
 
-export function toDepartureTime(raw: DepartureRawInfo): DepartureTimeInfo {
+export function toDepartureTimeFromString(timeString: string): DepartureTime {
     // timeString = seconds
     // 18120 => 05:02 (24-hour clock)
     // Label
-    const seconds = Number.parseInt(raw.timeString);
+    const seconds = Number.parseInt(timeString);
 
     if (Number.isNaN(seconds)) {
-        throw new Error(`Passed time string is not valid: ${raw.timeString}`);
+        throw new Error(`Passed time string is not valid: ${timeString}`);
     }
 
     const totalMinutes = Math.floor(seconds / 60);
@@ -85,7 +85,11 @@ export function toDepartureTime(raw: DepartureRawInfo): DepartureTimeInfo {
         minute,
         label,
     };
+    return departureTime;
+}
 
+export function toDepartureTime(raw: DepartureRawInfo): DepartureTimeInfo {
+    const departureTime = toDepartureTimeFromString(raw.timeString);
     return { ...departureTime, notice: raw.notice };
 }
 

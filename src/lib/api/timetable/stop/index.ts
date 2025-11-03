@@ -8,7 +8,7 @@ import type {
     TimetableStopApi,
     TimeTableStopDepartureApi,
 } from './type.ts';
-import { toDepartureTime } from '../../../db/schema/departure.ts';
+import { toDepartureTimeFromString } from '../../../db/schema/departure.ts';
 import {
     getRouteDirectionType,
     getTrackingStatus,
@@ -23,39 +23,43 @@ export async function getTimetableForStop(stop: number): Promise<TimetableStop> 
         headers
     );
 
-    const departuresData = data.Departures.D ?? [];
-    const stopIdSip = Number.parseInt(data.Departures?.i ?? '0', 10);
+    return parseTimetableForStop(data);
+}
 
-    const timetableForStop: TimetableStop = {
-        stopIdSip: stopIdSip,
-        currentTime: data.Departures?.time ?? '',
-        departures: Array.isArray(departuresData)
-            ? departuresData.map(toStopDepartureInfo)
-            : [toStopDepartureInfo(departuresData)],
-    };
+export function parseTimetableForStop(data: TimetableStopApi) {
+  const departuresData = data.Departures.D ?? [];
+  const stopIdSip = Number.parseInt(data.Departures?.i ?? '0', 10);
 
-    return timetableForStop;
+  const timetableForStop: TimetableStop = {
+    stopIdSip: stopIdSip,
+    currentTime: data.Departures?.time ?? '',
+    departures: Array.isArray(departuresData)
+      ? departuresData.map(toStopDepartureInfo)
+      : [toStopDepartureInfo(departuresData)],
+  };
 
-    function toStopDepartureInfo(departure: TimeTableStopDepartureApi) {
-        return {
-            id: departure.i,
-            estimatedDeparture: {
-                time: toDepartureTime(departure.t),
-                seconds: Number.parseInt(departure.vr),
-                label: departure.v,
-            },
-            trackingStatus: getTrackingStatus(Number.parseInt(departure.m)),
-            destination: departure.d,
-            route: {
-                direction: getRouteDirectionType(departure.dd),
-                number: departure.r,
-                id: departure.di,
-            },
-            vehicle: {
-                sideNumber: departure.n,
-                type: getVehicleType(departure.p),
-                flags: getVehicleFlags(departure.vn),
-            },
-        } satisfies StopDepartureInfo;
-    }
+  return timetableForStop;
+}
+
+export function toStopDepartureInfo(departure: TimeTableStopDepartureApi) {
+    return {
+        id: departure.i,
+        estimatedDeparture: {
+            time: toDepartureTimeFromString(departure.t),
+            seconds: Number.parseInt(departure.vr),
+            label: departure.v,
+        },
+        trackingStatus: getTrackingStatus(Number.parseInt(departure.m)),
+        destination: departure.d,
+        route: {
+            direction: getRouteDirectionType(departure.dd),
+            number: departure.r,
+            id: departure.di,
+        },
+        vehicle: {
+            sideNumber: departure.n,
+            type: getVehicleType(departure.p),
+            flags: getVehicleFlags(departure.vn),
+        },
+    } satisfies StopDepartureInfo;
 }
