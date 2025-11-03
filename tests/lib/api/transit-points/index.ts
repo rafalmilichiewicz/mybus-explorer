@@ -12,16 +12,16 @@ import {
     exampleStopsOnlyParsed,
     exampleZeroLength,
     exampleZeroLengthParsed,
-    fullExample,
-    fullParsed,
+    exampleFull,
+    exampleFullParsed,
 } from './examples.ts';
 
 const ROUTE_NUMBER = '160';
 const ROUTE_VARIANT = 'B';
 
 Deno.test('getRouteTransitPoints should parse fullExample response', () => {
-    const parsed = parseRouteTransitPointsData(parseXml(fullExample), ROUTE_NUMBER, ROUTE_VARIANT);
-    assertEquals(parsed, fullParsed);
+    const parsed = parseRouteTransitPointsData(parseXml(exampleFull), ROUTE_NUMBER, ROUTE_VARIANT);
+    assertEquals(parsed, exampleFullParsed);
 });
 
 Deno.test('getRouteTransitPoints should throw when parsing exampleInvalidSequence', () => {

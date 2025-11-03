@@ -1,6 +1,6 @@
 import { RouteTransitPoints } from '#src/lib/api/route-points/point.ts';
 
-export const fullExample = `
+export const exampleFull = `
 <?xml version="1.0" encoding="utf-8"?>
 <R r="160" t="B">
 	<T i1="251" i2="152">
@@ -193,7 +193,7 @@ y="51.26343"/>
 	</T>
 	<T i1="918" i2="918"/>
 </R>`;
-export const fullParsed: RouteTransitPoints = {
+export const exampleFullParsed: RouteTransitPoints = {
     'route': {
         'number': '160',
         'variant': 'B',
