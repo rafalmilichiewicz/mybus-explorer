@@ -8,6 +8,8 @@
 
 _This project is for research and educational purposes only. Do not misuse public APIs and respect ethical boundaries_
 
+Checkout full docs at this [link](https://rafalmilichiewicz.github.io/mybus-explorer)!
+
 # Aim
 
 The main aim of this project is to deepen technical understanding through:
